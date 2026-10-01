@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Schools Management | Daura Global</title>
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/schools.css"
+    >
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="dashboard-sidebar">
+
+
+        <div class="sidebar-brand">
+
+            <img
+                src="../assests/images/logo.svg"
+                alt="Daura Global Logo"
+            >
+
+            <div>
+
+                <strong>
+                    Daura Global
+                </strong>
+
+                <span>
+                   TECHNOLOGY
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="dashboard-nav">
+
+
+            <a
+                href="dashboard.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    ▦
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title">
+                MANAGEMENT
+            </div>
+
+
+            <a
+                href="students.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    👥
+                </span>
+
+                <span>
+                    Students
+                </span>
+
+            </a>
+
+
+            <a
+                href="schools.html"
+                class="nav-item active"
+            >
+
+                <span class="nav-icon">
+                    🏫
+                </span>
+
+                <span>
+                    Schools
+                </span>
+
+            </a>
+
+
+            <a
+                href="siwes-batches.html"
+                class="nav-item"
+                
+            >
+
+                <span class="nav-icon">
+                    📋
+                </span>
+
+                <span>
+                    SIWES Batches
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title">
+                ATTENDANCE
+            </div>
+
+
+            <a
+                href="today-attendance.html"
+                class="nav-item"
+                data-coming-soon
+            >
+
+                <span class="nav-icon">
+                    ✓
+                </span>
+
+                <span>
+                    Today's Attendance
+                </span>
+
+            </a>
+
+
+            <a
+                href="qr-attendance.html"
+                class="nav-item"
+                
+            >
+
+                <span class="nav-icon">
+                    QR
+                </span>
+
+                <span>
+                    QR Attendance
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title">
+                REPORTS
+            </div>
+
+
+            <a
+                href="attendance-reports.html"
+                class="nav-item"
+                
+            >
+
+                <span class="nav-icon">
+                    📊
+                </span>
+
+                <span>
+                    Reports
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title">
+                SYSTEM
+            </div>
+
+
+            <a
+                href="settings.html"
+                class="nav-item"
+                
+            >
+
+                <span class="nav-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="sidebar-status">
+
+                <span class="status-dot"></span>
+
+                System Online
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="dashboard-main">
+
+
+        <!-- TOPBAR -->
+
+        <header class="dashboard-topbar">
+
+
+            <div>
+
+                <div class="breadcrumb">
+                    Admin / Schools
+                </div>
+
+                <h1>
+                    Schools
+                </h1>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+
+                <div class="admin-profile">
+
+                    <div class="admin-avatar">
+                        A
+                    </div>
+
+                    <div>
+
+                        <strong id="adminName">
+                            Admin
+                        </strong>
+
+                        <span>
+                            Administrator
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="logout-button"
+                    id="logoutButton"
+                >
+                    Logout
+                </button>
+
+
+            </div>
+
+        </header>
+
+
+
+        <!-- CONTENT -->
+
+        <section class="dashboard-content schools-content">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="schools-page-header">
+
+
+                <div>
+
+                    <span class="welcome-badge">
+                        SCHOOL MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Manage Schools
+                    </h2>
+
+                    <p>
+                        Register and manage institutions
+                        participating in the SIWES programme.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary-action-button"
+                    id="openAddSchoolButton"
+                >
+
+                    <span>
+                        +
+                    </span>
+
+                    Add School
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="pageMessage"
+                class="page-message"
+            ></div>
+
+
+
+            <!-- FILTER -->
+
+            <div class="schools-filter-card">
+
+
+                <div class="filter-header">
+
+
+                    <div>
+
+                        <span class="card-label">
+                            SCHOOL DIRECTORY
+                        </span>
+
+                        <h3>
+                            Search & Filter
+                        </h3>
+
+                    </div>
+
+
+                    <span
+                        id="schoolCount"
+                        class="school-count"
+                    >
+                        0 Schools
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="schools-filters">
+
+
+                    <div class="filter-group search-group">
+
+                        <label>
+                            Search
+                        </label>
+
+                        <div class="search-box">
+
+                            <span>
+                                🔎
+                            </span>
+
+                            <input
+                                type="text"
+                                id="searchInput"
+                                placeholder="Search school name, address, email or contact..."
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="filter-group">
+
+                        <label>
+                            Status
+                        </label>
+
+                        <select id="statusFilter">
+
+                            <option value="">
+                                All Status
+                            </option>
+
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="inactive">
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <button
+                        type="button"
+                        class="reset-filter-button"
+                        id="resetFilters"
+                    >
+                        Reset
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- TABLE -->
+
+            <div class="schools-table-card">
+
+
+                <div class="table-header">
+
+
+                    <div>
+
+                        <span class="card-label">
+                            ALL SCHOOLS
+                        </span>
+
+                        <h3>
+                            Registered Schools
+                        </h3>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="table-wrapper">
+
+
+                    <table class="schools-table">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    School
+                                </th>
+
+                                <th>
+                                    Address
+                                </th>
+
+                                <th>
+                                    Contact
+                                </th>
+
+                                <th>
+                                    Email
+                                </th>
+
+                                <th>
+                                    Students
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="schoolsTableBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="loading-cell"
+                                >
+                                    Loading schools...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+
+                    </table>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- FOOTER -->
+
+        <footer class="dashboard-footer">
+
+            <span>
+                © Daura GlobalTECHNOLOGY
+            </span>
+
+            <span>
+                SIWES Attendance Management System
+            </span>
+
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         SCHOOL MODAL
+    ========================================== -->
+
+    <div
+        class="modal-overlay"
+        id="schoolModal"
+    >
+
+
+        <div class="school-modal">
+
+
+            <div class="modal-header">
+
+
+                <div>
+
+                    <span class="card-label">
+                        SCHOOL ACCOUNT
+                    </span>
+
+                    <h3 id="modalTitle">
+                        Add New School
+                    </h3>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeModal"
+                >
+                    ×
+                </button>
+
+
+            </div>
+
+
+
+            <form id="schoolForm">
+
+
+                <input
+                    type="hidden"
+                    id="editSchoolId"
+                >
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group full-width">
+
+                        <label for="schoolName">
+                            School Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="schoolName"
+                            placeholder="Enter institution name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group full-width">
+
+                        <label for="schoolAddress">
+                            Address
+                        </label>
+
+                        <input
+                            type="text"
+                            id="schoolAddress"
+                            placeholder="School address"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="schoolContact">
+                            Contact
+                        </label>
+
+                        <input
+                            type="text"
+                            id="schoolContact"
+                            placeholder="Phone number"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="schoolEmail">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="schoolEmail"
+                            placeholder="school@example.com"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="schoolStatus">
+                            Status
+                        </label>
+
+                        <select id="schoolStatus">
+
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="inactive">
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="modal-actions">
+
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="cancelModal"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-action-button"
+                        id="saveSchoolButton"
+                    >
+                        Save School
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <script src="../assests/js/schools.js"></script>
+
+</body>
+
+</html>

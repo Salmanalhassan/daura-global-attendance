@@ -1,0 +1,4063 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Payments | Daura Global
+    </title>
+
+    <!-- EXISTING DAURA GLOBAL CSS -->
+    <link
+        rel="stylesheet"
+        href="../assests/css/style.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           PAYMENTS PAGE
+           ===================================================== */
+
+        .payments-page {
+
+            width: 100%;
+
+        }
+
+
+        /* =====================================================
+           SUMMARY
+           ===================================================== */
+
+        .payments-summary {
+
+            margin-top: 22px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+        }
+
+
+        .summary-card {
+
+            padding: 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.04
+                );
+
+        }
+
+
+        .summary-icon {
+
+            width: 45px;
+
+            height: 45px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 11px;
+
+            font-size: 18px;
+
+        }
+
+
+        .summary-icon.all {
+
+            background: #ecfeff;
+
+        }
+
+
+        .summary-icon.pending {
+
+            background: #fffbeb;
+
+        }
+
+
+        .summary-icon.approved {
+
+            background: #f0fdf4;
+
+        }
+
+
+        .summary-icon.rejected {
+
+            background: #fef2f2;
+
+        }
+
+
+        .summary-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .summary-info span {
+
+            color:
+                var(--text-light);
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+        }
+
+
+        .summary-info strong {
+
+            margin-top: 3px;
+
+            color:
+                var(--dark);
+
+            font-size: 21px;
+
+        }
+
+
+        /* =====================================================
+           PAYMENT CARD
+           ===================================================== */
+
+        .payments-card {
+
+            margin-top: 22px;
+
+            padding: 25px;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.04
+                );
+
+        }
+
+
+        .payments-card-header {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content:
+                space-between;
+
+            gap: 20px;
+
+        }
+
+
+        .payments-card-title {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .payments-card-title span {
+
+            color:
+                var(--primary);
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.3px;
+
+        }
+
+
+        .payments-card-title h2 {
+
+            margin-top: 4px;
+
+            color:
+                var(--dark);
+
+            font-size: 18px;
+
+        }
+
+
+        .payments-card-title p {
+
+            margin-top: 4px;
+
+            color:
+                var(--text-light);
+
+            font-size: 10px;
+
+        }
+
+
+        .refresh-button {
+
+            height: 38px;
+
+            padding:
+                0 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 9px;
+
+            background: #ffffff;
+
+            color:
+                var(--primary);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+
+        }
+
+
+        .refresh-button:hover {
+
+            background:
+                var(--primary-light);
+
+            border-color:
+                var(--secondary);
+
+        }
+
+
+        /* =====================================================
+           FILTERS
+           ===================================================== */
+
+        .payment-filters {
+
+            margin-top: 22px;
+
+            padding: 15px;
+
+            display: grid;
+
+            grid-template-columns:
+                1.5fr
+                1fr
+                1fr
+                auto;
+
+            gap: 10px;
+
+            background:
+                #f8fafc;
+
+            border:
+                1px solid
+                #eef2f7;
+
+            border-radius: 12px;
+
+        }
+
+
+        .filter-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .filter-group label {
+
+            margin-bottom: 5px;
+
+            color:
+                var(--text-light);
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.5px;
+
+        }
+
+
+        .filter-group input,
+        .filter-group select {
+
+            width: 100%;
+
+            height: 40px;
+
+            padding:
+                0 11px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 8px;
+
+            outline: none;
+
+            background: #ffffff;
+
+            color:
+                var(--dark);
+
+            font-family: inherit;
+
+            font-size: 10px;
+
+        }
+
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+
+            border-color:
+                var(--secondary);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    20,
+                    184,
+                    166,
+                    0.08
+                );
+
+        }
+
+
+        .clear-filter {
+
+            height: 40px;
+
+            align-self: end;
+
+            padding:
+                0 14px;
+
+            border: 0;
+
+            border-radius: 8px;
+
+            background:
+                #64748b;
+
+            color: #ffffff;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+        }
+
+
+        .clear-filter:hover {
+
+            background:
+                #475569;
+
+        }
+
+
+        /* =====================================================
+           TABLE
+           ===================================================== */
+
+        .table-wrapper {
+
+            margin-top: 20px;
+
+            width: 100%;
+
+            overflow-x: auto;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 11px;
+
+        }
+
+
+        .payments-table {
+
+            width: 100%;
+
+            min-width: 1050px;
+
+            border-collapse:
+                collapse;
+
+        }
+
+
+        .payments-table thead {
+
+            background:
+                #f8fafc;
+
+        }
+
+
+        .payments-table th {
+
+            padding:
+                13px 12px;
+
+            text-align: left;
+
+            color:
+                #64748b;
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.6px;
+
+            white-space: nowrap;
+
+            border-bottom:
+                1px solid
+                var(--border);
+
+        }
+
+
+        .payments-table td {
+
+            padding:
+                14px 12px;
+
+            color:
+                var(--text);
+
+            font-size: 9px;
+
+            border-bottom:
+                1px solid
+                #f1f5f9;
+
+            vertical-align: middle;
+
+        }
+
+
+        .payments-table tbody tr {
+
+            transition: 0.15s ease;
+
+        }
+
+
+        .payments-table tbody tr:hover {
+
+            background:
+                #f8fffe;
+
+        }
+
+
+        .payments-table tbody tr:last-child td {
+
+            border-bottom: 0;
+
+        }
+
+
+        /* =====================================================
+           STUDENT
+           ===================================================== */
+
+        .student-cell {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+        }
+
+
+        .student-avatar {
+
+            width: 32px;
+
+            height: 32px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background:
+                var(--primary-light);
+
+            color:
+                var(--primary-dark);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+        }
+
+
+        .student-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .student-info strong {
+
+            color:
+                var(--dark);
+
+            font-size: 9px;
+
+        }
+
+
+        .student-info span {
+
+            margin-top: 2px;
+
+            color:
+                var(--text-light);
+
+            font-size: 8px;
+
+        }
+
+
+        /* =====================================================
+           AMOUNT
+           ===================================================== */
+
+        .payment-amount {
+
+            color:
+                var(--dark);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+        }
+
+
+        /* =====================================================
+           METHOD
+           ===================================================== */
+
+        .method-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            padding:
+                5px 8px;
+
+            border-radius: 50px;
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .method-opay {
+
+            background:
+                #f0fdf4;
+
+            color:
+                #15803d;
+
+        }
+
+
+        .method-moniepoint {
+
+            background:
+                #eff6ff;
+
+            color:
+                #1d4ed8;
+
+        }
+
+
+        /* =====================================================
+           STATUS
+           ===================================================== */
+
+        .status-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            padding:
+                5px 9px;
+
+            border-radius: 50px;
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+        }
+
+
+        .status-dot-small {
+
+            width: 5px;
+
+            height: 5px;
+
+            border-radius: 50%;
+
+        }
+
+
+        .status-pending {
+
+            background:
+                #fffbeb;
+
+            color:
+                #b45309;
+
+        }
+
+
+        .status-pending
+        .status-dot-small {
+
+            background:
+                #f59e0b;
+
+        }
+
+
+        .status-approved {
+
+            background:
+                #f0fdf4;
+
+            color:
+                #15803d;
+
+        }
+
+
+        .status-approved
+        .status-dot-small {
+
+            background:
+                #22c55e;
+
+        }
+
+
+        .status-rejected {
+
+            background:
+                #fef2f2;
+
+            color:
+                #b91c1c;
+
+        }
+
+
+        .status-rejected
+        .status-dot-small {
+
+            background:
+                #ef4444;
+
+        }
+
+
+        /* =====================================================
+           ACTIONS
+           ===================================================== */
+
+        .payment-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+        }
+
+
+        .action-button {
+
+            height: 30px;
+
+            padding:
+                0 8px;
+
+            border: 0;
+
+            border-radius: 7px;
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+
+        }
+
+
+        .approve-button {
+
+            background:
+                #f0fdf4;
+
+            color:
+                #15803d;
+
+            border:
+                1px solid
+                #bbf7d0;
+
+        }
+
+
+        .approve-button:hover {
+
+            background:
+                #dcfce7;
+
+        }
+
+
+        .reject-button {
+
+            background:
+                #fef2f2;
+
+            color:
+                #b91c1c;
+
+            border:
+                1px solid
+                #fecaca;
+
+        }
+
+
+        .reject-button:hover {
+
+            background:
+                #fee2e2;
+
+        }
+
+
+        .action-button:disabled {
+
+            opacity: 0.5;
+
+            cursor:
+                not-allowed;
+
+        }
+
+
+        /* =====================================================
+           EMPTY STATE
+           ===================================================== */
+
+        .empty-state {
+
+            padding:
+                55px 20px;
+
+            text-align: center;
+
+        }
+
+
+        .empty-icon {
+
+            width: 55px;
+
+            height: 55px;
+
+            margin:
+                0 auto 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background:
+                var(--primary-light);
+
+            font-size: 23px;
+
+        }
+
+
+        .empty-state h3 {
+
+            color:
+                var(--dark);
+
+            font-size: 14px;
+
+        }
+
+
+        .empty-state p {
+
+            margin-top: 4px;
+
+            color:
+                var(--text-light);
+
+            font-size: 10px;
+
+        }
+
+
+        /* =====================================================
+           LOADING
+           ===================================================== */
+
+        .loading-row td {
+
+            padding:
+                45px 20px;
+
+            text-align: center;
+
+            color:
+                var(--text-light);
+
+            font-size: 10px;
+
+        }
+
+
+        /* =====================================================
+           ERROR
+           ===================================================== */
+
+        .page-error {
+
+            display: none;
+
+            margin-top: 18px;
+
+            padding:
+                12px 15px;
+
+            border:
+                1px solid
+                #fecaca;
+
+            border-radius: 10px;
+
+            background:
+                #fef2f2;
+
+            color:
+                #b91c1c;
+
+            font-size: 10px;
+
+        }
+
+
+        .page-error.show {
+
+            display: block;
+
+        }
+
+
+        /* =====================================================
+           REJECTION MODAL
+           ===================================================== */
+
+        .modal-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 1000;
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.55
+                );
+
+        }
+
+
+        .modal-overlay.show {
+
+            display: flex;
+
+        }
+
+
+        .modal {
+
+            width:
+                min(
+                    430px,
+                    100%
+                );
+
+            padding: 25px;
+
+            background:
+                #ffffff;
+
+            border-radius: 16px;
+
+            box-shadow:
+                var(--shadow-lg);
+
+        }
+
+
+        .modal-header {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content:
+                space-between;
+
+            gap: 15px;
+
+        }
+
+
+        .modal-header h3 {
+
+            color:
+                var(--dark);
+
+            font-size: 17px;
+
+        }
+
+
+        .modal-header p {
+
+            margin-top: 4px;
+
+            color:
+                var(--text-light);
+
+            font-size: 10px;
+
+        }
+
+
+        .modal-close {
+
+            width: 30px;
+
+            height: 30px;
+
+            border: 0;
+
+            border-radius: 7px;
+
+            background:
+                #f8fafc;
+
+            color:
+                #64748b;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+        }
+
+
+        .modal-form {
+
+            margin-top: 20px;
+
+        }
+
+
+        .modal-form label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            color:
+                var(--dark);
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+        }
+
+
+        .modal-form textarea {
+
+            width: 100%;
+
+            min-height: 105px;
+
+            padding: 12px;
+
+            resize: vertical;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 9px;
+
+            outline: none;
+
+            font-family: inherit;
+
+            font-size: 11px;
+
+        }
+
+
+        .modal-form textarea:focus {
+
+            border-color:
+                var(--secondary);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    20,
+                    184,
+                    166,
+                    0.08
+                );
+
+        }
+
+
+        .modal-actions {
+
+            margin-top: 15px;
+
+            display: flex;
+
+            justify-content:
+                flex-end;
+
+            gap: 8px;
+
+        }
+
+
+        .modal-button {
+
+            height: 38px;
+
+            padding:
+                0 15px;
+
+            border: 0;
+
+            border-radius: 8px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+        }
+
+
+        .modal-cancel {
+
+            background:
+                #f1f5f9;
+
+            color:
+                #475569;
+
+        }
+
+
+        .modal-reject {
+
+            background:
+                #dc2626;
+
+            color:
+                #ffffff;
+
+        }
+
+
+        /* =====================================================
+           TOAST
+           ===================================================== */
+
+        .toast {
+
+            position: fixed;
+
+            right: 25px;
+
+            bottom: 25px;
+
+            z-index: 2000;
+
+            min-width: 250px;
+
+            max-width: 360px;
+
+            padding:
+                13px 16px;
+
+            border-radius: 10px;
+
+            background:
+                #0f172a;
+
+            color:
+                #ffffff;
+
+            font-size: 10px;
+
+            box-shadow:
+                var(--shadow-lg);
+
+            transform:
+                translateY(20px);
+
+            opacity: 0;
+
+            pointer-events:
+                none;
+
+            transition:
+                0.25s ease;
+
+        }
+
+
+        .toast.show {
+
+            transform:
+                translateY(0);
+
+            opacity: 1;
+
+        }
+
+
+        .toast.success {
+
+            background:
+                #15803d;
+
+        }
+
+
+        .toast.error {
+
+            background:
+                #b91c1c;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .payments-summary {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+
+            .payment-filters {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+            }
+
+
+            .clear-filter {
+
+                width: 100%;
+
+            }
+
+        }
+
+
+        @media (max-width: 750px) {
+
+            .payments-summary {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .payments-card {
+
+                padding: 18px;
+
+            }
+
+
+            .payments-card-header {
+
+                flex-direction:
+                    column;
+
+            }
+
+
+            .refresh-button {
+
+                width: 100%;
+
+                justify-content:
+                    center;
+
+            }
+
+
+            .payment-filters {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .clear-filter {
+
+                width: 100%;
+
+            }
+
+
+            .toast {
+
+                left: 15px;
+
+                right: 15px;
+
+                bottom: 15px;
+
+                min-width: auto;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         DASHBOARD PAGE
+         ===================================================== -->
+
+    <div class="dashboard-page">
+
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside class="dashboard-sidebar">
+
+
+            <!-- BRAND -->
+
+            <div class="sidebar-brand">
+
+                <div>
+
+                    <strong>
+                        DAURA GLOBAL
+                    </strong>
+
+                    <span>
+                       TECHNOLOGY
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- NAVIGATION -->
+
+            <nav class="dashboard-nav">
+
+
+                <a
+                    href="dashboard.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📊
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="students.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        👨‍🎓
+                    </span>
+
+                    <span>
+                        Students
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="schools.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        🏫
+                    </span>
+
+                    <span>
+                        Schools
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="batches.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📚
+                    </span>
+
+                    <span>
+                        SIWES Batches
+                    </span>
+
+                </a>
+
+
+                <div class="nav-section-title">
+                    ATTENDANCE
+                </div>
+
+
+                <a
+                    href="today-attendance.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📅
+                    </span>
+
+                    <span>
+                        Today's Attendance
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="attendance-history.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        🕒
+                    </span>
+
+                    <span>
+                        Attendance History
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="qr-attendance.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📱
+                    </span>
+
+                    <span>
+                        QR Attendance
+                    </span>
+
+                </a>
+
+
+                <div class="nav-section-title">
+                    REPORTS
+                </div>
+
+
+                <a
+                    href="reports.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📄
+                    </span>
+
+                    <span>
+                        Reports
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="student-reports.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        👤
+                    </span>
+
+                    <span>
+                        Student Reports
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="school-reports.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        🏫
+                    </span>
+
+                    <span>
+                        School Reports
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="batch-reports.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📊
+                    </span>
+
+                    <span>
+                        Batch Reports
+                    </span>
+
+                </a>
+
+
+                <div class="nav-section-title">
+                    PAYMENTS
+                </div>
+
+
+                <a
+                    href="payment-dashboard.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        💳
+                    </span>
+
+                    <span>
+                        Payment Dashboard
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="payments.html"
+                    class="nav-item active"
+                >
+
+                    <span class="nav-icon">
+                        💰
+                    </span>
+
+                    <span>
+                        All Payments
+                    </span>
+
+                </a>
+
+                <a
+                    href="siwes-fees.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        💵
+                    </span>
+
+                    <span>
+                        SIWES Fees
+                    </span>
+
+                </a>
+
+
+                <div class="nav-section-title">
+                    SYSTEM
+                </div>
+
+
+                <a
+                    href="settings.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        ⚙️
+                    </span>
+
+                    <span>
+                        Settings
+                    </span>
+
+                </a>
+
+
+            </nav>
+
+
+            <!-- SIDEBAR FOOTER -->
+
+            <div class="sidebar-footer">
+
+                <div class="sidebar-status">
+
+                    <span class="status-dot"></span>
+
+                    <span>
+                        System Online
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN
+             ================================================= -->
+
+        <main class="dashboard-main">
+
+
+            <!-- =================================================
+                 TOPBAR
+                 ================================================= -->
+
+            <header class="dashboard-topbar">
+
+
+                <div>
+
+                    <div class="breadcrumb">
+                        ADMIN / PAYMENTS
+                    </div>
+
+                    <h1>
+                        All Payments
+                    </h1>
+
+                </div>
+
+
+                <div class="topbar-right">
+
+
+                    <div class="admin-profile">
+
+                        <div
+                            class="admin-avatar"
+                            id="adminAvatar"
+                        >
+                            A
+                        </div>
+
+
+                        <div>
+
+                            <strong id="adminName">
+                                Admin
+                            </strong>
+
+                            <span>
+                                Administrator
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="logout-button"
+                        id="logoutButton"
+                    >
+                        Logout
+                    </button>
+
+
+                </div>
+
+
+            </header>
+
+
+            <!-- =================================================
+                 CONTENT
+                 ================================================= -->
+
+            <div class="dashboard-content">
+
+
+                <div class="payments-page">
+
+
+                    <!-- =================================================
+                         WELCOME
+                         ================================================= -->
+
+                    <section class="dashboard-welcome">
+
+                        <div>
+
+                            <span class="welcome-badge">
+                                PAYMENT RECORDS
+                            </span>
+
+                            <h2>
+                                All Student Payments
+                            </h2>
+
+                            <p>
+                                View, search and verify SIWES
+                                payment submissions.
+                            </p>
+
+                        </div>
+
+
+                        <div class="welcome-date">
+
+                            <span>
+                                TODAY
+                            </span>
+
+                            <strong id="todayDate">
+                                Loading...
+                            </strong>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         ERROR
+                         ================================================= -->
+
+                    <div
+                        class="page-error"
+                        id="pageError"
+                    ></div>
+
+
+                    <!-- =================================================
+                         SUMMARY
+                         ================================================= -->
+
+                    <section class="payments-summary">
+
+
+                        <div class="summary-card">
+
+                            <div
+                                class="summary-icon all"
+                            >
+                                💳
+                            </div>
+
+                            <div class="summary-info">
+
+                                <span>
+                                    TOTAL
+                                </span>
+
+                                <strong id="totalCount">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-card">
+
+                            <div
+                                class="summary-icon pending"
+                            >
+                                ⏳
+                            </div>
+
+                            <div class="summary-info">
+
+                                <span>
+                                    PENDING
+                                </span>
+
+                                <strong id="pendingCount">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-card">
+
+                            <div
+                                class="summary-icon approved"
+                            >
+                                ✅
+                            </div>
+
+                            <div class="summary-info">
+
+                                <span>
+                                    APPROVED
+                                </span>
+
+                                <strong id="approvedCount">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-card">
+
+                            <div
+                                class="summary-icon rejected"
+                            >
+                                ❌
+                            </div>
+
+                            <div class="summary-info">
+
+                                <span>
+                                    REJECTED
+                                </span>
+
+                                <strong id="rejectedCount">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                    </section>
+
+
+                    <!-- =================================================
+                         PAYMENTS TABLE CARD
+                         ================================================= -->
+
+                    <section class="payments-card">
+
+
+                        <div
+                            class="payments-card-header"
+                        >
+
+
+                            <div
+                                class="payments-card-title"
+                            >
+
+                                <span>
+                                    TRANSACTION MANAGEMENT
+                                </span>
+
+                                <h2>
+                                    Payment Records
+                                </h2>
+
+                                <p>
+                                    Search and manage submitted
+                                    SIWES payments.
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="refresh-button"
+                                id="refreshButton"
+                            >
+
+                                🔄
+
+                                <span>
+                                    Refresh
+                                </span>
+
+                            </button>
+
+
+                        </div>
+
+
+                        <!-- =================================================
+                             FILTERS
+                             ================================================= -->
+
+                        <div class="payment-filters">
+
+
+                            <div class="filter-group">
+
+                                <label>
+                                    SEARCH
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="searchInput"
+                                    placeholder="Student name, ID or transaction reference..."
+                                >
+
+                            </div>
+
+
+                            <div class="filter-group">
+
+                                <label>
+                                    STATUS
+                                </label>
+
+                                <select
+                                    id="statusFilter"
+                                >
+
+                                    <option value="all">
+                                        All Payments
+                                    </option>
+
+                                    <option value="pending">
+                                        Pending
+                                    </option>
+
+                                    <option value="approved">
+                                        Approved
+                                    </option>
+
+                                    <option value="rejected">
+                                        Rejected
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="filter-group">
+
+                                <label>
+                                    PAYMENT METHOD
+                                </label>
+
+                                <select
+                                    id="methodFilter"
+                                >
+
+                                    <option value="all">
+                                        All Methods
+                                    </option>
+
+                                    <option value="opay">
+                                        OPay
+                                    </option>
+
+                                    <option value="moniepoint">
+                                        Moniepoint
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="clear-filter"
+                                id="clearFilterButton"
+                            >
+                                Clear Filters
+                            </button>
+
+
+                        </div>
+
+
+                        <!-- =================================================
+                             TABLE
+                             ================================================= -->
+
+                        <div class="table-wrapper">
+
+
+                            <table
+                                class="payments-table"
+                            >
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            STUDENT
+                                        </th>
+
+                                        <th>
+                                            SCHOOL
+                                        </th>
+
+                                        <th>
+                                            BATCH
+                                        </th>
+
+                                        <th>
+                                            AMOUNT
+                                        </th>
+
+                                        <th>
+                                            METHOD
+                                        </th>
+
+                                        <th>
+                                            TRANSACTION REFERENCE
+                                        </th>
+
+                                        <th>
+                                            PAYMENT DATE
+                                        </th>
+
+                                        <th>
+                                            STATUS
+                                        </th>
+
+                                        <th>
+                                            ACTION
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody
+                                    id="paymentsTableBody"
+                                >
+
+                                    <tr class="loading-row">
+
+                                        <td colspan="9">
+
+                                            Loading payments...
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+
+                            </table>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                    <!-- =================================================
+                         FOOTER
+                         ================================================= -->
+
+                    <footer
+                        class="dashboard-footer"
+                        style="margin-top:25px;"
+                    >
+
+                        <span>
+
+                            ©
+                            <span id="currentYear"></span>
+
+                            Daura GlobalTECHNOLOGY
+
+                        </span>
+
+
+                        <span>
+                            SIWES Attendance Management System
+                        </span>
+
+                    </footer>
+
+
+                </div>
+
+            </div>
+
+
+        </main>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         REJECTION MODAL
+         ===================================================== -->
+
+    <div
+        class="modal-overlay"
+        id="rejectModal"
+    >
+
+
+        <div class="modal">
+
+
+            <div class="modal-header">
+
+
+                <div>
+
+                    <h3>
+                        Reject Payment
+                    </h3>
+
+                    <p>
+                        Enter a reason for rejecting this payment.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeRejectModal"
+                >
+                    ×
+                </button>
+
+
+            </div>
+
+
+            <div class="modal-form">
+
+
+                <label for="rejectionReason">
+                    Rejection Reason
+                </label>
+
+
+                <textarea
+                    id="rejectionReason"
+                    placeholder="Example: Transaction reference could not be verified."
+                ></textarea>
+
+
+                <div class="modal-actions">
+
+
+                    <button
+                        type="button"
+                        class="modal-button modal-cancel"
+                        id="cancelRejectButton"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="modal-button modal-reject"
+                        id="confirmRejectButton"
+                    >
+                        Reject Payment
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         TOAST
+         ===================================================== -->
+
+    <div
+        class="toast"
+        id="toast"
+    ></div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script>
+
+
+        /* =====================================================
+           CONFIG
+           ===================================================== */
+
+        const API_URL = "/api";
+
+
+        const token =
+            localStorage.getItem(
+                "daura_admin_token"
+            );
+
+
+        /* =====================================================
+           AUTH
+           ===================================================== */
+
+        if (!token) {
+
+            window.location.href = "/";
+
+        }
+
+
+        /* =====================================================
+           STATE
+           ===================================================== */
+
+        let allPayments = [];
+
+        let paymentToReject = null;
+
+
+        /* =====================================================
+           ELEMENTS
+           ===================================================== */
+
+        const tableBody =
+            document.getElementById(
+                "paymentsTableBody"
+            );
+
+
+        const searchInput =
+            document.getElementById(
+                "searchInput"
+            );
+
+
+        const statusFilter =
+            document.getElementById(
+                "statusFilter"
+            );
+
+
+        const methodFilter =
+            document.getElementById(
+                "methodFilter"
+            );
+
+
+        const pageError =
+            document.getElementById(
+                "pageError"
+            );
+
+
+        const rejectModal =
+            document.getElementById(
+                "rejectModal"
+            );
+
+
+        const rejectionReason =
+            document.getElementById(
+                "rejectionReason"
+            );
+
+
+        /* =====================================================
+           ADMIN INFORMATION
+           ===================================================== */
+
+        const savedAdmin =
+            localStorage.getItem(
+                "daura_admin_user"
+            );
+
+
+        if (savedAdmin) {
+
+            try {
+
+                const admin =
+                    JSON.parse(savedAdmin);
+
+
+                const name =
+                    admin.full_name ||
+                    admin.name ||
+                    admin.username ||
+                    admin.email ||
+                    "Admin";
+
+
+                document.getElementById(
+                    "adminName"
+                ).textContent =
+                    name;
+
+
+                document.getElementById(
+                    "adminAvatar"
+                ).textContent =
+                    name
+                        .charAt(0)
+                        .toUpperCase();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Admin data error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           TODAY
+           ===================================================== */
+
+        function showToday() {
+
+            const today =
+                new Date();
+
+
+            document.getElementById(
+                "todayDate"
+            ).textContent =
+
+                today.toLocaleDateString(
+                    "en-NG",
+                    {
+                        weekday:
+                            "long",
+
+                        year:
+                            "numeric",
+
+                        month:
+                            "long",
+
+                        day:
+                            "numeric"
+                    }
+                );
+
+
+            document.getElementById(
+                "currentYear"
+            ).textContent =
+                today.getFullYear();
+
+        }
+
+
+        /* =====================================================
+           MONEY
+           ===================================================== */
+
+        function formatMoney(value) {
+
+            const amount =
+                Number(value) || 0;
+
+
+            return new Intl.NumberFormat(
+                "en-NG",
+                {
+                    style:
+                        "currency",
+
+                    currency:
+                        "NGN",
+
+                    minimumFractionDigits:
+                        2
+                }
+            ).format(amount);
+
+        }
+
+
+        /* =====================================================
+           DATE
+           ===================================================== */
+
+        function formatDate(value) {
+
+            if (!value) {
+
+                return "-";
+
+            }
+
+
+            const date =
+                new Date(value);
+
+
+            if (Number.isNaN(
+                date.getTime()
+            )) {
+
+                return String(value);
+
+            }
+
+
+            return date.toLocaleDateString(
+                "en-NG",
+                {
+                    day:
+                        "2-digit",
+
+                    month:
+                        "2-digit",
+
+                    year:
+                        "numeric"
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           ESCAPE HTML
+           ===================================================== */
+
+        function escapeHTML(value) {
+
+            return String(
+                value ?? ""
+            )
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =====================================================
+           GET PAYMENT FIELD
+           ===================================================== */
+
+        function getStudentName(payment) {
+
+            return (
+                payment.student_name ||
+                payment.full_name ||
+                payment.name ||
+                (
+                    payment.student &&
+                    (
+                        payment.student.full_name ||
+                        payment.student.name
+                    )
+                ) ||
+                "Unknown Student"
+            );
+
+        }
+
+
+        function getStudentId(payment) {
+
+            return (
+                payment.student_id_number ||
+                payment.student_code ||
+                payment.registration_number ||
+                payment.matric_number ||
+                (
+                    payment.student &&
+                    (
+                        payment.student.student_id ||
+                        payment.student.registration_number ||
+                        payment.student.matric_number
+                    )
+                ) ||
+                payment.student_id ||
+                "-"
+            );
+
+        }
+
+
+        function getSchoolName(payment) {
+
+            return (
+                payment.school_name ||
+                (
+                    payment.school &&
+                    payment.school.name
+                ) ||
+                "Unknown School"
+            );
+
+        }
+
+
+        function getBatchName(payment) {
+
+            return (
+                payment.batch_name ||
+                payment.siwes_batch_name ||
+                (
+                    payment.siwes_batch &&
+                    payment.siwes_batch.name
+                ) ||
+                "Unknown Batch"
+            );
+
+        }
+
+
+        function getAmount(payment) {
+
+            return (
+                payment.amount ||
+                0
+            );
+
+        }
+
+
+        function getMethod(payment) {
+
+            return String(
+                payment.payment_method ||
+                payment.method ||
+                ""
+            ).toLowerCase();
+
+        }
+
+
+        function getReference(payment) {
+
+            return (
+                payment.transaction_reference ||
+                payment.reference ||
+                "-"
+            );
+
+        }
+
+
+        function getPaymentDate(payment) {
+
+            return (
+                payment.payment_date ||
+                payment.submitted_at ||
+                payment.created_at ||
+                ""
+            );
+
+        }
+
+
+        function getStatus(payment) {
+
+            return String(
+                payment.status ||
+                "pending"
+            ).toLowerCase();
+
+        }
+
+
+        /* =====================================================
+           NORMALIZE API RESPONSE
+           ===================================================== */
+
+        function extractPayments(data) {
+
+            if (
+                Array.isArray(data)
+            ) {
+
+                return data;
+
+            }
+
+
+            if (
+                data &&
+                Array.isArray(data.data)
+            ) {
+
+                return data.data;
+
+            }
+
+
+            if (
+                data &&
+                data.data &&
+                Array.isArray(data.data.payments)
+            ) {
+
+                return data.data.payments;
+
+            }
+
+
+            if (
+                data &&
+                Array.isArray(data.payments)
+            ) {
+
+                return data.payments;
+
+            }
+
+
+            if (
+                data &&
+                data.result &&
+                Array.isArray(data.result)
+            ) {
+
+                return data.result;
+
+            }
+
+
+            return [];
+
+        }
+
+
+        /* =====================================================
+           LOAD PAYMENTS
+           ===================================================== */
+
+        async function loadPayments() {
+
+            tableBody.innerHTML = `
+
+                <tr class="loading-row">
+
+                    <td colspan="9">
+
+                        Loading payments...
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            pageError
+                .classList
+                .remove("show");
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/payments/`,
+                        {
+                            method:
+                                "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    `Bearer ${token}`,
+
+                                "Content-Type":
+                                    "application/json"
+
+                            }
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                /* =============================================
+                   SESSION EXPIRED
+                   ============================================= */
+
+                if (
+                    response.status === 401
+                ) {
+
+                    localStorage.removeItem(
+                        "daura_admin_token"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_admin_user"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_role"
+                    );
+
+
+                    window.location.href =
+                        "/";
+
+
+                    return;
+
+                }
+
+
+                /* =============================================
+                   ERROR
+                   ============================================= */
+
+                if (
+                    !response.ok ||
+                    data.success === false
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load payments."
+                    );
+
+                }
+
+
+                /* =============================================
+                   SAVE
+                   ============================================= */
+
+                allPayments =
+                    extractPayments(data);
+
+
+                updateSummary();
+
+
+                applyFilters();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Load payments error:",
+                    error
+                );
+
+
+                tableBody.innerHTML = `
+
+                    <tr class="loading-row">
+
+                        <td colspan="9">
+
+                            Unable to load payment records.
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                pageError.textContent =
+                    error.message ||
+                    "Unable to load payments.";
+
+
+                pageError
+                    .classList
+                    .add("show");
+
+            }
+
+        }
+
+
+        /* =====================================================
+           UPDATE SUMMARY
+           ===================================================== */
+
+        function updateSummary() {
+
+            const total =
+                allPayments.length;
+
+
+            const pending =
+                allPayments.filter(
+                    payment =>
+                        getStatus(payment)
+                        === "pending"
+                ).length;
+
+
+            const approved =
+                allPayments.filter(
+                    payment =>
+                        getStatus(payment)
+                        === "approved"
+                ).length;
+
+
+            const rejected =
+                allPayments.filter(
+                    payment =>
+                        getStatus(payment)
+                        === "rejected"
+                ).length;
+
+
+            document.getElementById(
+                "totalCount"
+            ).textContent =
+                total;
+
+
+            document.getElementById(
+                "pendingCount"
+            ).textContent =
+                pending;
+
+
+            document.getElementById(
+                "approvedCount"
+            ).textContent =
+                approved;
+
+
+            document.getElementById(
+                "rejectedCount"
+            ).textContent =
+                rejected;
+
+        }
+
+
+        /* =====================================================
+           APPLY FILTERS
+           ===================================================== */
+
+        function applyFilters() {
+
+            const search =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+
+            const status =
+                statusFilter.value
+                    .toLowerCase();
+
+
+            const method =
+                methodFilter.value
+                    .toLowerCase();
+
+
+            const filtered =
+                allPayments.filter(
+                    payment => {
+
+
+                        const studentName =
+                            getStudentName(
+                                payment
+                            ).toLowerCase();
+
+
+                        const studentId =
+                            String(
+                                getStudentId(
+                                    payment
+                                )
+                            ).toLowerCase();
+
+
+                        const reference =
+                            String(
+                                getReference(
+                                    payment
+                                )
+                            ).toLowerCase();
+
+
+                        const paymentStatus =
+                            getStatus(
+                                payment
+                            );
+
+
+                        const paymentMethod =
+                            getMethod(
+                                payment
+                            );
+
+
+                        const matchesSearch =
+                            !search ||
+                            studentName.includes(
+                                search
+                            ) ||
+                            studentId.includes(
+                                search
+                            ) ||
+                            reference.includes(
+                                search
+                            );
+
+
+                        const matchesStatus =
+                            status === "all" ||
+                            paymentStatus ===
+                                status;
+
+
+                        const matchesMethod =
+                            method === "all" ||
+                            paymentMethod ===
+                                method;
+
+
+                        return (
+                            matchesSearch &&
+                            matchesStatus &&
+                            matchesMethod
+                        );
+
+                    }
+                );
+
+
+            renderPayments(
+                filtered
+            );
+
+        }
+
+
+        /* =====================================================
+           RENDER PAYMENTS
+           ===================================================== */
+
+        function renderPayments(
+            payments
+        ) {
+
+            if (
+                !payments.length
+            ) {
+
+                tableBody.innerHTML = `
+
+                    <tr>
+
+                        <td colspan="9">
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    💳
+                                </div>
+
+                                <h3>
+                                    No Payment Records Found
+                                </h3>
+
+                                <p>
+                                    No payments match the
+                                    current search or filter.
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                return;
+
+            }
+
+
+            tableBody.innerHTML =
+                payments.map(
+                    payment =>
+                        createPaymentRow(
+                            payment
+                        )
+                ).join("");
+
+        }
+
+
+        /* =====================================================
+           CREATE TABLE ROW
+           ===================================================== */
+
+        function createPaymentRow(
+            payment
+        ) {
+
+            const id =
+                payment.id;
+
+
+            const studentName =
+                getStudentName(
+                    payment
+                );
+
+
+            const studentId =
+                getStudentId(
+                    payment
+                );
+
+
+            const schoolName =
+                getSchoolName(
+                    payment
+                );
+
+
+            const batchName =
+                getBatchName(
+                    payment
+                );
+
+
+            const amount =
+                getAmount(
+                    payment
+                );
+
+
+            const method =
+                getMethod(
+                    payment
+                );
+
+
+            const reference =
+                getReference(
+                    payment
+                );
+
+
+            const paymentDate =
+                getPaymentDate(
+                    payment
+                );
+
+
+            const status =
+                getStatus(
+                    payment
+                );
+
+
+            const initial =
+                studentName
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            let methodHTML = "";
+
+
+            if (
+                method === "opay"
+            ) {
+
+                methodHTML = `
+
+                    <span class="method-badge method-opay">
+
+                        OPay
+
+                    </span>
+
+                `;
+
+            } else {
+
+                methodHTML = `
+
+                    <span class="method-badge method-moniepoint">
+
+                        Moniepoint
+
+                    </span>
+
+                `;
+
+            }
+
+
+            let statusHTML = "";
+
+
+            if (
+                status === "approved"
+            ) {
+
+                statusHTML = `
+
+                    <span
+                        class="status-badge status-approved"
+                    >
+
+                        <span
+                            class="status-dot-small"
+                        ></span>
+
+                        Approved
+
+                    </span>
+
+                `;
+
+            } else if (
+                status === "rejected"
+            ) {
+
+                statusHTML = `
+
+                    <span
+                        class="status-badge status-rejected"
+                    >
+
+                        <span
+                            class="status-dot-small"
+                        ></span>
+
+                        Rejected
+
+                    </span>
+
+                `;
+
+            } else {
+
+                statusHTML = `
+
+                    <span
+                        class="status-badge status-pending"
+                    >
+
+                        <span
+                            class="status-dot-small"
+                        ></span>
+
+                        Pending
+
+                    </span>
+
+                `;
+
+            }
+
+
+            let actionsHTML = "";
+
+
+            if (
+                status === "pending"
+            ) {
+
+                actionsHTML = `
+
+                    <div class="payment-actions">
+
+                        <button
+                            type="button"
+                            class="action-button approve-button"
+                            onclick="approvePayment(${Number(id)})"
+                        >
+                            Approve
+                        </button>
+
+                        <button
+                            type="button"
+                            class="action-button reject-button"
+                            onclick="openRejectModal(${Number(id)})"
+                        >
+                            Reject
+                        </button>
+
+                    </div>
+
+                `;
+
+            } else {
+
+                actionsHTML = `
+
+                    <span
+                        style="
+                            color:#94a3b8;
+                            font-size:8px;
+                        "
+                    >
+                        No action
+                    </span>
+
+                `;
+
+            }
+
+
+            return `
+
+                <tr>
+
+                    <td>
+
+                        <div class="student-cell">
+
+                            <div class="student-avatar">
+
+                                ${escapeHTML(
+                                    initial
+                                )}
+
+                            </div>
+
+                            <div class="student-info">
+
+                                <strong>
+                                    ${escapeHTML(
+                                        studentName
+                                    )}
+                                </strong>
+
+                                <span>
+                                    ${escapeHTML(
+                                        studentId
+                                    )}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeHTML(
+                            schoolName
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeHTML(
+                            batchName
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="payment-amount">
+
+                            ${formatMoney(
+                                amount
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        ${methodHTML}
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            style="
+                                font-family:monospace;
+                                font-size:8px;
+                                color:#475569;
+                            "
+                        >
+
+                            ${escapeHTML(
+                                reference
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeHTML(
+                            formatDate(
+                                paymentDate
+                            )
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${statusHTML}
+
+                    </td>
+
+
+                    <td>
+
+                        ${actionsHTML}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+
+        /* =====================================================
+           APPROVE PAYMENT
+           ===================================================== */
+
+        async function approvePayment(
+            paymentId
+        ) {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to approve this payment?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/payments/approve/${paymentId}`,
+                        {
+                            method:
+                                "PUT",
+
+                            headers: {
+
+                                "Authorization":
+                                    `Bearer ${token}`,
+
+                                "Content-Type":
+                                    "application/json"
+
+                            }
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    response.status === 401
+                ) {
+
+                    localStorage.removeItem(
+                        "daura_admin_token"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_admin_user"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_role"
+                    );
+
+
+                    window.location.href =
+                        "/";
+
+
+                    return;
+
+                }
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to approve payment."
+                    );
+
+                }
+
+
+                showToast(
+                    data.message ||
+                    "Payment approved successfully.",
+                    "success"
+                );
+
+
+                await loadPayments();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Approve payment error:",
+                    error
+                );
+
+
+                showToast(
+                    error.message ||
+                    "Failed to approve payment.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           OPEN REJECT MODAL
+           ===================================================== */
+
+        function openRejectModal(
+            paymentId
+        ) {
+
+            paymentToReject =
+                paymentId;
+
+
+            rejectionReason.value =
+                "";
+
+
+            rejectModal
+                .classList
+                .add("show");
+
+
+            setTimeout(
+                function () {
+
+                    rejectionReason.focus();
+
+                },
+                100
+            );
+
+        }
+
+
+        /* =====================================================
+           CLOSE REJECT MODAL
+           ===================================================== */
+
+        function closeRejectModal() {
+
+            paymentToReject =
+                null;
+
+
+            rejectionReason.value =
+                "";
+
+
+            rejectModal
+                .classList
+                .remove("show");
+
+        }
+
+
+        /* =====================================================
+           REJECT PAYMENT
+           ===================================================== */
+
+        async function rejectPayment() {
+
+            if (
+                !paymentToReject
+            ) {
+
+                return;
+
+            }
+
+
+            const reason =
+                rejectionReason.value
+                    .trim();
+
+
+            if (!reason) {
+
+                showToast(
+                    "Please enter a rejection reason.",
+                    "error"
+                );
+
+
+                rejectionReason.focus();
+
+
+                return;
+
+            }
+
+
+            const button =
+                document.getElementById(
+                    "confirmRejectButton"
+                );
+
+
+            button.disabled =
+                true;
+
+
+            button.textContent =
+                "Rejecting...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/payments/reject/${paymentToReject}`,
+                        {
+                            method:
+                                "PUT",
+
+                            headers: {
+
+                                "Authorization":
+                                    `Bearer ${token}`,
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    {
+                                        rejection_reason:
+                                            reason
+                                    }
+                                )
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    response.status === 401
+                ) {
+
+                    localStorage.removeItem(
+                        "daura_admin_token"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_admin_user"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_role"
+                    );
+
+
+                    window.location.href =
+                        "/";
+
+
+                    return;
+
+                }
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to reject payment."
+                    );
+
+                }
+
+
+                closeRejectModal();
+
+
+                showToast(
+                    data.message ||
+                    "Payment rejected successfully.",
+                    "success"
+                );
+
+
+                await loadPayments();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Reject payment error:",
+                    error
+                );
+
+
+                showToast(
+                    error.message ||
+                    "Failed to reject payment.",
+                    "error"
+                );
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "Reject Payment";
+
+            }
+
+        }
+
+
+        /* =====================================================
+           TOAST
+           ===================================================== */
+
+        let toastTimer = null;
+
+
+        function showToast(
+            message,
+            type = "success"
+        ) {
+
+            const toast =
+                document.getElementById(
+                    "toast"
+                );
+
+
+            toast.textContent =
+                message;
+
+
+            toast.className =
+                `toast ${type}`;
+
+
+            setTimeout(
+                function () {
+
+                    toast.classList.add(
+                        "show"
+                    );
+
+                },
+                10
+            );
+
+
+            clearTimeout(
+                toastTimer
+            );
+
+
+            toastTimer =
+                setTimeout(
+                    function () {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    3500
+                );
+
+        }
+
+
+        /* =====================================================
+           FILTER EVENTS
+           ===================================================== */
+
+        searchInput.addEventListener(
+            "input",
+            applyFilters
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+        methodFilter.addEventListener(
+            "change",
+            applyFilters
+        );
+
+
+        /* =====================================================
+           CLEAR FILTERS
+           ===================================================== */
+
+        document
+            .getElementById(
+                "clearFilterButton"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    searchInput.value =
+                        "";
+
+                    statusFilter.value =
+                        "all";
+
+                    methodFilter.value =
+                        "all";
+
+                    applyFilters();
+
+                }
+            );
+
+
+        /* =====================================================
+           REFRESH
+           ===================================================== */
+
+        document
+            .getElementById(
+                "refreshButton"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    loadPayments();
+
+                }
+            );
+
+
+        /* =====================================================
+           MODAL EVENTS
+           ===================================================== */
+
+        document
+            .getElementById(
+                "closeRejectModal"
+            )
+            .addEventListener(
+                "click",
+                closeRejectModal
+            );
+
+
+        document
+            .getElementById(
+                "cancelRejectButton"
+            )
+            .addEventListener(
+                "click",
+                closeRejectModal
+            );
+
+
+        document
+            .getElementById(
+                "confirmRejectButton"
+            )
+            .addEventListener(
+                "click",
+                rejectPayment
+            );
+
+
+        rejectModal.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target ===
+                    rejectModal
+                ) {
+
+                    closeRejectModal();
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           LOGOUT
+           ===================================================== */
+
+        document
+            .getElementById(
+                "logoutButton"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+
+                    localStorage.removeItem(
+                        "daura_admin_token"
+                    );
+
+
+                    localStorage.removeItem(
+                        "daura_admin_user"
+                    );
+
+
+                    localStorage.removeItem(
+                        "daura_role"
+                    );
+
+
+                    window.location.href =
+                        "/";
+
+                }
+            );
+
+
+        /* =====================================================
+           START
+           ===================================================== */
+
+        showToday();
+
+        loadPayments();
+
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My SIWES - Daura GlobalTECHNOLOGY</title>
+
+    <!-- Global CSS -->
+    <link
+        rel="stylesheet"
+        href="../assests/css/style.css"
+    >
+
+    <!-- My SIWES CSS -->
+    <link
+        rel="stylesheet"
+        href="../assests/css/my-siwes.css"
+    >
+</head>
+
+<body>
+
+    <div class="student-layout">
+
+        <!-- =========================================
+             SIDEBAR
+        ========================================== -->
+
+        <aside class="student-sidebar">
+
+            <div class="sidebar-logo">
+
+                <img
+                    src="../assests/images/logo.svg"
+                    alt="Daura GlobalTECHNOLOGY"
+                >
+
+                <div>
+                    <h2>Daura Global</h2>
+                    <span>ICT Center</span>
+                </div>
+
+            </div>
+
+
+            <nav class="student-nav">
+
+                <a
+                    href="/student/dashboard.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">🏠</span>
+                    <span>Dashboard</span>
+                </a>
+
+
+                <a
+                    href="/student/scan-qr.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">📷</span>
+                    <span>Scan QR</span>
+                </a>
+
+
+                <a
+                    href="/student/my-attendance.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">📋</span>
+                    <span>My Attendance</span>
+                </a>
+
+
+                <a
+                    href="/student/attendance-summary.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">📊</span>
+                    <span>Attendance Summary</span>
+                </a>
+
+
+                <a
+                    href="/student/my-siwes.html"
+                    class="nav-item active"
+                >
+                    <span class="nav-icon">🎓</span>
+                    <span>My SIWES</span>
+                </a>
+
+
+                <a
+                    href="/student/profile.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">👤</span>
+                    <span>My Profile</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <button
+                    type="button"
+                    id="logoutBtn"
+                    class="logout-btn"
+                >
+                    <span>🚪</span>
+                    Logout
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =========================================
+             MAIN CONTENT
+        ========================================== -->
+
+        <main class="student-main">
+
+            <!-- TOPBAR -->
+
+            <header class="student-topbar">
+
+                <div class="topbar-left">
+
+                    <h1>My SIWES</h1>
+
+                    <p>
+                        View your SIWES information
+                    </p>
+
+                </div>
+
+
+                <div class="topbar-right">
+
+                    <button
+                        type="button"
+                        id="refreshBtn"
+                        class="refresh-btn"
+                    >
+                        🔄 Refresh
+                    </button>
+
+
+                    <div class="student-user">
+
+                        <div
+                            class="student-avatar"
+                            id="studentAvatar"
+                        >
+                            S
+                        </div>
+
+                        <div class="student-user-info">
+
+                            <strong id="studentName">
+                                Student
+                            </strong>
+
+                            <span>
+                                Student
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- CONTENT -->
+
+            <section class="siwes-content">
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="siwesMessage"
+                    class="siwes-message"
+                    hidden
+                ></div>
+
+
+                <!-- LOADING -->
+
+                <div
+                    id="loadingState"
+                    class="loading-state"
+                >
+
+                    <div class="loading-spinner"></div>
+
+                    <p>
+                        Loading SIWES information...
+                    </p>
+
+                </div>
+
+
+                <!-- MAIN CONTENT -->
+
+                <div
+                    id="siwesContent"
+                    hidden
+                >
+
+                    <!-- =================================
+                         SIWES HEADER CARD
+                    ================================== -->
+
+                    <div class="siwes-header-card">
+
+                        <div class="siwes-header-icon">
+                            🎓
+                        </div>
+
+                        <div>
+
+                            <h2 id="batchName">
+                                SIWES Batch
+                            </h2>
+
+                            <p id="batchDescription">
+                                SIWES training information
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         STATUS
+                    ================================== -->
+
+                    <div class="siwes-status-card">
+
+                        <div>
+
+                            <span class="info-label">
+                                SIWES Status
+                            </span>
+
+                            <strong
+                                id="siwesStatus"
+                                class="status-badge"
+                            >
+                                -
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            <span class="info-label">
+                                Training Period
+                            </span>
+
+                            <strong id="trainingPeriod">
+                                -
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         INFORMATION GRID
+                    ================================== -->
+
+                    <div class="section-title">
+
+                        <h3>
+                            SIWES Information
+                        </h3>
+
+                    </div>
+
+
+                    <div class="info-grid">
+
+                        <!-- SCHOOL -->
+
+                        <div class="info-card">
+
+                            <div class="info-icon">
+                                🏫
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    School
+                                </span>
+
+                                <strong id="schoolName">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DEPARTMENT -->
+
+                        <div class="info-card">
+
+                            <div class="info-icon">
+                                🏢
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Department
+                                </span>
+
+                                <strong id="department">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- COURSE -->
+
+                        <div class="info-card">
+
+                            <div class="info-icon">
+                                📚
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Course
+                                </span>
+
+                                <strong id="course">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- REGISTRATION NUMBER -->
+
+                        <div class="info-card">
+
+                            <div class="info-icon">
+                                🆔
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Registration Number
+                                </span>
+
+                                <strong id="registrationNumber">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- START DATE -->
+
+                        <div class="info-card">
+
+                            <div class="info-icon">
+                                📅
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Start Date
+                                </span>
+
+                                <strong id="startDate">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- END DATE -->
+
+                        <div class="info-card">
+
+                            <div class="info-icon">
+                                🏁
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    End Date
+                                </span>
+
+                                <strong id="endDate">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         BATCH DESCRIPTION
+                    ================================== -->
+
+                    <div class="description-card">
+
+                        <div class="description-icon">
+                            📝
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                SIWES Batch Description
+                            </h3>
+
+                            <p id="description">
+                                No description available.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- GLOBAL JS -->
+
+    <script src="../assests/js/app.js"></script>
+
+    <!-- MY SIWES JS -->
+
+    <script src="../assests/js/my-siwes.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QR Attendance | Daura GlobalTECHNOLOGY</title>
+
+    <link rel="stylesheet" href="../assests/css/qr-attendance.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <img
+                src="../assests/images/logo.svg"
+                alt="Daura GlobalTECHNOLOGY"
+                class="logo"
+            >
+
+            <div>
+                <h2>Daura Global</h2>
+                <p>ICT Center</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html">
+                <span>🏠</span>
+                Dashboard
+            </a>
+
+            <a href="students.html">
+                <span>👨‍🎓</span>
+                Students
+            </a>
+
+            <a href="schools.html">
+                <span>🏫</span>
+                Schools
+            </a>
+
+            <a href="siwes-batches.html">
+                <span>📚</span>
+                SIWES Batches
+            </a>
+
+            <div class="nav-title">
+                Attendance
+            </div>
+
+            <a href="today-attendance.html">
+                <span>📅</span>
+                Today's Attendance
+            </a>
+
+            <a href="attendance-history.html">
+                <span>🕘</span>
+                Attendance History
+            </a>
+
+            <a href="qr-attendance.html" class="active">
+                <span>📱</span>
+                QR Attendance
+            </a>
+
+            <div class="nav-title">
+                Reports
+            </div>
+
+            <a href="student-reports.html">
+                <span>👨‍🎓</span>
+                Student Reports
+            </a>
+
+            <a href="school-reports.html">
+                <span>🏫</span>
+                School Reports
+            </a>
+
+            <a href="batch-reports.html">
+                <span>📚</span>
+                Batch Reports
+            </a>
+
+            <div class="nav-title">
+                System
+            </div>
+
+            <a href="settings.html" >
+                <span>⚙️</span>
+                Settings
+            </a>
+
+            <a href="#" id="logoutBtn" class="logout-link">
+                <span>🚪</span>
+                Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+                <h1>QR Attendance</h1>
+                <p>Create and manage attendance QR sessions</p>
+            </div>
+
+            <div class="admin-info">
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Admin</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="content">
+
+            <!-- PAGE MESSAGE -->
+            <div id="messageBox" class="message-box"></div>
+
+
+            <!-- CREATE QR + PREVIEW -->
+            <div class="top-grid">
+
+                <!-- CREATE SESSION -->
+                <div class="card">
+
+                    <div class="card-header">
+                        <div>
+                            <h2>Create QR Session</h2>
+                            <p>Generate a QR code for student attendance</p>
+                        </div>
+                    </div>
+
+                    <form id="qrForm">
+
+                        <div class="form-group">
+
+                            <label for="sessionType">
+                                Session Type
+                            </label>
+
+                            <select id="sessionType" required>
+
+                                <option value="morning">
+                                    Morning
+                                </option>
+
+                                <option value="afternoon">
+                                    Afternoon
+                                </option>
+
+                                <option value="custom">
+                                    Custom
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+
+                                <label for="sessionDate">
+                                    Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="sessionDate"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="startTime">
+                                    Start Time
+                                </label>
+
+                                <input
+                                    type="time"
+                                    id="startTime"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="endTime">
+                                End Time
+                            </label>
+
+                            <input
+                                type="time"
+                                id="endTime"
+                                required
+                            >
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn-primary"
+                            id="generateBtn"
+                        >
+                            <span>📱</span>
+                            Generate QR Code
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- QR PREVIEW -->
+                <div class="card qr-preview-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h2>QR Code Preview</h2>
+                            <p>Students can scan this code to mark attendance</p>
+                        </div>
+
+                    </div>
+
+
+                    <div id="qrEmptyState" class="qr-empty">
+
+                        <div class="empty-icon">
+                            📱
+                        </div>
+
+                        <h3>No QR Code Generated</h3>
+
+                        <p>
+                            Create a session to generate an attendance QR code.
+                        </p>
+
+                    </div>
+
+
+                    <div id="qrResult" class="qr-result">
+
+                        <div class="qr-image-wrapper">
+
+                            <img
+                                id="qrImage"
+                                src=""
+                                alt="Attendance QR Code"
+                            >
+
+                        </div>
+
+
+                        <div class="qr-success">
+                            ✓ QR Code Generated Successfully
+                        </div>
+
+
+                        <div class="qr-details">
+
+                            <div class="detail-item">
+
+                                <span>Session ID</span>
+
+                                <strong id="resultSessionId">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div class="detail-item">
+
+                                <span>Date</span>
+
+                                <strong id="resultDate">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div class="detail-item">
+
+                                <span>Time</span>
+
+                                <strong id="resultTime">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div class="detail-item token-item">
+
+                                <span>QR Token</span>
+
+                                <strong id="resultToken">
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- EXISTING SESSIONS -->
+            <div class="card sessions-card">
+
+                <div class="card-header sessions-header">
+
+                    <div>
+                        <h2>QR Sessions</h2>
+                        <p>Previously created attendance sessions</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="refreshBtn"
+                    >
+                        🔄 Refresh
+                    </button>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Expires</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="sessionsTableBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="loading"
+                                >
+                                    Loading QR sessions...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="../assests/js/qr-attendance.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Profile - Daura GlobalTECHNOLOGY</title>
+
+    <!-- Global CSS -->
+    <link
+        rel="stylesheet"
+        href="../assests/css/style.css"
+    >
+
+    <!-- Profile CSS -->
+    <link
+        rel="stylesheet"
+        href="../assests/css/profile.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="student-layout">
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside class="student-sidebar">
+
+            <div class="sidebar-logo">
+
+                <img
+                    src="../assests/images/logo.svg"
+                    alt="Daura GlobalTECHNOLOGY"
+                >
+
+                <div>
+
+                    <h2>
+                        Daura Global
+                    </h2>
+
+                    <span>
+                       TECHNOLOGY
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <nav class="student-nav">
+
+                <a
+                    href="/student/dashboard.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">🏠</span>
+                    <span>Dashboard</span>
+                </a>
+
+
+                <a
+                    href="/student/scan-qr.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">📷</span>
+                    <span>Scan QR</span>
+                </a>
+
+
+                <a
+                    href="/student/my-attendance.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">📋</span>
+                    <span>My Attendance</span>
+                </a>
+
+
+                <a
+                    href="/student/attendance-summary.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">📊</span>
+                    <span>Attendance Summary</span>
+                </a>
+
+
+                <a
+                    href="/student/my-siwes.html"
+                    class="nav-item"
+                >
+                    <span class="nav-icon">🎓</span>
+                    <span>My SIWES</span>
+                </a>
+
+
+                <a
+                    href="/student/profile.html"
+                    class="nav-item active"
+                >
+                    <span class="nav-icon">👤</span>
+                    <span>My Profile</span>
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <button
+                    type="button"
+                    id="logoutBtn"
+                    class="logout-btn"
+                >
+                    <span>🚪</span>
+                    Logout
+                </button>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             MAIN
+        ================================================== -->
+
+        <main class="student-main">
+
+
+            <!-- =================================================
+                 TOPBAR
+            ================================================== -->
+
+            <header class="student-topbar">
+
+                <div class="topbar-left">
+
+                    <h1>
+                        My Profile
+                    </h1>
+
+                    <p>
+                        View your personal and academic information
+                    </p>
+
+                </div>
+
+
+                <div class="topbar-right">
+
+                    <button
+                        type="button"
+                        id="refreshBtn"
+                        class="refresh-btn"
+                    >
+                        🔄 Refresh
+                    </button>
+
+
+                    <div class="student-user">
+
+                        <div
+                            class="student-avatar"
+                            id="studentAvatar"
+                        >
+                            S
+                        </div>
+
+
+                        <div class="student-user-info">
+
+                            <strong id="studentName">
+                                Student
+                            </strong>
+
+                            <span>
+                                Student
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- =================================================
+                 PROFILE CONTENT
+            ================================================== -->
+
+            <section class="profile-content">
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="profileMessage"
+                    class="profile-message"
+                    hidden
+                ></div>
+
+
+
+                <!-- LOADING -->
+
+                <div
+                    id="loadingState"
+                    class="loading-state"
+                >
+
+                    <div class="loading-spinner"></div>
+
+                    <p>
+                        Loading profile information...
+                    </p>
+
+                </div>
+
+
+
+                <!-- PROFILE CONTENT -->
+
+                <div
+                    id="profileContent"
+                    hidden
+                >
+
+
+                    <!-- =================================================
+                         PROFILE HEADER
+                    ================================================== -->
+
+                    <div class="profile-header-card">
+
+                        <div
+                            class="large-avatar"
+                            id="largeAvatar"
+                        >
+                            S
+                        </div>
+
+
+                        <div class="profile-header-info">
+
+                            <h2 id="fullName">
+                                Student
+                            </h2>
+
+                            <p id="studentId">
+                                Student ID
+                            </p>
+
+
+                            <span
+                                id="accountStatus"
+                                class="status-badge"
+                            >
+                                Active
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         PERSONAL INFORMATION
+                    ================================================== -->
+
+                    <div class="profile-section">
+
+                        <div class="section-heading">
+
+                            <div class="section-icon">
+                                👤
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Personal Information
+                                </h3>
+
+                                <p>
+                                    Your registered personal details
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="profile-grid">
+
+
+                            <!-- FULL NAME -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    Full Name
+                                </span>
+
+                                <strong id="profileFullName">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- STUDENT ID -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    Student ID
+                                </span>
+
+                                <strong id="profileStudentId">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- REGISTRATION NUMBER -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    Registration Number
+                                </span>
+
+                                <strong id="registrationNumber">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- EMAIL -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    Email Address
+                                </span>
+
+                                <strong id="email">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- PHONE -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    Phone Number
+                                </span>
+
+                                <strong id="phone">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         ACADEMIC INFORMATION
+                    ================================================== -->
+
+                    <div class="profile-section">
+
+                        <div class="section-heading">
+
+                            <div class="section-icon">
+                                🎓
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Academic Information
+                                </h3>
+
+                                <p>
+                                    Your school and course information
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="profile-grid">
+
+
+                            <!-- SCHOOL -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    School
+                                </span>
+
+                                <strong id="schoolName">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- DEPARTMENT -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    Department
+                                </span>
+
+                                <strong id="department">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- COURSE -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    Course
+                                </span>
+
+                                <strong id="course">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- SIWES BATCH -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    SIWES Batch
+                                </span>
+
+                                <strong id="batchName">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         SIWES INFORMATION
+                    ================================================== -->
+
+                    <div class="profile-section">
+
+                        <div class="section-heading">
+
+                            <div class="section-icon">
+                                📅
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    SIWES Information
+                                </h3>
+
+                                <p>
+                                    Your SIWES training period
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="profile-grid">
+
+
+                            <!-- START DATE -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    Start Date
+                                </span>
+
+                                <strong id="startDate">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- END DATE -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    End Date
+                                </span>
+
+                                <strong id="endDate">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- SIWES STATUS -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    SIWES Status
+                                </span>
+
+                                <strong id="siwesStatus">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- ACCOUNT STATUS -->
+
+                            <div class="profile-item">
+
+                                <span>
+                                    Account Status
+                                </span>
+
+                                <strong id="profileStatus">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- =================================================
+     CHANGE PASSWORD
+================================================== -->
+
+<div class="password-section">
+
+    <div class="section-heading">
+
+        <div class="section-icon">
+            🔐
+        </div>
+
+        <div>
+
+            <h3>
+                Change Password
+            </h3>
+
+            <p>
+                Update your student account password
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <form
+        id="changePasswordForm"
+        class="password-form"
+    >
+
+
+        <!-- CURRENT PASSWORD -->
+
+        <div class="password-field">
+
+            <label for="currentPassword">
+                Current Password
+            </label>
+
+            <input
+                type="password"
+                id="currentPassword"
+                name="current_password"
+                placeholder="Enter your current password"
+                autocomplete="current-password"
+                required
+            >
+
+        </div>
+
+
+
+        <!-- NEW PASSWORD -->
+
+        <div class="password-field">
+
+            <label for="newPassword">
+                New Password
+            </label>
+
+            <input
+                type="password"
+                id="newPassword"
+                name="new_password"
+                placeholder="Enter your new password"
+                autocomplete="new-password"
+                minlength="6"
+                required
+            >
+
+            <small>
+                Password must be at least 6 characters.
+            </small>
+
+        </div>
+
+
+
+        <!-- CONFIRM PASSWORD -->
+
+        <div class="password-field">
+
+            <label for="confirmPassword">
+                Confirm New Password
+            </label>
+
+            <input
+                type="password"
+                id="confirmPassword"
+                name="confirm_password"
+                placeholder="Confirm your new password"
+                autocomplete="new-password"
+                minlength="6"
+                required
+            >
+
+        </div>
+
+
+
+        <!-- BUTTON -->
+
+        <div class="password-actions">
+
+            <button
+                type="submit"
+                id="changePasswordBtn"
+                class="change-password-btn"
+            >
+                🔐 Change Password
+            </button>
+
+        </div>
+
+
+        <!-- PASSWORD MESSAGE -->
+
+        <div
+            id="passwordMessage"
+            class="password-message"
+            hidden
+        ></div>
+
+
+    </form>
+
+</div>
+
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- GLOBAL JS -->
+
+    <script src="../assests/js/app.js"></script>
+
+
+    <!-- PROFILE JS -->
+
+    <script src="../assests/js/profile.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Attendance History | Daura Global</title>
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/attendance-history.css"
+    >
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+
+            <img
+                src="../assests/images/logo.svg"
+                alt="Daura Global Logo"
+            >
+
+            <h2>Daura Global</h2>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html">
+                <span>📊</span>
+                Dashboard
+            </a>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    Students
+                </div>
+
+                <a href="students.html">
+                    <span>👨‍🎓</span>
+                    All Students
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    Schools
+                </div>
+
+                <a href="schools.html">
+                    <span>🏫</span>
+                    All Schools
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    SIWES
+                </div>
+
+                <a href="siwes-batches.html">
+                    <span>📚</span>
+                    SIWES Batches
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    Attendance
+                </div>
+
+                <a href="today-attendance.html">
+                    <span>📅</span>
+                    Today's Attendance
+                </a>
+
+                <a
+                    href="attendance-history.html"
+                    class="active"
+                >
+                    <span>🕘</span>
+                    Attendance History
+                </a>
+
+                <a href="qr-attendance.html" >
+                    <span>📱</span>
+                    QR Attendance
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    Reports
+                </div>
+
+                <a href="attendance-reports.html">
+                    <span>📄</span>
+                    Reports
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    System
+                </div>
+
+                <a href="settings.html" >
+                    <span>⚙️</span>
+                    Settings
+                </a>
+
+            </div>
+
+        </nav>
+
+
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+        >
+            🚪 Logout
+        </button>
+
+    </aside>
+
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Attendance History
+                </h1>
+
+                <p>
+                    Search and review previous attendance records
+                </p>
+
+            </div>
+
+
+            <div class="admin-info">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <strong id="adminName">
+                        Admin
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- PAGE -->
+        <section class="page-content">
+
+
+            <!-- FILTER CARD -->
+            <div class="filter-card">
+
+                <div class="filter-title">
+
+                    <h2>
+                        Search Attendance
+                    </h2>
+
+                    <p>
+                        Use the filters below to find records
+                    </p>
+
+                </div>
+
+
+                <div class="filter-grid">
+
+                    <!-- DATE -->
+                    <div class="filter-group">
+
+                        <label for="dateFilter">
+                            Attendance Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="dateFilter"
+                        >
+
+                    </div>
+
+
+                    <!-- SCHOOL -->
+                    <div class="filter-group">
+
+                        <label for="schoolFilter">
+                            School
+                        </label>
+
+                        <select id="schoolFilter">
+
+                            <option value="">
+                                All Schools
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- STUDENT -->
+                    <div class="filter-group">
+
+                        <label for="studentFilter">
+                            Student ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="studentFilter"
+                            placeholder="e.g. DGT-001"
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS -->
+                    <div class="filter-group">
+
+                        <label for="statusFilter">
+                            Status
+                        </label>
+
+                        <select id="statusFilter">
+
+                            <option value="">
+                                All Status
+                            </option>
+
+                            <option value="present">
+                                Present
+                            </option>
+
+                            <option value="late">
+                                Late
+                            </option>
+
+                            <option value="absent">
+                                Absent
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="filter-actions">
+
+                    <button
+                        id="searchBtn"
+                        class="primary-btn"
+                    >
+                        🔎 Search
+                    </button>
+
+
+                    <button
+                        id="resetBtn"
+                        class="secondary-btn"
+                    >
+                        ↺ Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MESSAGE -->
+            <div
+                id="messageBox"
+                class="message-box"
+            ></div>
+
+
+
+            <!-- SUMMARY -->
+            <div class="summary-grid">
+
+                <div class="summary-card">
+
+                    <span>
+                        Total Records
+                    </span>
+
+                    <strong id="totalRecords">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card present-summary">
+
+                    <span>
+                        Present
+                    </span>
+
+                    <strong id="presentRecords">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card late-summary">
+
+                    <span>
+                        Late
+                    </span>
+
+                    <strong id="lateRecords">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TABLE -->
+            <div class="table-card">
+
+                <div class="table-header">
+
+                    <div>
+
+                        <h2>
+                            Attendance Records
+                        </h2>
+
+                        <p id="resultText">
+                            Showing attendance records
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        id="refreshBtn"
+                        class="refresh-btn"
+                    >
+                        🔄 Refresh
+                    </button>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Student
+                                </th>
+
+                                <th>
+                                    Student ID
+                                </th>
+
+                                <th>
+                                    School
+                                </th>
+
+                                <th>
+                                    Time
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="attendanceTableBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    class="loading"
+                                >
+                                    Enter filters and click Search
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="../assests/js/attendance-history.js"></script>
+
+</body>
+
+</html>

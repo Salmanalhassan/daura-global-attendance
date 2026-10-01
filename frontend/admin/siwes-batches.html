@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SIWES Batches | Daura Global</title>
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/siwes-batches.css"
+    >
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+                <img
+                    src="../assests/images/logo.svg"
+                    alt="Daura Global Logo"
+                >
+
+                <h2>Daura Global</h2>
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <a href="dashboard.html">
+                    <span>📊</span>
+                    Dashboard
+                </a>
+
+
+                <div class="nav-section">
+
+                    <div class="nav-title">
+                        Students
+                    </div>
+
+                    <a href="students.html">
+                        <span>👨‍🎓</span>
+                        All Students
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <div class="nav-title">
+                        Schools
+                    </div>
+
+                    <a href="schools.html">
+                        <span>🏫</span>
+                        All Schools
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <div class="nav-title">
+                        SIWES
+                    </div>
+
+                    <a
+                        href="siwes-batches.html"
+                        class="active"
+                    >
+                        <span>📚</span>
+                        SIWES Batches
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <div class="nav-title">
+                        Attendance
+                    </div>
+
+                    <a href="today-attendance.html" >
+                        <span>📅</span>
+                        Today's Attendance
+                    </a>
+
+                    <a href="attendance-history.html" >
+                        <span>🕘</span>
+                        Attendance History
+                    </a>
+
+                    <a href="qr-attendance.html" >
+                        <span>📱</span>
+                        QR Attendance
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <div class="nav-title">
+                        Reports
+                    </div>
+
+                    <a href="attendance-reports.html" >
+                        <span>📄</span>
+                        Reports
+                    </a>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <div class="nav-title">
+                        System
+                    </div>
+
+                    <a href="settings.html" >
+                        <span>⚙️</span>
+                        Settings
+                    </a>
+
+                </div>
+
+            </nav>
+
+
+            <button
+                id="logoutBtn"
+                class="logout-btn"
+            >
+                🚪 Logout
+            </button>
+
+        </aside>
+
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP BAR -->
+            <header class="topbar">
+
+                <div>
+                    <h1>SIWES Batches</h1>
+
+                    <p>
+                        Manage student industrial training batches
+                    </p>
+                </div>
+
+                <div class="admin-info">
+
+                    <div class="admin-avatar">
+                        A
+                    </div>
+
+                    <div>
+                        <strong id="adminName">
+                            Admin
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- PAGE CONTENT -->
+            <section class="page-content">
+
+                <!-- ACTION BAR -->
+                <div class="action-bar">
+
+                    <div class="search-box">
+
+                        <span>🔎</span>
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search batch..."
+                        >
+
+                    </div>
+
+
+                    <div class="filter-box">
+
+                        <select id="statusFilter">
+
+                            <option value="">
+                                All Status
+                            </option>
+
+                            <option value="upcoming">
+                                Upcoming
+                            </option>
+
+                            <option value="active">
+                                Active
+                            </option>
+
+                            <option value="completed">
+                                Completed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        id="addBatchBtn"
+                        class="primary-btn"
+                    >
+                        + Add SIWES Batch
+                    </button>
+
+                </div>
+
+
+
+                <!-- MESSAGE -->
+                <div
+                    id="messageBox"
+                    class="message-box"
+                ></div>
+
+
+
+                <!-- TABLE CARD -->
+                <div class="table-card">
+
+                    <div class="table-header">
+
+                        <div>
+
+                            <h2>
+                                All SIWES Batches
+                            </h2>
+
+                            <p>
+                                View and manage training periods
+                            </p>
+
+                        </div>
+
+                        <div
+                            id="batchCount"
+                            class="batch-count"
+                        >
+                            0 Batches
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        #
+                                    </th>
+
+                                    <th>
+                                        Batch Name
+                                    </th>
+
+                                    <th>
+                                        Start Date
+                                    </th>
+
+                                    <th>
+                                        End Date
+                                    </th>
+
+                                    <th>
+                                        Duration
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Description
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="batchesTableBody">
+
+                                <tr>
+
+                                    <td
+                                        colspan="8"
+                                        class="loading"
+                                    >
+                                        Loading batches...
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- ADD / EDIT MODAL -->
+    <div
+        id="batchModal"
+        class="modal"
+    >
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h2 id="modalTitle">
+                        Add SIWES Batch
+                    </h2>
+
+                    <p>
+                        Enter batch information
+                    </p>
+
+                </div>
+
+                <button
+                    id="closeModalBtn"
+                    class="close-btn"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="batchForm">
+
+                <input
+                    type="hidden"
+                    id="batchId"
+                >
+
+
+                <div class="form-group">
+
+                    <label for="batchName">
+                        Batch Name
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="batchName"
+                        placeholder="e.g. SIWES Batch 2026 A"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="startDate">
+                            Start Date
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            id="startDate"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="endDate">
+                            End Date
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            id="endDate"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="batchStatus">
+                        Status
+                    </label>
+
+                    <select id="batchStatus">
+
+                        <option value="upcoming">
+                            Upcoming
+                        </option>
+
+                        <option value="active">
+                            Active
+                        </option>
+
+                        <option value="completed">
+                            Completed
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        rows="4"
+                        placeholder="Optional batch description..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        id="cancelBtn"
+                        class="secondary-btn"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        id="saveBtn"
+                        class="primary-btn"
+                    >
+                        Save Batch
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="../assests/js/siwes-batches.js"></script>
+
+</body>
+
+</html>

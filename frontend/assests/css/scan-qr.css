@@ -1,0 +1,597 @@
+/* =========================================================
+   DAURA GLOBALTECHNOLOGY
+   STUDENT SCAN QR
+   ========================================================= */
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+body.student-page {
+    margin: 0;
+    background: #f5f7fb;
+    color: #172033;
+    font-family: Arial, sans-serif;
+}
+
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.student-layout {
+    min-height: 100vh;
+    display: flex;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.student-sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.student-sidebar-header {
+    padding: 24px 20px;
+    border-bottom: 1px solid #eef0f4;
+}
+
+
+.student-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.student-logo img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+
+
+.student-logo strong {
+    display: block;
+    font-size: 16px;
+}
+
+
+.student-logo span {
+    display: block;
+    margin-top: 3px;
+    color: #7b8494;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.student-nav {
+    padding: 20px 14px;
+    flex: 1;
+}
+
+
+.student-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #596273;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+
+.student-nav-link:hover {
+    background: #f3f5f9;
+    color: #172033;
+}
+
+
+.student-nav-link.active {
+    background: #eef3ff;
+    color: #2457d6;
+    font-weight: 600;
+}
+
+
+.student-nav-link span:first-child {
+    width: 22px;
+    text-align: center;
+}
+
+
+/* =========================================================
+   SIDEBAR FOOTER
+   ========================================================= */
+
+.student-sidebar-footer {
+    padding: 16px 14px;
+    border-top: 1px solid #eef0f4;
+}
+
+
+.logout-button {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: #dc3545;
+    padding: 12px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 14px;
+}
+
+
+.logout-button:hover {
+    background: #fff1f2;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.student-main {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.student-topbar {
+    min-height: 82px;
+    padding: 18px 32px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.page-eyebrow {
+    margin: 0 0 5px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #718096;
+}
+
+
+.student-topbar h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+
+.student-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.student-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #2457d6;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+
+.student-user-info strong {
+    display: block;
+    font-size: 14px;
+}
+
+
+.student-user-info span {
+    display: block;
+    margin-top: 3px;
+    color: #7b8494;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.scan-page {
+    padding: 32px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+
+.scan-intro {
+    margin-bottom: 25px;
+}
+
+
+.scan-intro h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+
+.scan-intro p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   SCANNER CARD
+   ========================================================= */
+
+.scan-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
+}
+
+
+.scanner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+
+.scanner-header > div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.scanner-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: #eef3ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+
+.scanner-header h3 {
+    margin: 0 0 4px;
+    font-size: 17px;
+}
+
+
+.scanner-header p {
+    margin: 0;
+    color: #7b8494;
+    font-size: 13px;
+}
+
+
+.scanner-status {
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   QR READER
+   ========================================================= */
+
+.qr-reader {
+    width: 100%;
+    max-width: 520px;
+    min-height: 100px;
+    margin: 0 auto;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+
+.qr-reader video {
+    width: 100% !important;
+    border-radius: 14px;
+}
+
+
+.qr-reader img {
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.attendance-message {
+    max-width: 520px;
+    margin: 20px auto 0;
+    padding: 15px 17px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+.attendance-message.success {
+    background: #ecfdf3;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+
+.attendance-message.error {
+    background: #fff1f2;
+    color: #b42318;
+    border: 1px solid #fecdd3;
+}
+
+
+.attendance-message.info {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.scanner-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+}
+
+
+.primary-button,
+.secondary-button {
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+.primary-button {
+    background: #2457d6;
+    color: #ffffff;
+}
+
+
+.primary-button:hover {
+    background: #1d46b0;
+}
+
+
+.secondary-button {
+    background: #eef0f4;
+    color: #374151;
+}
+
+
+.secondary-button:hover {
+    background: #e2e5eb;
+}
+
+
+.primary-button:disabled,
+.secondary-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   INFO CARDS
+   ========================================================= */
+
+.scan-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+}
+
+
+.scan-info-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    gap: 13px;
+}
+
+
+.scan-info-card > span {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #eef3ff;
+    color: #2457d6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+
+.scan-info-card h3 {
+    margin: 0 0 5px;
+    font-size: 14px;
+}
+
+
+.scan-info-card p {
+    margin: 0;
+    color: #7b8494;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   NOTICE
+   ========================================================= */
+
+.scan-notice {
+    margin-top: 20px;
+    padding: 17px;
+    background: #fffaf0;
+    border: 1px solid #f4e1b2;
+    border-radius: 14px;
+    display: flex;
+    gap: 12px;
+}
+
+
+.scan-notice > span {
+    font-size: 20px;
+}
+
+
+.scan-notice strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+
+.scan-notice p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .student-sidebar {
+        width: 215px;
+    }
+
+    .student-topbar {
+        padding: 18px 20px;
+    }
+
+    .scan-page {
+        padding: 22px 18px;
+    }
+
+    .scan-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 620px) {
+
+    .student-layout {
+        display: block;
+    }
+
+    .student-sidebar {
+        width: 100%;
+        min-height: auto;
+    }
+
+    .student-sidebar-header {
+        padding: 14px 18px;
+    }
+
+    .student-nav {
+        display: flex;
+        overflow-x: auto;
+        padding: 10px;
+        gap: 5px;
+    }
+
+    .student-nav-link {
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .student-sidebar-footer {
+        display: none;
+    }
+
+    .student-topbar {
+        padding: 18px;
+    }
+
+    .student-topbar h1 {
+        font-size: 20px;
+    }
+
+    .student-user-info {
+        display: none;
+    }
+
+    .scan-page {
+        padding: 18px 14px;
+    }
+
+    .scan-card {
+        padding: 16px;
+    }
+
+}

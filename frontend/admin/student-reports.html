@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Reports - Daura GlobalTECHNOLOGY</title>
+
+    <link rel="stylesheet" href="../assests/css/student-reports.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo-area">
+            <img src="../assests/images/logo.svg" alt="Logo">
+            <h2>Daura Global</h2>
+            <span>ICT Center</span>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html">Dashboard</a>
+
+            <a href="students.html">Students</a>
+
+            <a href="schools.html">Schools</a>
+
+            <a href="siwes-batches.html">SIWES Batches</a>
+
+            <div class="nav-title">Attendance</div>
+
+            <a href="today-attendance.html">Today's Attendance</a>
+
+            <a href="attendance-history.html">Attendance History</a>
+
+            <a href="qr-attendance.html">QR Attendance</a>
+
+            <div class="nav-title">Reports</div>
+
+            <a href="student-reports.html" class="active">
+                Student Reports
+            </a>
+
+            <a href="school-reports.html">
+                School Reports
+            </a>
+
+            <a href="batch-reports.html">
+                Batch Reports
+            </a>
+
+        </nav>
+
+        <button id="logoutBtn" class="logout-btn">
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Student Reports</h1>
+                <p>View individual student attendance reports</p>
+            </div>
+        </header>
+
+
+        <!-- SEARCH SECTION -->
+        <section class="search-card">
+
+            <div class="form-group">
+
+                <label for="studentSelect">
+                    Select Student
+                </label>
+
+                <select id="studentSelect">
+                    <option value="">
+                        -- Select Student --
+                    </option>
+                </select>
+
+            </div>
+
+            <button id="viewReportBtn" class="primary-btn">
+                View Report
+            </button>
+
+            <button id="resetBtn" class="secondary-btn">
+                Reset
+            </button>
+
+        </section>
+
+
+        <!-- REPORT -->
+        <section id="reportSection" class="report-section hidden">
+
+            <!-- STUDENT INFO -->
+            <div class="student-card">
+
+                <div class="student-info">
+
+                    <h2 id="studentName">—</h2>
+
+                    <p>
+                        <strong>Student ID:</strong>
+                        <span id="studentId">—</span>
+                    </p>
+
+                    <p>
+                        <strong>Registration Number:</strong>
+                        <span id="registrationNumber">—</span>
+                    </p>
+
+                    <p>
+                        <strong>School:</strong>
+                        <span id="schoolName">—</span>
+                    </p>
+
+                    <p>
+                        <strong>Department:</strong>
+                        <span id="department">—</span>
+                    </p>
+
+                    <p>
+                        <strong>Course:</strong>
+                        <span id="course">—</span>
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUMMARY CARDS -->
+            <div class="summary-grid">
+
+                <div class="summary-card">
+                    <span>Total Sessions</span>
+                    <strong id="totalSessions">—</strong>
+                </div>
+
+                <div class="summary-card present">
+                    <span>Present</span>
+                    <strong id="presentCount">—</strong>
+                </div>
+
+                <div class="summary-card late">
+                    <span>Late</span>
+                    <strong id="lateCount">—</strong>
+                </div>
+
+                <div class="summary-card absent">
+                    <span>Absent</span>
+                    <strong id="absentCount">—</strong>
+                </div>
+
+                <div class="summary-card percentage">
+                    <span>Attendance Percentage</span>
+                    <strong id="attendancePercentage">—</strong>
+                </div>
+
+            </div>
+
+
+            <!-- ATTENDANCE TABLE -->
+            <div class="table-card">
+
+                <div class="table-header">
+
+                    <div>
+                        <h2>Attendance History</h2>
+                        <p>Individual attendance records</p>
+                    </div>
+
+                    <button id="refreshBtn" class="secondary-btn">
+                        Refresh
+                    </button>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Date</th>
+                                <th>Session</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="attendanceTableBody">
+
+                            <tr>
+                                <td colspan="5" class="empty">
+                                    No attendance records
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MESSAGE -->
+        <div id="messageBox" class="message-box hidden"></div>
+
+    </main>
+
+</div>
+
+
+<script src="../assests/js/student-reports.js"></script>
+
+</body>
+</html>

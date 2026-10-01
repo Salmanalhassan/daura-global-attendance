@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Daura GlobalTECHNOLOGY Student QR Attendance"
+    >
+
+    <title>
+        Scan QR | Daura Global
+    </title>
+
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="/assests/images/logo.svg"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/assests/css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/assests/css/scan-qr.css"
+    >
+
+</head>
+
+
+<body class="student-page">
+
+
+    <div class="student-layout">
+
+
+        <!-- =========================
+             SIDEBAR
+        ========================== -->
+
+        <aside class="student-sidebar">
+
+
+            <div class="student-sidebar-header">
+
+                <a
+                    href="/student/dashboard.html"
+                    class="student-logo"
+                >
+
+                    <img
+                        src="/assests/images/logo.svg"
+                        alt="Daura Global Logo"
+                    >
+
+                    <div>
+
+                        <strong>
+                            Daura Global
+                        </strong>
+
+                        <span>
+                            Student Portal
+                        </span>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <nav class="student-nav">
+
+
+                <a
+                    href="/student/dashboard.html"
+                    class="student-nav-link"
+                >
+                    <span>🏠</span>
+                    <span>Dashboard</span>
+                </a>
+
+
+                <a
+                    href="/student/scan-qr.html"
+                    class="student-nav-link active"
+                >
+                    <span>📷</span>
+                    <span>Scan QR</span>
+                </a>
+
+
+                <a
+                    href="/student/my-attendance.html"
+                    class="student-nav-link"
+                >
+                    <span>📋</span>
+                    <span>My Attendance</span>
+                </a>
+
+
+<a
+    href="/student/attendance-summary.html"
+    class="student-nav-link"
+>
+    <span>📊</span>
+    <span>Attendance Summary</span>
+</a>
+
+
+                <a
+                    href="/student/my-siwes.html"
+                    class="student-nav-link"
+                >
+                    <span>📚</span>
+                    <span>My SIWES</span>
+                </a>
+
+
+                <a
+                    href="/student/profile.html"
+                    class="student-nav-link"
+                >
+                    <span>👤</span>
+                    <span>My Profile</span>
+                </a>
+
+
+            </nav>
+
+
+            <div class="student-sidebar-footer">
+
+                <button
+                    type="button"
+                    id="logoutBtn"
+                    class="logout-button"
+                >
+                    <span>🚪</span>
+                    <span>Logout</span>
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- =========================
+             MAIN CONTENT
+        ========================== -->
+
+        <main class="student-main">
+
+
+            <!-- TOPBAR -->
+
+            <header class="student-topbar">
+
+
+                <div>
+
+                    <p class="page-eyebrow">
+                        STUDENT PORTAL
+                    </p>
+
+                    <h1>
+                        Scan Attendance QR
+                    </h1>
+
+                </div>
+
+
+                <div class="student-user-info">
+
+                    <div
+                        class="student-avatar"
+                        id="studentAvatar"
+                    >
+                        S
+                    </div>
+
+                    <div>
+
+                        <strong id="studentName">
+                            Student
+                        </strong>
+
+                        <span>
+                            Student
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </header>
+
+
+
+            <!-- CONTENT -->
+
+            <section class="scan-page">
+
+
+                <!-- INTRO -->
+
+                <div class="scan-intro">
+
+                    <h2>
+                        Mark Your Attendance
+                    </h2>
+
+                    <p>
+                        Scan the active attendance QR code
+                        displayed by Daura GlobalTECHNOLOGY.
+                    </p>
+
+                </div>
+
+
+
+                <!-- SCANNER CARD -->
+
+                <div class="scan-card">
+
+
+                    <div class="scanner-header">
+
+                        <div>
+
+                            <span class="scanner-icon">
+                                📷
+                            </span>
+
+                            <div>
+
+                                <h3>
+                                    QR Scanner
+                                </h3>
+
+                                <p>
+                                    Position the QR code
+                                    inside the frame.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <span
+                            class="scanner-status"
+                            id="scannerStatus"
+                        >
+                            Ready
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- QR SCANNER -->
+
+                    <div
+                        id="qr-reader"
+                        class="qr-reader"
+                    ></div>
+
+
+
+                    <!-- MESSAGE -->
+
+                    <div
+                        id="attendanceMessage"
+                        class="attendance-message"
+                        hidden
+                    ></div>
+
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="scanner-actions">
+
+                        <button
+                            type="button"
+                            id="startScannerBtn"
+                            class="primary-button"
+                        >
+                            📷 Start Scanner
+                        </button>
+
+
+                        <button
+                            type="button"
+                            id="stopScannerBtn"
+                            class="secondary-button"
+                            disabled
+                        >
+                            Stop Scanner
+                        </button>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- INSTRUCTIONS -->
+
+                <div class="scan-info-grid">
+
+
+                    <div class="scan-info-card">
+
+                        <span>
+                            1
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Start Scanner
+                            </h3>
+
+                            <p>
+                                Allow camera access when
+                                your browser asks for permission.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="scan-info-card">
+
+                        <span>
+                            2
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Scan QR Code
+                            </h3>
+
+                            <p>
+                                Point your camera at the
+                                active attendance QR code.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="scan-info-card">
+
+                        <span>
+                            3
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Attendance Confirmed
+                            </h3>
+
+                            <p>
+                                If the QR session is valid,
+                                your attendance will be recorded.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- IMPORTANT NOTICE -->
+
+                <div class="scan-notice">
+
+                    <span>
+                        ℹ️
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Important
+                        </strong>
+
+                        <p>
+                            Attendance can only be marked when
+                            the QR session is active and within
+                            the allowed attendance time.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <!-- GLOBAL JAVASCRIPT -->
+
+    <script src="/assests/js/app.js"></script>
+
+
+    <!-- QR SCANNER LIBRARY -->
+
+    <script
+        src="https://unpkg.com/html5-qrcode"
+        type="text/javascript"
+    ></script>
+
+
+    <!-- PAGE JAVASCRIPT -->
+
+    <script src="/assests/js/scan-qr.js"></script>
+
+
+</body>
+
+</html>

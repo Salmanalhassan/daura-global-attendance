@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Batch Reports - Daura GlobalTECHNOLOGY
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/batch-reports.css"
+    >
+
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+
+            <img
+                src="../assests/images/logo.svg"
+                alt="Daura GlobalTECHNOLOGY"
+                class="logo"
+            >
+
+            <h2>Daura Global</h2>
+
+            <p>ICT Center</p>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="students.html">
+                Students
+            </a>
+
+            <a href="schools.html">
+                Schools
+            </a>
+
+            <a href="siwes-batches.html">
+                SIWES Batches
+            </a>
+
+            <a href="today-attendance.html">
+                Today's Attendance
+            </a>
+
+            <a href="attendance-history.html">
+                Attendance History
+            </a>
+
+            <a href="qr-attendance.html">
+                QR Attendance
+            </a>
+
+
+            <div class="nav-title">
+                Reports
+            </div>
+
+
+            <a href="student-reports.html">
+                Student Reports
+            </a>
+
+            <a href="school-reports.html">
+                School Reports
+            </a>
+
+            <a
+                href="batch-reports.html"
+                class="active"
+            >
+                Batch Reports
+            </a>
+
+        </nav>
+
+
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+        >
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+        <div class="page-header">
+
+            <h1>
+                Batch Reports
+            </h1>
+
+            <p>
+                View attendance reports for SIWES batches.
+            </p>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div
+            id="messageBox"
+            class="message-box hidden"
+        ></div>
+
+
+        <!-- SELECT BATCH -->
+
+        <section class="filter-card">
+
+            <div class="form-group">
+
+                <label for="batchSelect">
+                    Select SIWES Batch
+                </label>
+
+                <select id="batchSelect">
+
+                    <option value="">
+                        -- Select Batch --
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="button-group">
+
+                <button
+                    id="viewReportBtn"
+                    class="primary-btn"
+                >
+                    View Report
+                </button>
+
+                <button
+                    id="refreshBtn"
+                    class="secondary-btn"
+                >
+                    Refresh
+                </button>
+
+                <button
+                    id="resetBtn"
+                    class="danger-btn"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- REPORT -->
+
+        <section
+            id="reportSection"
+            class="report-section hidden"
+        >
+
+
+            <!-- BATCH INFO -->
+
+            <div class="batch-info-card">
+
+                <div>
+
+                    <h2 id="batchName">
+                        —
+                    </h2>
+
+                    <p id="batchDescription">
+                        —
+                    </p>
+
+                </div>
+
+
+                <div class="batch-dates">
+
+                    <p>
+
+                        <strong>
+                            Start:
+                        </strong>
+
+                        <span id="startDate">
+                            —
+                        </span>
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            End:
+                        </strong>
+
+                        <span id="endDate">
+                            —
+                        </span>
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Status:
+                        </strong>
+
+                        <span id="batchStatus">
+                            —
+                        </span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="summary-grid">
+
+
+                <div class="summary-card">
+
+                    <span>
+                        Total Students
+                    </span>
+
+                    <strong id="totalStudents">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>
+                        Total Sessions
+                    </span>
+
+                    <strong id="totalSessions">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>
+                        Attendance Records
+                    </span>
+
+                    <strong id="totalAttendanceRecords">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>
+                        Present
+                    </span>
+
+                    <strong id="presentCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>
+                        Late
+                    </span>
+
+                    <strong id="lateCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <span>
+                        Absent
+                    </span>
+
+                    <strong id="absentCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-card percentage-card">
+
+                    <span>
+                        Attendance Percentage
+                    </span>
+
+                    <strong id="attendancePercentage">
+                        0%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- STUDENTS TABLE -->
+
+            <div class="table-card">
+
+                <div class="table-header">
+
+                    <h2>
+                        Batch Students
+                    </h2>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+
+                                <th>
+                                    Student ID
+                                </th>
+
+                                <th>
+                                    Student Name
+                                </th>
+
+                                <th>
+                                    Registration Number
+                                </th>
+
+                                <th>
+                                    School
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                <th>
+                                    Present
+                                </th>
+
+                                <th>
+                                    Late
+                                </th>
+
+                                <th>
+                                    Absent
+                                </th>
+
+                                <th>
+                                    Percentage
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="studentsTableBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="11"
+                                    class="empty"
+                                >
+                                    No report loaded
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- ATTENDANCE RECORDS -->
+
+            <div class="table-card attendance-records">
+
+                <div class="table-header">
+
+                    <h2>
+                        Attendance Records
+                    </h2>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>#</th>
+
+                                <th>
+                                    Student ID
+                                </th>
+
+                                <th>
+                                    Student Name
+                                </th>
+
+                                <th>
+                                    School
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Time
+                                </th>
+
+                                <th>
+                                    Session
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="attendanceTableBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="8"
+                                    class="empty"
+                                >
+                                    No attendance records
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="../assests/js/batch-reports.js"></script>
+
+</body>
+
+</html>

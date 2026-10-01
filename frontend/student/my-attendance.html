@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Daura GlobalTECHNOLOGY Student Attendance History"
+    >
+
+    <title>
+        My Attendance | Daura Global
+    </title>
+
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="/assests/images/logo.svg"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/assests/css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/assests/css/my-attendance.css"
+    >
+
+</head>
+
+
+<body class="student-page">
+
+
+    <div class="student-layout">
+
+
+        <!-- =========================
+             SIDEBAR
+        ========================== -->
+
+        <aside class="student-sidebar">
+
+
+            <div class="student-sidebar-header">
+
+                <a
+                    href="/student/dashboard.html"
+                    class="student-logo"
+                >
+
+                    <img
+                        src="/assests/images/logo.svg"
+                        alt="Daura Global Logo"
+                    >
+
+                    <div>
+
+                        <strong>
+                            Daura Global
+                        </strong>
+
+                        <span>
+                            Student Portal
+                        </span>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <nav class="student-nav">
+
+
+                <a
+                    href="/student/dashboard.html"
+                    class="student-nav-link"
+                >
+                    <span>🏠</span>
+                    <span>Dashboard</span>
+                </a>
+
+
+                <a
+                    href="/student/scan-qr.html"
+                    class="student-nav-link"
+                >
+                    <span>📷</span>
+                    <span>Scan QR</span>
+                </a>
+
+
+                <a
+                    href="/student/my-attendance.html"
+                    class="student-nav-link active"
+                >
+                    <span>📋</span>
+                    <span>My Attendance</span>
+                </a>
+
+<a
+    href="/student/attendance-summary.html"
+    class="student-nav-link"
+>
+    <span>📊</span>
+    <span>Attendance Summary</span>
+</a>
+
+
+                <a
+                    href="/student/my-siwes.html"
+                    class="student-nav-link"
+                >
+                    <span>📚</span>
+                    <span>My SIWES</span>
+                </a>
+
+
+                <a
+                    href="/student/profile.html"
+                    class="student-nav-link"
+                >
+                    <span>👤</span>
+                    <span>My Profile</span>
+                </a>
+
+
+            </nav>
+
+
+            <div class="student-sidebar-footer">
+
+                <button
+                    type="button"
+                    id="logoutBtn"
+                    class="logout-button"
+                >
+                    <span>🚪</span>
+                    <span>Logout</span>
+                </button>
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- =========================
+             MAIN
+        ========================== -->
+
+        <main class="student-main">
+
+
+            <!-- TOPBAR -->
+
+            <header class="student-topbar">
+
+                <div>
+
+                    <p class="page-eyebrow">
+                        STUDENT PORTAL
+                    </p>
+
+                    <h1>
+                        My Attendance
+                    </h1>
+
+                </div>
+
+
+                <div class="student-user-info">
+
+                    <div
+                        class="student-avatar"
+                        id="studentAvatar"
+                    >
+                        S
+                    </div>
+
+                    <div>
+
+                        <strong id="studentName">
+                            Student
+                        </strong>
+
+                        <span>
+                            Student
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- PAGE CONTENT -->
+
+            <section class="attendance-page">
+
+
+                <!-- INTRO -->
+
+                <div class="attendance-intro">
+
+                    <div>
+
+                        <p class="section-label">
+                            ATTENDANCE HISTORY
+                        </p>
+
+                        <h2>
+                            Track Your Attendance
+                        </h2>
+
+                        <p>
+                            View all attendance records
+                            recorded during your SIWES training.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="refreshBtn"
+                        class="refresh-button"
+                    >
+                        ↻ Refresh
+                    </button>
+
+                </div>
+
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="attendanceMessage"
+                    class="attendance-message"
+                    hidden
+                ></div>
+
+
+
+                <!-- SUMMARY CARDS -->
+
+                <div class="attendance-summary-grid">
+
+
+                    <div class="attendance-summary-card">
+
+                        <div class="summary-icon">
+                            📋
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Total Records
+                            </span>
+
+                            <strong id="totalRecords">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="attendance-summary-card">
+
+                        <div class="summary-icon">
+                            ✅
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Present
+                            </span>
+
+                            <strong id="presentCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="attendance-summary-card">
+
+                        <div class="summary-icon">
+                            ⏰
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Late
+                            </span>
+
+                            <strong id="lateCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="attendance-summary-card">
+
+                        <div class="summary-icon">
+                            📊
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Attendance %
+                            </span>
+
+                            <strong id="attendancePercentage">
+                                0%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ATTENDANCE TABLE -->
+
+                <div class="attendance-card">
+
+
+                    <div class="attendance-card-header">
+
+                        <div>
+
+                            <h3>
+                                Attendance History
+                            </h3>
+
+                            <p>
+                                Your recorded attendance sessions.
+                            </p>
+
+                        </div>
+
+
+                        <span
+                            id="recordCountLabel"
+                            class="record-count"
+                        >
+                            0 records
+                        </span>
+
+                    </div>
+
+
+
+                    <div
+                        id="loadingState"
+                        class="loading-state"
+                    >
+
+                        <div class="loading-spinner"></div>
+
+                        <p>
+                            Loading attendance...
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        id="emptyState"
+                        class="empty-state"
+                        hidden
+                    >
+
+                        <div class="empty-icon">
+                            📋
+                        </div>
+
+                        <h3>
+                            No Attendance Records
+                        </h3>
+
+                        <p>
+                            Your attendance records will appear
+                            here after you scan an active QR code.
+                        </p>
+
+                    </div>
+
+
+
+                    <div
+                        id="tableWrapper"
+                        class="table-wrapper"
+                        hidden
+                    >
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        #
+                                    </th>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Time
+                                    </th>
+
+                                    <th>
+                                        Session
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="attendanceTableBody"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                </div>
+
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <!-- GLOBAL JS -->
+
+    <script src="/assests/js/app.js"></script>
+
+
+    <!-- PAGE JS -->
+
+    <script src="/assests/js/my-attendance.js"></script>
+
+
+</body>
+
+</html>

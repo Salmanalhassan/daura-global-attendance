@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Admin Settings - Daura GlobalTECHNOLOGY
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/settings.css"
+    >
+</head>
+
+<body>
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+
+            <img
+                src="../assests/images/logo.svg"
+                alt="Daura GlobalTECHNOLOGY"
+                class="logo"
+            >
+
+            <h2>Daura Global</h2>
+
+            <p>ICT Center</p>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="students.html">
+                Students
+            </a>
+
+            <a href="schools.html">
+                Schools
+            </a>
+
+            <a href="siwes-batches.html">
+                SIWES Batches
+            </a>
+
+            <a href="today-attendance.html">
+                Today's Attendance
+            </a>
+
+            <a href="attendance-history.html">
+                Attendance History
+            </a>
+
+            <a href="qr-attendance.html">
+                QR Attendance
+            </a>
+
+
+            <div class="nav-title">
+                Reports
+            </div>
+
+            <a href="student-reports.html">
+                Student Reports
+            </a>
+
+            <a href="school-reports.html">
+                School Reports
+            </a>
+
+            <a href="batch-reports.html">
+                Batch Reports
+            </a>
+
+
+            <a
+                href="settings.html"
+                class="active"
+            >
+                Settings
+            </a>
+
+        </nav>
+
+
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+        >
+            Logout
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <div class="page-header">
+
+            <h1>
+                Admin Settings
+            </h1>
+
+            <p>
+                Manage your administrator account.
+            </p>
+
+        </div>
+
+
+        <div
+            id="messageBox"
+            class="message-box hidden"
+        ></div>
+
+
+        <!-- PROFILE -->
+
+        <section class="settings-card">
+
+            <div class="card-header">
+
+                <h2>
+                    Profile Information
+                </h2>
+
+                <p>
+                    Update your administrator information.
+                </p>
+
+            </div>
+
+
+            <form id="profileForm">
+
+                <div class="form-group">
+
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Update Profile
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- PASSWORD -->
+
+        <section class="settings-card">
+
+            <div class="card-header">
+
+                <h2>
+                    Change Password
+                </h2>
+
+                <p>
+                    Keep your administrator account secure.
+                </p>
+
+            </div>
+
+
+            <form id="passwordForm">
+
+                <div class="form-group">
+
+                    <label for="currentPassword">
+                        Current Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="currentPassword"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="newPassword">
+                        New Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="newPassword"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirm New Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Change Password
+                </button>
+
+            </form>
+
+        </section>
+
+                <!-- PAYMENT SETTINGS -->
+
+        <section class="settings-card">
+
+            <div class="card-header">
+
+                <h2>
+                    SIWES Payment Settings
+                </h2>
+
+                <p>
+                    Manage the OPay and Moniepoint accounts
+                    students will use for SIWES payments.
+                </p>
+
+            </div>
+
+
+            <form id="paymentSettingsForm">
+
+
+                <!-- OPAY -->
+
+                <div class="payment-method-section">
+
+                    <h3>
+                        OPay Account
+                    </h3>
+
+
+                    <div class="form-group">
+
+                        <label for="opayAccountName">
+                            Account Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="opayAccountName"
+                            placeholder="Enter OPay account name"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="opayAccountNumber">
+                            Account Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="opayAccountNumber"
+                            placeholder="Enter OPay account number"
+                            inputmode="numeric"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- MONIEPOINT -->
+
+                <div class="payment-method-section">
+
+                    <h3>
+                        Moniepoint Account
+                    </h3>
+
+
+                    <div class="form-group">
+
+                        <label for="moniepointAccountName">
+                            Account Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="moniepointAccountName"
+                            placeholder="Enter Moniepoint account name"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="moniepointAccountNumber">
+                            Account Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="moniepointAccountNumber"
+                            placeholder="Enter Moniepoint account number"
+                            inputmode="numeric"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="savePaymentSettingsBtn"
+                >
+                    Save Payment Settings
+                </button>
+
+            </form>
+
+        </section>
+    </main>
+
+</div>
+
+
+<script src="../assests/js/settings.js"></script>
+</body>
+
+</html>

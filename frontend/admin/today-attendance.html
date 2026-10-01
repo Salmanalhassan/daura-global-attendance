@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Today's Attendance | Daura Global</title>
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/today-attendance.css"
+    >
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+
+            <img
+                src="../assests/images/logo.svg"
+                alt="Daura Global Logo"
+            >
+
+            <h2>Daura Global</h2>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html">
+                <span>📊</span>
+                Dashboard
+            </a>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    Students
+                </div>
+
+                <a href="students.html">
+                    <span>👨‍🎓</span>
+                    All Students
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    Schools
+                </div>
+
+                <a href="schools.html">
+                    <span>🏫</span>
+                    All Schools
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    SIWES
+                </div>
+
+                <a href="siwes-batches.html">
+                    <span>📚</span>
+                    SIWES Batches
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    Attendance
+                </div>
+
+                <a
+                    href="today-attendance.html"
+                    class="active"
+                >
+                    <span>📅</span>
+                    Today's Attendance
+                </a>
+
+                <a
+                    href="attendance-history.html"
+                    
+                >
+                    <span>🕘</span>
+                    Attendance History
+                </a>
+
+                <a
+                    href="qr-attendance.html"
+                    
+                >
+                    <span>📱</span>
+                    QR Attendance
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    Reports
+                </div>
+
+                <a
+                    href="attendance-reports.html"
+                    
+                >
+                    <span>📄</span>
+                    Reports
+                </a>
+
+            </div>
+
+
+            <div class="nav-section">
+
+                <div class="nav-title">
+                    System
+                </div>
+
+                <a
+                    href="settings.html"
+                    
+                >
+                    <span>⚙️</span>
+                    Settings
+                </a>
+
+            </div>
+
+        </nav>
+
+
+        <button
+            id="logoutBtn"
+            class="logout-btn"
+        >
+            🚪 Logout
+        </button>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    Today's Attendance
+                </h1>
+
+                <p id="todayDate">
+                    Loading date...
+                </p>
+
+            </div>
+
+
+            <div class="admin-info">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <strong id="adminName">
+                        Admin
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- PAGE CONTENT -->
+        <section class="page-content">
+
+
+            <!-- STAT CARDS -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon total">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Total Attendance
+                        </p>
+
+                        <h2 id="totalAttendance">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon present">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Present
+                        </p>
+
+                        <h2 id="presentCount">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon late">
+                        ⏰
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Late
+                        </p>
+
+                        <h2 id="lateCount">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon absent">
+                        ✕
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Absent
+                        </p>
+
+                        <h2 id="absentCount">
+                            0
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MESSAGE -->
+            <div
+                id="messageBox"
+                class="message-box"
+            ></div>
+
+
+
+            <!-- FILTER BAR -->
+            <div class="filter-card">
+
+                <div class="search-box">
+
+                    <span>🔎</span>
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search student name or ID..."
+                    >
+
+                </div>
+
+
+                <select id="schoolFilter">
+
+                    <option value="">
+                        All Schools
+                    </option>
+
+                </select>
+
+
+                <select id="statusFilter">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="present">
+                        Present
+                    </option>
+
+                    <option value="late">
+                        Late
+                    </option>
+
+                    <option value="absent">
+                        Absent
+                    </option>
+
+                </select>
+
+
+                <button
+                    id="refreshBtn"
+                    class="refresh-btn"
+                >
+                    🔄 Refresh
+                </button>
+
+            </div>
+
+
+
+            <!-- ATTENDANCE TABLE -->
+            <div class="table-card">
+
+                <div class="table-header">
+
+                    <div>
+
+                        <h2>
+                            Attendance Records
+                        </h2>
+
+                        <p>
+                            Students attendance for today
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        id="recordCount"
+                        class="record-count"
+                    >
+                        0 Records
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    Student
+                                </th>
+
+                                <th>
+                                    Student ID
+                                </th>
+
+                                <th>
+                                    School
+                                </th>
+
+                                <th>
+                                    Time
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="attendanceTableBody">
+
+                            <tr>
+
+                                <td
+                                    colspan="6"
+                                    class="loading"
+                                >
+                                    Loading attendance...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<script src="../assests/js/today-attendance.js"></script>
+
+</body>
+
+</html>

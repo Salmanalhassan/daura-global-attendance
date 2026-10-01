@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SIWES Payment - Daura GlobalTECHNOLOGY</title>
+
+    <link
+        rel="stylesheet"
+        href="assests/css/style.css"
+    >
+
+    <style>
+
+        .payment-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .payment-header {
+            margin-bottom: 25px;
+        }
+
+        .payment-header h1 {
+            margin-bottom: 8px;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .payment-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow:
+                0 3px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .payment-card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .amount-box {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            background: #f5f7fa;
+        }
+
+        .amount-box .label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .amount-box .amount {
+            display: block;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .batch-name {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .method-option {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 14px;
+            cursor: pointer;
+        }
+
+        .method-option:hover {
+            border-color: #999;
+        }
+
+        .method-option input {
+            margin-right: 7px;
+        }
+
+        .account-box {
+            display: none;
+            margin-top: 15px;
+            padding: 16px;
+            border-radius: 10px;
+            background: #f5f7fa;
+            border: 1px solid #e2e6ea;
+        }
+
+        .account-box.active {
+            display: block;
+        }
+
+        .account-box h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .account-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .account-row:last-child {
+            border-bottom: none;
+        }
+
+        .account-label {
+            font-weight: 600;
+        }
+
+        .account-value {
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .message.success {
+            display: block;
+            background: #e8f7ee;
+            color: #146c36;
+        }
+
+        .message.error {
+            display: block;
+            background: #fdeaea;
+            color: #a11a1a;
+        }
+
+        .message.info {
+            display: block;
+            background: #eaf2ff;
+            color: #174ea6;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .payment-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .payment-table th,
+        .payment-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status.approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .loading-text {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .no-account {
+            color: #a11a1a;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+
+            .payment-container {
+                padding: 12px;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .account-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .account-value {
+                text-align: left;
+            }
+
+        }
+
+        .payment-details {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.rejection-reason {
+    margin-top: 6px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: #fff1f1;
+    color: #a11a1a;
+}
+
+.rejection-reason strong {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.payment-approved {
+    color: #155724;
+    font-size: 12px;
+}
+
+.payment-pending {
+    color: #856404;
+    font-size: 12px;
+}
+
+
+.payment-summary-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.payment-summary-card {
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px solid #e5e5e5;
+    background: #f8f9fa;
+}
+
+.payment-summary-card .summary-label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.payment-summary-card .summary-value {
+    display: block;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.payment-summary-card.total {
+    border-left: 4px solid #555;
+}
+
+.payment-summary-card.approved {
+    background: #e8f7ee;
+    border-left: 4px solid #28a745;
+}
+
+.payment-summary-card.pending {
+    background: #fff8e1;
+    border-left: 4px solid #ffc107;
+}
+
+.payment-summary-card.rejected {
+    background: #fdeaea;
+    border-left: 4px solid #dc3545;
+}
+
+@media (max-width: 800px) {
+
+    .payment-summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .payment-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="payment-container">
+
+
+        <!-- HEADER -->
+
+        <div class="payment-header">
+
+            <h1>SIWES Payment</h1>
+
+            <p>
+                Make your SIWES payment and track
+                your payment status.
+            </p>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        <div class="payment-grid">
+
+
+            <!-- PAYMENT FORM -->
+
+            <div class="payment-card">
+
+                <h2>Make Payment</h2>
+
+
+                <div class="amount-box">
+
+                    <span class="label">
+                        SIWES Payment Amount
+                    </span>
+
+                    <span
+                        class="amount"
+                        id="paymentAmount"
+                    >
+                        Loading...
+                    </span>
+
+                    <div
+                        class="batch-name"
+                        id="batchName"
+                    >
+                        Loading batch...
+                    </div>
+
+                </div>
+
+
+                <form id="paymentForm">
+
+
+                    <!-- PAYMENT METHOD -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Payment Method
+                        </label>
+
+
+                        <div class="payment-methods">
+
+                            <label class="method-option">
+
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="opay"
+                                    required
+                                >
+
+                                OPay
+
+                            </label>
+
+
+                            <label class="method-option">
+
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value="moniepoint"
+                                    required
+                                >
+
+                                Moniepoint
+
+                            </label>
+
+                        </div>
+
+
+                        <!-- OPAY ACCOUNT -->
+
+                        <div
+                            id="opayAccountBox"
+                            class="account-box"
+                        >
+
+                            <h3>
+                                OPay Payment Account
+                            </h3>
+
+                            <div class="account-row">
+
+                                <span class="account-label">
+                                    Account Name
+                                </span>
+
+                                <span
+                                    class="account-value"
+                                    id="opayAccountName"
+                                >
+                                    -
+                                </span>
+
+                            </div>
+
+                            <div class="account-row">
+
+                                <span class="account-label">
+                                    Account Number
+                                </span>
+
+                                <span
+                                    class="account-value"
+                                    id="opayAccountNumber"
+                                >
+                                    -
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MONIEPOINT ACCOUNT -->
+
+                        <div
+                            id="moniepointAccountBox"
+                            class="account-box"
+                        >
+
+                            <h3>
+                                Moniepoint Payment Account
+                            </h3>
+
+                            <div class="account-row">
+
+                                <span class="account-label">
+                                    Account Name
+                                </span>
+
+                                <span
+                                    class="account-value"
+                                    id="moniepointAccountName"
+                                >
+                                    -
+                                </span>
+
+                            </div>
+
+                            <div class="account-row">
+
+                                <span class="account-label">
+                                    Account Number
+                                </span>
+
+                                <span
+                                    class="account-value"
+                                    id="moniepointAccountNumber"
+                                >
+                                    -
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- TRANSACTION REFERENCE -->
+
+                    <div class="form-group">
+
+                        <label for="transactionReference">
+                            Transaction Reference
+                        </label>
+
+                        <input
+                            type="text"
+                            id="transactionReference"
+                            placeholder="Enter transaction reference"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- PAYMENT DATE -->
+
+                    <div class="form-group">
+
+                        <label for="paymentDate">
+                            Payment Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="paymentDate"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="submit-btn"
+                        id="submitPaymentBtn"
+                    >
+                        Submit Payment
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- PAYMENT INFORMATION -->
+
+            <div class="payment-card">
+
+                <h2>Payment Information</h2>
+
+
+                <p>
+                    Transfer your SIWES payment to
+                    the official Daura Global account
+                    shown after selecting your
+                    payment method.
+                </p>
+
+
+                <p>
+                    After completing the transfer,
+                    enter your transaction reference
+                    and submit the payment.
+                </p>
+
+
+                <hr>
+
+
+                <p>
+                    <strong>Important:</strong>
+                </p>
+
+
+                <p>
+                    Your payment will initially appear
+                    as <strong>Pending</strong>.
+                    An administrator will verify the
+                    transaction before approving it.
+                </p>
+
+
+                <p>
+                    Please make sure the transaction
+                    reference is correct before
+                    submitting.
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- PAYMENT SUMMARY -->
+
+<div
+    class="payment-card"
+    style="margin-top: 25px;"
+>
+
+    <h2>My Payment Summary</h2>
+
+    <div class="payment-summary-grid">
+
+        <div class="payment-summary-card total">
+            <span class="summary-label">
+                Total Payments
+            </span>
+
+            <strong
+                id="summaryTotal"
+                class="summary-value"
+            >
+                ₦0.00
+            </strong>
+        </div>
+
+
+        <div class="payment-summary-card approved">
+            <span class="summary-label">
+                Approved
+            </span>
+
+            <strong
+                id="summaryApproved"
+                class="summary-value"
+            >
+                ₦0.00
+            </strong>
+        </div>
+
+
+        <div class="payment-summary-card pending">
+            <span class="summary-label">
+                Pending
+            </span>
+
+            <strong
+                id="summaryPending"
+                class="summary-value"
+            >
+                ₦0.00
+            </strong>
+        </div>
+
+
+        <div class="payment-summary-card rejected">
+            <span class="summary-label">
+                Rejected
+            </span>
+
+            <strong
+                id="summaryRejected"
+                class="summary-value"
+            >
+                ₦0.00
+            </strong>
+        </div>
+
+    </div>
+
+</div>
+
+
+        <!-- PAYMENT HISTORY -->
+
+        <div
+            class="payment-card"
+            style="margin-top: 25px;"
+        >
+
+            <h2>Payment History</h2>
+
+
+            <div class="table-wrapper">
+
+                <table class="payment-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Date</th>
+<th>Batch</th>
+<th>Amount</th>
+<th>Method</th>
+<th>Reference</th>
+<th>Status</th>
+<th>Details</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="paymentHistory">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- GLOBAL APP -->
+
+    <script src="assests/js/app.js"></script>
+
+
+    <script>
+
+        /* =====================================================
+           PAYMENT PAGE
+        ===================================================== */
+
+        let paymentSettings = {
+
+            opay_account_name: '',
+            opay_account_number: '',
+
+            moniepoint_account_name: '',
+            moniepoint_account_number: ''
+
+        };
+
+
+        /*
+         * Student batch information is now loaded
+         * directly from the backend.
+         */
+
+        let studentBatch = {
+
+            id: null,
+            name: '',
+            fee: 0
+
+        };
+
+
+        /* =====================================================
+           PAGE LOAD
+        ===================================================== */
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            async () => {
+
+                if (!requireLogin()) {
+                    return;
+                }
+
+
+                const user = getUser();
+
+
+                if (
+                    !user ||
+                    user.role !== 'student'
+                ) {
+
+                    window.location.href = '/';
+
+                    return;
+
+                }
+
+
+                setDefaultDate();
+
+
+                /*
+                 * Load all required data.
+                 */
+
+                await loadPaymentSettings();
+
+                await loadStudentPaymentInfo();
+
+                await loadPayments();
+
+            }
+        );
+
+
+        /* =====================================================
+           DEFAULT DATE
+        ===================================================== */
+
+        function setDefaultDate() {
+
+            const input =
+                document.getElementById(
+                    'paymentDate'
+                );
+
+
+            /*
+             * Use local browser date.
+             * This avoids UTC date shifting.
+             */
+
+            const now = new Date();
+
+            const year =
+                now.getFullYear();
+
+            const month =
+                String(
+                    now.getMonth() + 1
+                ).padStart(2, '0');
+
+            const day =
+                String(
+                    now.getDate()
+                ).padStart(2, '0');
+
+
+            input.value =
+                `${year}-${month}-${day}`;
+
+        }
+
+
+        /* =====================================================
+           LOAD PAYMENT SETTINGS
+        ===================================================== */
+
+        async function loadPaymentSettings() {
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        '/payment-settings'
+                    );
+
+
+                if (
+                    response.success &&
+                    response.data
+                ) {
+
+                    paymentSettings =
+                        response.data;
+
+
+                    document.getElementById(
+                        'opayAccountName'
+                    ).textContent =
+                        paymentSettings.opay_account_name ||
+                        '-';
+
+
+                    document.getElementById(
+                        'opayAccountNumber'
+                    ).textContent =
+                        paymentSettings.opay_account_number ||
+                        '-';
+
+
+                    document.getElementById(
+                        'moniepointAccountName'
+                    ).textContent =
+                        paymentSettings.moniepoint_account_name ||
+                        '-';
+
+
+                    document.getElementById(
+                        'moniepointAccountNumber'
+                    ).textContent =
+                        paymentSettings.moniepoint_account_number ||
+                        '-';
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    'Payment settings error:',
+                    error
+                );
+
+                showMessage(
+                    'Unable to load payment account details.',
+                    'error'
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           LOAD STUDENT PAYMENT INFORMATION
+           
+           IMPORTANT:
+           The student's actual SIWES batch and fee
+           are loaded from the backend.
+
+           Endpoint:
+           GET /api/students/my-siwes
+        ===================================================== */
+
+        async function loadStudentPaymentInfo() {
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        '/students/my-siwes'
+                    );
+
+
+                if (
+                    !response.success ||
+                    !response.data
+                ) {
+
+                    throw new Error(
+                        'Unable to load your SIWES information.'
+                    );
+
+                }
+
+
+                const data =
+                    response.data;
+
+
+                /*
+                 * The backend returns the SIWES batch
+                 * inside data.siwes_batch.
+                 */
+
+                const batch =
+                    data.siwes_batch;
+
+
+                if (!batch) {
+
+                    studentBatch = {
+
+                        id: null,
+                        name: '',
+                        fee: 0
+
+                    };
+
+
+                    updateBatchDisplay();
+
+
+                    showMessage(
+                        'You are not currently assigned to a SIWES batch.',
+                        'error'
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                 * Save the actual batch information.
+                 */
+
+                studentBatch.id =
+                    batch.id || null;
+
+
+                studentBatch.name =
+                    batch.name || '';
+
+
+                studentBatch.fee =
+                    Number(batch.fee || 0);
+
+
+                updateBatchDisplay();
+
+
+                /*
+                 * If there is no valid fee,
+                 * disable payment submission.
+                 */
+
+                const button =
+                    document.getElementById(
+                        'submitPaymentBtn'
+                    );
+
+
+                if (
+                    !studentBatch.id ||
+                    studentBatch.fee <= 0
+                ) {
+
+                    button.disabled = true;
+
+                } else {
+
+                    button.disabled = false;
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    'Student SIWES information error:',
+                    error
+                );
+
+
+                studentBatch = {
+
+                    id: null,
+                    name: '',
+                    fee: 0
+
+                };
+
+
+                updateBatchDisplay();
+
+
+                document.getElementById(
+                    'submitPaymentBtn'
+                ).disabled = true;
+
+
+                showMessage(
+                    error.message ||
+                    'Unable to load your SIWES payment information.',
+                    'error'
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           BATCH DISPLAY
+        ===================================================== */
+
+        function updateBatchDisplay() {
+
+            document.getElementById(
+                'paymentAmount'
+            ).textContent =
+                `₦${formatAmount(studentBatch.fee)}`;
+
+
+            document.getElementById(
+                'batchName'
+            ).textContent =
+                studentBatch.name
+                    ? `Batch: ${studentBatch.name}`
+                    : 'SIWES Batch not available';
+
+        }
+
+
+        /* =====================================================
+           PAYMENT METHOD CHANGE
+        ===================================================== */
+
+        document
+            .querySelectorAll(
+                'input[name="paymentMethod"]'
+            )
+            .forEach(input => {
+
+                input.addEventListener(
+                    'change',
+                    () => {
+
+                        const method =
+                            document.querySelector(
+                                'input[name="paymentMethod"]:checked'
+                            );
+
+
+                        document
+                            .getElementById(
+                                'opayAccountBox'
+                            )
+                            .classList
+                            .remove('active');
+
+
+                        document
+                            .getElementById(
+                                'moniepointAccountBox'
+                            )
+                            .classList
+                            .remove('active');
+
+
+                        if (!method) {
+                            return;
+                        }
+
+
+                        if (
+                            method.value === 'opay'
+                        ) {
+
+                            document
+                                .getElementById(
+                                    'opayAccountBox'
+                                )
+                                .classList
+                                .add('active');
+
+                        }
+
+
+                        if (
+                            method.value === 'moniepoint'
+                        ) {
+
+                            document
+                                .getElementById(
+                                    'moniepointAccountBox'
+                                )
+                                .classList
+                                .add('active');
+
+                        }
+
+                    }
+                );
+
+            });
+
+
+        /* =====================================================
+           LOAD PAYMENT HISTORY
+        ===================================================== */
+
+        async function loadPayments() {
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        '/payments/my-payments'
+                    );
+
+if (
+    response.success &&
+    Array.isArray(response.data)
+) {
+
+    updatePaymentSummary(
+        response.data
+    );
+
+    renderPayments(
+        response.data
+    );
+
+}
+
+            } catch (error) {
+
+                console.error(
+                    'Payment history error:',
+                    error
+                );
+
+
+                showMessage(
+                    error.message ||
+                    'Unable to load payment history.',
+                    'error'
+                );
+
+            }
+
+        }
+
+
+        /////////////////////////////
+
+        /* =====================================================
+   PAYMENT SUMMARY
+===================================================== */
+
+function updatePaymentSummary(payments) {
+
+    let total = 0;
+    let approved = 0;
+    let pending = 0;
+    let rejected = 0;
+
+
+    payments.forEach(payment => {
+
+        const amount =
+            Number(payment.amount || 0);
+
+        const status =
+            String(payment.status || '')
+                .toLowerCase();
+
+
+        total += amount;
+
+
+        if (status === 'approved') {
+
+            approved += amount;
+
+        }
+
+
+        if (status === 'pending') {
+
+            pending += amount;
+
+        }
+
+
+        if (status === 'rejected') {
+
+            rejected += amount;
+
+        }
+
+    });
+
+
+    document.getElementById(
+        'summaryTotal'
+    ).textContent =
+        `₦${formatAmount(total)}`;
+
+
+    document.getElementById(
+        'summaryApproved'
+    ).textContent =
+        `₦${formatAmount(approved)}`;
+
+
+    document.getElementById(
+        'summaryPending'
+    ).textContent =
+        `₦${formatAmount(pending)}`;
+
+
+    document.getElementById(
+        'summaryRejected'
+    ).textContent =
+        `₦${formatAmount(rejected)}`;
+
+}
+        /* =====================================================
+           RENDER PAYMENT HISTORY
+        ===================================================== */
+
+        function renderPayments(payments) {
+
+            const tbody =
+                document.getElementById(
+                    'paymentHistory'
+                );
+
+
+            tbody.innerHTML = '';
+
+
+            if (!payments.length) {
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="7"
+                            class="empty-state"
+                        >
+                            No payment records found.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
+
+
+            payments.forEach(
+                payment => {
+
+                    const row =
+                        document.createElement(
+                            'tr'
+                        );
+
+
+                    row.innerHTML = `
+
+                        <td>
+                            ${formatDate(
+                                payment.payment_date
+                            )}
+                        </td>
+
+                        <td>
+                            ${
+                                escapeHtml(
+                                    payment.batch_name ||
+                                    payment.siwes_batch_name ||
+                                    '-'
+                                )
+                            }
+                        </td>
+
+                        <td>
+                            ₦${formatAmount(
+                                payment.amount
+                            )}
+                        </td>
+
+                        <td>
+                            ${formatMethod(
+                                payment.payment_method
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                payment.transaction_reference
+                            )}
+                        </td>
+
+                        <td>
+    ${statusBadge(
+        payment.status
+    )}
+</td>
+
+<td>
+    ${payment.status === 'rejected'
+        ? `
+            <div class="rejection-reason">
+                <strong>Reason:</strong>
+                ${escapeHtml(
+                    payment.rejection_reason ||
+                    'No rejection reason provided.'
+                )}
+            </div>
+        `
+        : payment.status === 'approved'
+        ? `
+            <div class="payment-details payment-approved">
+                Payment verified successfully.
+            </div>
+        `
+        : `
+            <div class="payment-details payment-pending">
+                Awaiting administrator verification.
+            </div>
+        `
+    }
+</td>
+                    `;
+
+
+                    tbody.appendChild(row);
+
+                }
+            );
+
+        }
+
+
+        /* =====================================================
+           SUBMIT PAYMENT
+        ===================================================== */
+
+        document
+            .getElementById('paymentForm')
+            .addEventListener(
+                'submit',
+                async function (event) {
+
+                    event.preventDefault();
+
+
+                    const method =
+                        document.querySelector(
+                            'input[name="paymentMethod"]:checked'
+                        );
+
+
+                    const reference =
+                        document.getElementById(
+                            'transactionReference'
+                        )
+                        .value
+                        .trim();
+
+
+                    const paymentDate =
+                        document.getElementById(
+                            'paymentDate'
+                        ).value;
+
+
+                    /*
+                     * Validate payment method.
+                     */
+
+                    if (!method) {
+
+                        showMessage(
+                            'Please select a payment method.',
+                            'error'
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Validate reference.
+                     */
+
+                    if (!reference) {
+
+                        showMessage(
+                            'Please enter the transaction reference.',
+                            'error'
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Validate date.
+                     */
+
+                    if (!paymentDate) {
+
+                        showMessage(
+                            'Please select the payment date.',
+                            'error'
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Validate batch.
+                     */
+
+                    if (!studentBatch.id) {
+
+                        showMessage(
+                            'Your SIWES batch information is not available. Please contact the administrator.',
+                            'error'
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Validate fee.
+                     */
+
+                    if (
+                        !studentBatch.fee ||
+                        Number(studentBatch.fee) <= 0
+                    ) {
+
+                        showMessage(
+                            'SIWES payment fee has not been configured for your batch. Please contact the administrator.',
+                            'error'
+                        );
+
+                        return;
+
+                    }
+
+
+                    const button =
+                        document.getElementById(
+                            'submitPaymentBtn'
+                        );
+
+
+                    button.disabled = true;
+
+                    button.textContent =
+                        'Submitting...';
+
+
+                    try {
+
+                        /*
+                         * IMPORTANT:
+                         *
+                         * We do NOT send amount.
+                         *
+                         * The backend gets the official
+                         * fee directly from the database.
+                         */
+
+                        const response =
+                            await apiRequest(
+                                '/payments',
+                                {
+
+                                    method: 'POST',
+
+                                    body:
+                                        JSON.stringify({
+
+                                            siwes_batch_id:
+                                                studentBatch.id,
+
+                                            payment_method:
+                                                method.value,
+
+                                            transaction_reference:
+                                                reference,
+
+                                            payment_date:
+                                                paymentDate
+
+                                        })
+
+                                }
+                            );
+
+
+                        showMessage(
+                            response.message ||
+                            'Payment submitted successfully.',
+                            'success'
+                        );
+
+
+                        /*
+                         * Reset form after successful
+                         * submission.
+                         */
+
+                        this.reset();
+
+
+                        document
+                            .getElementById(
+                                'opayAccountBox'
+                            )
+                            .classList
+                            .remove('active');
+
+
+                        document
+                            .getElementById(
+                                'moniepointAccountBox'
+                            )
+                            .classList
+                            .remove('active');
+
+
+                        setDefaultDate();
+
+
+                        /*
+                         * Keep the batch information
+                         * because it came from backend
+                         * and is still valid.
+                         */
+
+                        updateBatchDisplay();
+
+
+                        /*
+                         * Refresh payment history.
+                         */
+
+                        await loadPayments();
+
+                    } catch (error) {
+
+                        console.error(
+                            'Payment submission error:',
+                            error
+                        );
+
+
+                        showMessage(
+                            error.message ||
+                            'Payment submission failed.',
+                            'error'
+                        );
+
+                    } finally {
+
+                        /*
+                         * Re-enable button only if
+                         * valid batch and fee exist.
+                         */
+
+                        if (
+                            studentBatch.id &&
+                            Number(studentBatch.fee) > 0
+                        ) {
+
+                            button.disabled = false;
+
+                        } else {
+
+                            button.disabled = true;
+
+                        }
+
+
+                        button.textContent =
+                            'Submit Payment';
+
+                    }
+
+                }
+            );
+
+
+        /* =====================================================
+           FORMAT AMOUNT
+        ===================================================== */
+
+        function formatAmount(amount) {
+
+            return Number(amount || 0)
+                .toLocaleString(
+                    'en-NG',
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+
+
+        /* =====================================================
+           FORMAT DATE
+        ===================================================== */
+
+        function formatDate(date) {
+
+            if (!date) {
+                return '-';
+            }
+
+
+            const parsedDate =
+                new Date(date);
+
+
+            if (
+                Number.isNaN(
+                    parsedDate.getTime()
+                )
+            ) {
+
+                return '-';
+
+            }
+
+
+            return parsedDate
+                .toLocaleDateString(
+                    'en-NG'
+                );
+
+        }
+
+
+        /* =====================================================
+           FORMAT PAYMENT METHOD
+        ===================================================== */
+
+        function formatMethod(method) {
+
+            if (!method) {
+                return '-';
+            }
+
+
+            if (method === 'opay') {
+                return 'OPay';
+            }
+
+
+            if (method === 'moniepoint') {
+                return 'Moniepoint';
+            }
+
+
+            return escapeHtml(method);
+
+        }
+
+
+        /* =====================================================
+           STATUS BADGE
+        ===================================================== */
+
+        function statusBadge(status) {
+
+            const value =
+                String(status || '')
+                    .toLowerCase();
+
+
+            const allowedStatuses = [
+                'pending',
+                'approved',
+                'rejected'
+            ];
+
+
+            const safeStatus =
+                allowedStatuses.includes(value)
+                    ? value
+                    : 'pending';
+
+
+            const label =
+                safeStatus
+                    .charAt(0)
+                    .toUpperCase() +
+                safeStatus.slice(1);
+
+
+            return `
+                <span class="status ${safeStatus}">
+                    ${label}
+                </span>
+            `;
+
+        }
+
+
+        /* =====================================================
+           HTML ESCAPE
+        ===================================================== */
+
+        function escapeHtml(value) {
+
+            return String(value || '')
+                .replace(
+                    /[&<>"']/g,
+                    character => {
+
+                        const entities = {
+
+                            '&': '&amp;',
+                            '<': '&lt;',
+                            '>': '&gt;',
+                            '"': '&quot;',
+                            "'": '&#039;'
+
+                        };
+
+
+                        return entities[
+                            character
+                        ];
+
+                    }
+                );
+
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        function showMessage(
+            message,
+            type = 'info'
+        ) {
+
+            const box =
+                document.getElementById(
+                    'message'
+                );
+
+
+            box.textContent =
+                message;
+
+
+            box.className =
+                `message ${type}`;
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+
+            setTimeout(
+                () => {
+
+                    box.className =
+                        'message';
+
+                },
+                5000
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

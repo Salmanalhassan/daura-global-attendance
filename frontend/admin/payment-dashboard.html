@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Payment Dashboard | Daura Global
+    </title>
+
+    <!-- IMPORTANT:
+         Your existing folder is assests -->
+    <link
+        rel="stylesheet"
+        href="../assests/css/style.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           PAYMENT DASHBOARD EXTRA STYLES
+           ===================================================== */
+
+        .payment-summary-grid {
+
+            margin-top: 22px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 16px;
+
+        }
+
+
+        .payment-stat-card {
+
+            min-height: 125px;
+
+            padding: 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.04
+                );
+
+            transition: 0.2s ease;
+
+        }
+
+
+        .payment-stat-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+
+        .payment-stat-icon {
+
+            width: 50px;
+
+            height: 50px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 13px;
+
+            font-size: 20px;
+
+        }
+
+
+        .payment-stat-icon.total {
+
+            background: #ecfeff;
+
+        }
+
+
+        .payment-stat-icon.pending {
+
+            background: #fffbeb;
+
+        }
+
+
+        .payment-stat-icon.approved {
+
+            background: #f0fdf4;
+
+        }
+
+
+        .payment-stat-icon.rejected {
+
+            background: #fef2f2;
+
+        }
+
+
+        .payment-stat-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .payment-stat-info span {
+
+            color:
+                var(--text-light);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+        }
+
+
+        .payment-stat-info strong {
+
+            margin-top: 4px;
+
+            color:
+                var(--dark);
+
+            font-size: 25px;
+
+            line-height: 1;
+
+        }
+
+
+        /* =====================================================
+           AMOUNT SUMMARY
+           ===================================================== */
+
+        .payment-amount-grid {
+
+            margin-top: 22px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 16px;
+
+        }
+
+
+        .payment-amount-card {
+
+            padding: 22px;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.04
+                );
+
+        }
+
+
+        .payment-amount-card span {
+
+            color:
+                var(--text-light);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+        }
+
+
+        .payment-amount-card strong {
+
+            display: block;
+
+            margin-top: 7px;
+
+            color:
+                var(--dark);
+
+            font-size: 23px;
+
+        }
+
+
+        .payment-amount-card.approved {
+
+            border-top:
+                3px solid
+                #22c55e;
+
+        }
+
+
+        .payment-amount-card.pending {
+
+            border-top:
+                3px solid
+                #f59e0b;
+
+        }
+
+
+        .payment-amount-card.rejected {
+
+            border-top:
+                3px solid
+                #ef4444;
+
+        }
+
+
+        /* =====================================================
+           PAYMENT MANAGEMENT CARD
+           ===================================================== */
+
+        .payment-management {
+
+            margin-top: 22px;
+
+            padding: 25px;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(
+                    15,
+                    23,
+                    42,
+                    0.04
+                );
+
+        }
+
+
+        .payment-management-header {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content:
+                space-between;
+
+            gap: 15px;
+
+        }
+
+
+        .payment-management-label {
+
+            color:
+                var(--primary);
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.3px;
+
+        }
+
+
+        .payment-management h3 {
+
+            margin-top: 4px;
+
+            color:
+                var(--dark);
+
+            font-size: 17px;
+
+        }
+
+
+        .payment-management p {
+
+            margin-top: 5px;
+
+            color:
+                var(--text-light);
+
+            font-size: 11px;
+
+        }
+
+
+        .payment-action-grid {
+
+            margin-top: 20px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 10px;
+
+        }
+
+
+        .payment-action {
+
+            min-height: 72px;
+
+            padding: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 11px;
+
+            background: #ffffff;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+
+        }
+
+
+        .payment-action:hover {
+
+            border-color:
+                var(--secondary);
+
+            background:
+                #f8fffe;
+
+            transform:
+                translateY(-2px);
+
+        }
+
+
+        .payment-action-icon {
+
+            width: 35px;
+
+            height: 35px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background:
+                var(--primary-light);
+
+            font-size: 13px;
+
+        }
+
+
+        .payment-action-content {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .payment-action-content strong {
+
+            color:
+                var(--dark);
+
+            font-size: 10px;
+
+        }
+
+
+        .payment-action-content span {
+
+            margin-top: 2px;
+
+            color:
+                var(--text-light);
+
+            font-size: 8px;
+
+        }
+
+
+        /* =====================================================
+           ERROR MESSAGE
+           ===================================================== */
+
+        .payment-error {
+
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 13px 15px;
+
+            border:
+                1px solid
+                #fecaca;
+
+            border-radius: 10px;
+
+            background:
+                #fef2f2;
+
+            color:
+                #b91c1c;
+
+            font-size: 12px;
+
+        }
+
+
+        .payment-error.show {
+
+            display: block;
+
+        }
+
+
+        /* =====================================================
+           LOADING
+           ===================================================== */
+
+        .payment-loading {
+
+            opacity: 0.55;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .payment-summary-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+
+            .payment-action-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+        }
+
+
+        @media (max-width: 750px) {
+
+            .payment-summary-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .payment-amount-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .payment-action-grid {
+
+                grid-template-columns:
+                    1fr;
+
+            }
+
+
+            .payment-management-header {
+
+                flex-direction:
+                    column;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         DASHBOARD PAGE
+         ===================================================== -->
+
+    <div class="dashboard-page">
+
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside class="dashboard-sidebar">
+
+
+            <!-- BRAND -->
+
+            <div class="sidebar-brand">
+
+                <!--
+                    If your existing dashboard already has
+                    a logo, use the SAME logo path here.
+                -->
+
+                <div>
+
+                    <strong>
+                        DAURA GLOBAL
+                    </strong>
+
+                    <span>
+                       TECHNOLOGY
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- NAVIGATION -->
+
+            <nav class="dashboard-nav">
+
+
+                <!-- MAIN -->
+
+                <a
+                    href="dashboard.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📊
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- STUDENTS -->
+
+                <a
+                    href="students.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        👨‍🎓
+                    </span>
+
+                    <span>
+                        Students
+                    </span>
+
+                </a>
+
+
+                <!-- SCHOOLS -->
+
+                <a
+                    href="schools.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        🏫
+                    </span>
+
+                    <span>
+                        Schools
+                    </span>
+
+                </a>
+
+
+                <!-- BATCHES -->
+
+                <a
+                    href="batches.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📚
+                    </span>
+
+                    <span>
+                        SIWES Batches
+                    </span>
+
+                </a>
+
+
+                <!-- ATTENDANCE -->
+
+                <div class="nav-section-title">
+                    ATTENDANCE
+                </div>
+
+
+                <a
+                    href="today-attendance.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📅
+                    </span>
+
+                    <span>
+                        Today's Attendance
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="attendance-history.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        🕒
+                    </span>
+
+                    <span>
+                        Attendance History
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="qr-attendance.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📱
+                    </span>
+
+                    <span>
+                        QR Attendance
+                    </span>
+
+                </a>
+
+
+                <!-- REPORTS -->
+
+                <div class="nav-section-title">
+                    REPORTS
+                </div>
+
+
+                <a
+                    href="reports.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📄
+                    </span>
+
+                    <span>
+                        Reports
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="student-reports.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        👤
+                    </span>
+
+                    <span>
+                        Student Reports
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="school-reports.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        🏫
+                    </span>
+
+                    <span>
+                        School Reports
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="batch-reports.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        📊
+                    </span>
+
+                    <span>
+                        Batch Reports
+                    </span>
+
+                </a>
+
+
+                <!-- PAYMENTS -->
+
+                <div class="nav-section-title">
+                    PAYMENTS
+                </div>
+
+
+                <a
+                    href="payment-dashboard.html"
+                    class="nav-item active"
+                >
+
+                    <span class="nav-icon">
+                        💳
+                    </span>
+
+                    <span>
+                        Payment Dashboard
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="payments.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        💰
+                    </span>
+
+                    <span>
+                        All Payments
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="siwes-fees.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        💵
+                    </span>
+
+                    <span>
+                        SIWES Fees
+                    </span>
+
+                </a>
+
+
+                <!-- SYSTEM -->
+
+                <div class="nav-section-title">
+                    SYSTEM
+                </div>
+
+
+
+
+                <a
+                    href="settings.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        ⚙️
+                    </span>
+
+                    <span>
+                        Settings
+                    </span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- SIDEBAR FOOTER -->
+
+            <div class="sidebar-footer">
+
+                <div class="sidebar-status">
+
+                    <span class="status-dot"></span>
+
+                    <span>
+                        System Online
+                    </span>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN
+             ================================================= -->
+
+        <main class="dashboard-main">
+
+
+            <!-- =================================================
+                 TOPBAR
+                 ================================================= -->
+
+            <header class="dashboard-topbar">
+
+
+                <div>
+
+                    <div class="breadcrumb">
+                        ADMIN / PAYMENTS
+                    </div>
+
+                    <h1>
+                        Payment Dashboard
+                    </h1>
+
+                </div>
+
+
+                <div class="topbar-right">
+
+
+                    <!-- ADMIN PROFILE -->
+
+                    <div class="admin-profile">
+
+                        <div
+                            class="admin-avatar"
+                            id="adminAvatar"
+                        >
+                            A
+                        </div>
+
+                        <div>
+
+                            <strong id="adminName">
+                                Admin
+                            </strong>
+
+                            <span>
+                                Administrator
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOGOUT -->
+
+                    <button
+                        type="button"
+                        class="logout-button"
+                        id="logoutButton"
+                    >
+                        Logout
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================================
+                 CONTENT
+                 ================================================= -->
+
+            <div class="dashboard-content">
+
+
+                <!-- WELCOME -->
+
+                <section class="dashboard-welcome">
+
+                    <div>
+
+                        <span class="welcome-badge">
+                            PAYMENT MANAGEMENT
+                        </span>
+
+                        <h2>
+                            SIWES Payment Overview
+                        </h2>
+
+                        <p>
+                            Monitor student payments,
+                            verify transactions and
+                            manage SIWES fees from one place.
+                        </p>
+
+                    </div>
+
+
+                    <div class="welcome-date">
+
+                        <span>
+                            TODAY
+                        </span>
+
+                        <strong id="todayDate">
+                            Loading...
+                        </strong>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ERROR -->
+
+                <div
+                    class="payment-error"
+                    id="paymentError"
+                ></div>
+
+
+                <!-- =================================================
+                     PAYMENT STATISTICS
+                     ================================================= -->
+
+                <section
+                    class="payment-summary-grid"
+                    id="paymentSummary"
+                >
+
+
+                    <!-- TOTAL -->
+
+                    <div class="payment-stat-card">
+
+                        <div
+                            class="payment-stat-icon total"
+                        >
+                            💳
+                        </div>
+
+                        <div class="payment-stat-info">
+
+                            <span>
+                                TOTAL PAYMENTS
+                            </span>
+
+                            <strong id="totalPayments">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PENDING -->
+
+                    <div class="payment-stat-card">
+
+                        <div
+                            class="payment-stat-icon pending"
+                        >
+                            ⏳
+                        </div>
+
+                        <div class="payment-stat-info">
+
+                            <span>
+                                PENDING PAYMENTS
+                            </span>
+
+                            <strong id="pendingPayments">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- APPROVED -->
+
+                    <div class="payment-stat-card">
+
+                        <div
+                            class="payment-stat-icon approved"
+                        >
+                            ✅
+                        </div>
+
+                        <div class="payment-stat-info">
+
+                            <span>
+                                APPROVED PAYMENTS
+                            </span>
+
+                            <strong id="approvedPayments">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- REJECTED -->
+
+                    <div class="payment-stat-card">
+
+                        <div
+                            class="payment-stat-icon rejected"
+                        >
+                            ❌
+                        </div>
+
+                        <div class="payment-stat-info">
+
+                            <span>
+                                REJECTED PAYMENTS
+                            </span>
+
+                            <strong id="rejectedPayments">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     AMOUNT SUMMARY
+                     ================================================= -->
+
+                <section
+                    class="payment-amount-grid"
+                >
+
+
+                    <!-- APPROVED -->
+
+                    <div
+                        class="payment-amount-card approved"
+                    >
+
+                        <span>
+                            TOTAL APPROVED AMOUNT
+                        </span>
+
+                        <strong id="approvedAmount">
+                            ₦0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- PENDING -->
+
+                    <div
+                        class="payment-amount-card pending"
+                    >
+
+                        <span>
+                            TOTAL PENDING AMOUNT
+                        </span>
+
+                        <strong id="pendingAmount">
+                            ₦0.00
+                        </strong>
+
+                    </div>
+
+
+                    <!-- REJECTED -->
+
+                    <div
+                        class="payment-amount-card rejected"
+                    >
+
+                        <span>
+                            TOTAL REJECTED AMOUNT
+                        </span>
+
+                        <strong id="rejectedAmount">
+                            ₦0.00
+                        </strong>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     PAYMENT MANAGEMENT
+                     ================================================= -->
+
+                <section
+                    class="payment-management"
+                >
+
+                    <div
+                        class="payment-management-header"
+                    >
+
+                        <div>
+
+                            <div class="payment-management-label">
+                                QUICK ACTIONS
+                            </div>
+
+                            <h3>
+                                Payment Management
+                            </h3>
+
+                            <p>
+                                Quickly access payment records
+                                and SIWES fee settings.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="payment-action-grid"
+                    >
+
+
+                        <!-- ALL -->
+
+                        <a
+                            href="payments.html"
+                            class="payment-action"
+                        >
+
+                            <div
+                                class="payment-action-icon"
+                            >
+                                💳
+                            </div>
+
+                            <div
+                                class="payment-action-content"
+                            >
+
+                                <strong>
+                                    All Payments
+                                </strong>
+
+                                <span>
+                                    View all records
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- PENDING -->
+
+                        <a
+                            href="payments.html?status=pending"
+                            class="payment-action"
+                        >
+
+                            <div
+                                class="payment-action-icon"
+                            >
+                                ⏳
+                            </div>
+
+                            <div
+                                class="payment-action-content"
+                            >
+
+                                <strong>
+                                    Pending
+                                </strong>
+
+                                <span>
+                                    Verify payments
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- APPROVED -->
+
+                        <a
+                            href="payments.html?status=approved"
+                            class="payment-action"
+                        >
+
+                            <div
+                                class="payment-action-icon"
+                            >
+                                ✅
+                            </div>
+
+                            <div
+                                class="payment-action-content"
+                            >
+
+                                <strong>
+                                    Approved
+                                </strong>
+
+                                <span>
+                                    Verified payments
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- REJECTED -->
+
+                        <a
+                            href="payments.html?status=rejected"
+                            class="payment-action"
+                        >
+
+                            <div
+                                class="payment-action-icon"
+                            >
+                                ❌
+                            </div>
+
+                            <div
+                                class="payment-action-content"
+                            >
+
+                                <strong>
+                                    Rejected
+                                </strong>
+
+                                <span>
+                                    Rejected records
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- FEES -->
+
+                        <a
+                            href="siwes-fees.html"
+                            class="payment-action"
+                        >
+
+                            <div
+                                class="payment-action-icon"
+                            >
+                                💵
+                            </div>
+
+                            <div
+                                class="payment-action-content"
+                            >
+
+                                <strong>
+                                    SIWES Fees
+                                </strong>
+
+                                <span>
+                                    Manage batch fees
+                                </span>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                </section>
+
+
+                <!-- FOOTER -->
+
+                <footer
+                    class="dashboard-footer"
+                    style="margin-top: 25px;"
+                >
+
+                    <span>
+                        © <span id="currentYear"></span>
+                        Daura GlobalTECHNOLOGY
+                    </span>
+
+                    <span>
+                        SIWES Attendance Management System
+                    </span>
+
+                </footer>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script>
+
+        /* =====================================================
+           CONFIG
+           ===================================================== */
+
+        const API_URL = "/api";
+
+
+        const token =
+            localStorage.getItem(
+                "daura_admin_token"
+            );
+
+
+        /* =====================================================
+           AUTH CHECK
+           ===================================================== */
+
+        if (!token) {
+
+            window.location.href = "/";
+
+        }
+
+
+        /* =====================================================
+           ELEMENTS
+           ===================================================== */
+
+        const adminNameElement =
+            document.getElementById(
+                "adminName"
+            );
+
+
+        const adminAvatarElement =
+            document.getElementById(
+                "adminAvatar"
+            );
+
+
+        const errorElement =
+            document.getElementById(
+                "paymentError"
+            );
+
+
+        /* =====================================================
+           ADMIN INFORMATION
+           ===================================================== */
+
+        const savedAdmin =
+            localStorage.getItem(
+                "daura_admin_user"
+            );
+
+
+        if (savedAdmin) {
+
+            try {
+
+                const admin =
+                    JSON.parse(savedAdmin);
+
+
+                const name =
+                    admin.full_name ||
+                    admin.name ||
+                    admin.username ||
+                    admin.email ||
+                    "Admin";
+
+
+                adminNameElement.textContent =
+                    name;
+
+
+                adminAvatarElement.textContent =
+                    name
+                        .charAt(0)
+                        .toUpperCase();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Admin information error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           TODAY'S DATE
+           ===================================================== */
+
+        function showTodayDate() {
+
+            const today =
+                new Date();
+
+
+            const formatted =
+                today.toLocaleDateString(
+                    "en-NG",
+                    {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                    }
+                );
+
+
+            document.getElementById(
+                "todayDate"
+            ).textContent =
+                formatted;
+
+
+            document.getElementById(
+                "currentYear"
+            ).textContent =
+                today.getFullYear();
+
+        }
+
+
+        /* =====================================================
+           FORMAT MONEY
+           ===================================================== */
+
+        function formatMoney(value) {
+
+            const amount =
+                Number(value) || 0;
+
+
+            return new Intl.NumberFormat(
+                "en-NG",
+                {
+                    style: "currency",
+                    currency: "NGN",
+                    minimumFractionDigits: 2
+                }
+            ).format(amount);
+
+        }
+
+
+        /* =====================================================
+           LOAD PAYMENT SUMMARY
+           ===================================================== */
+
+        async function loadPaymentSummary() {
+
+            try {
+
+                errorElement
+                    .classList
+                    .remove("show");
+
+
+                const response =
+                    await fetch(
+                        `${API_URL}/payments/summary`,
+                        {
+                            method: "GET",
+
+                            headers: {
+
+                                "Authorization":
+                                    `Bearer ${token}`,
+
+                                "Content-Type":
+                                    "application/json"
+
+                            }
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                /* =============================================
+                   SESSION EXPIRED
+                   ============================================= */
+
+                if (
+                    response.status === 401
+                ) {
+
+                    localStorage.removeItem(
+                        "daura_admin_token"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_admin_user"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_role"
+                    );
+
+
+                    window.location.href =
+                        "/";
+
+
+                    return;
+
+                }
+
+
+                /* =============================================
+                   API ERROR
+                   ============================================= */
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load payment summary."
+                    );
+
+                }
+
+
+                /*
+                 * The backend may return the summary
+                 * directly inside data or inside data.data.
+                 */
+
+                const summary =
+                    data.data ||
+                    data;
+
+
+                /* =============================================
+                   COUNTS
+                   ============================================= */
+
+                document.getElementById(
+                    "totalPayments"
+                ).textContent =
+
+                    Number(
+                        summary.total ||
+                        summary.total_payments ||
+                        0
+                    );
+
+
+                document.getElementById(
+                    "pendingPayments"
+                ).textContent =
+
+                    Number(
+                        summary.pending ||
+                        summary.pending_payments ||
+                        0
+                    );
+
+
+                document.getElementById(
+                    "approvedPayments"
+                ).textContent =
+
+                    Number(
+                        summary.approved ||
+                        summary.approved_payments ||
+                        0
+                    );
+
+
+                document.getElementById(
+                    "rejectedPayments"
+                ).textContent =
+
+                    Number(
+                        summary.rejected ||
+                        summary.rejected_payments ||
+                        0
+                    );
+
+
+                /* =============================================
+                   AMOUNTS
+                   ============================================= */
+
+                document.getElementById(
+                    "approvedAmount"
+                ).textContent =
+
+                    formatMoney(
+                        summary.approved_amount ||
+                        0
+                    );
+
+
+                document.getElementById(
+                    "pendingAmount"
+                ).textContent =
+
+                    formatMoney(
+                        summary.pending_amount ||
+                        0
+                    );
+
+
+                document.getElementById(
+                    "rejectedAmount"
+                ).textContent =
+
+                    formatMoney(
+                        summary.rejected_amount ||
+                        0
+                    );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Payment summary error:",
+                    error
+                );
+
+
+                errorElement.textContent =
+                    error.message ||
+                    "Unable to load payment summary.";
+
+
+                errorElement
+                    .classList
+                    .add("show");
+
+            }
+
+        }
+
+
+        /* =====================================================
+           LOGOUT
+           ===================================================== */
+
+        document
+            .getElementById("logoutButton")
+            .addEventListener(
+                "click",
+                function () {
+
+
+                    localStorage.removeItem(
+                        "daura_admin_token"
+                    );
+
+
+                    localStorage.removeItem(
+                        "daura_admin_user"
+                    );
+
+
+                    localStorage.removeItem(
+                        "daura_role"
+                    );
+
+
+                    window.location.href =
+                        "/";
+
+                }
+            );
+
+
+        /* =====================================================
+           START
+           ===================================================== */
+
+        showTodayDate();
+
+        loadPaymentSummary();
+
+    </script>
+
+</body>
+</html>

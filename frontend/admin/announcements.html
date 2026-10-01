@@ -1,0 +1,2926 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Announcements | Daura Global</title>
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/style.css"
+    >
+
+
+    <style>
+
+        /* =========================================
+           ANNOUNCEMENT PAGE
+        ========================================== */
+
+        .announcement-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+
+        .announcement-page-header h2 {
+            margin: 0 0 6px;
+        }
+
+
+        .announcement-page-header p {
+            margin: 0;
+            color: #666;
+        }
+
+
+        .announcement-primary-button {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            background: #111;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+
+        .announcement-primary-button:hover {
+            opacity: 0.9;
+        }
+
+
+        /* =========================================
+           FORM
+        ========================================== */
+
+        .announcement-form-card {
+            display: none;
+            margin-bottom: 25px;
+        }
+
+
+        .announcement-form-card.show {
+            display: block;
+        }
+
+
+        .announcement-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+
+        .announcement-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+
+        .announcement-form-group.full {
+            grid-column: 1 / -1;
+        }
+
+
+        .announcement-form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+
+        .announcement-form-group input,
+        .announcement-form-group textarea,
+        .announcement-form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            background: #fff;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+
+        .announcement-form-group input:focus,
+        .announcement-form-group textarea:focus,
+        .announcement-form-group select:focus {
+            border-color: #888;
+        }
+
+
+        .announcement-form-group textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+
+        .announcement-help {
+            font-size: 12px;
+            color: #777;
+        }
+
+
+        .announcement-target-group {
+            display: none;
+        }
+
+
+        .announcement-target-group.show {
+            display: flex;
+        }
+
+
+        .announcement-form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+
+        .announcement-secondary-button,
+        .announcement-submit-button {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 17px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+
+        .announcement-secondary-button {
+            background: #eee;
+            color: #333;
+        }
+
+
+        .announcement-submit-button {
+            background: #111;
+            color: #fff;
+        }
+
+
+        /* =========================================
+           MESSAGE
+        ========================================== */
+
+        .announcement-message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+
+        .announcement-message.show {
+            display: block;
+        }
+
+
+        .announcement-message.success {
+            background: #e8f7ee;
+            color: #155724;
+        }
+
+
+        .announcement-message.error {
+            background: #fdeaea;
+            color: #a11a1a;
+        }
+
+
+        /* =========================================
+           ANNOUNCEMENT LIST
+        ========================================== */
+
+        .announcement-list {
+            display: grid;
+            gap: 18px;
+        }
+
+
+        .announcement-item {
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            padding: 20px;
+            background: #fff;
+        }
+
+
+        .announcement-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+
+        .announcement-item-title {
+            margin: 0;
+            font-size: 18px;
+        }
+
+
+        .announcement-item-message {
+            margin: 0 0 15px;
+            color: #555;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+
+        .announcement-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+
+        .announcement-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+
+        .badge-normal {
+            background: #f0f0f0;
+            color: #555;
+        }
+
+
+        .badge-important {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+
+        .badge-urgent {
+            background: #fdeaea;
+            color: #a11a1a;
+        }
+
+
+        .badge-published {
+            background: #e8f7ee;
+            color: #155724;
+        }
+
+
+        .badge-draft {
+            background: #eee;
+            color: #666;
+        }
+
+
+        .announcement-audience {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+
+        .announcement-date {
+            font-size: 12px;
+            color: #888;
+        }
+
+
+        .announcement-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+
+        .announcement-action-button {
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+
+        .announcement-edit-button {
+            background: #eee;
+            color: #333;
+        }
+
+
+        .announcement-publish-button {
+            background: #e8f7ee;
+            color: #155724;
+        }
+
+
+        .announcement-unpublish-button {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+
+        .announcement-delete-button {
+            background: #fdeaea;
+            color: #a11a1a;
+        }
+
+
+        /* =========================================
+           EMPTY / LOADING
+        ========================================== */
+
+        .announcement-empty {
+            text-align: center;
+            padding: 45px 20px;
+            color: #777;
+        }
+
+
+        .announcement-loading {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+
+        /* =========================================
+           MODAL
+        ========================================== */
+
+        .announcement-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+
+        .announcement-modal.show {
+            display: flex;
+        }
+
+
+        .announcement-modal-content {
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+
+        .announcement-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+
+        .announcement-modal-header h2 {
+            margin: 0;
+        }
+
+
+        .announcement-close {
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            cursor: pointer;
+            color: #555;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (max-width: 800px) {
+
+            .announcement-page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+
+            .announcement-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .announcement-form-group.full {
+                grid-column: auto;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .announcement-item-header {
+                flex-direction: column;
+            }
+
+
+            .announcement-form-actions {
+                flex-direction: column;
+            }
+
+
+            .announcement-secondary-button,
+            .announcement-submit-button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="dashboard-sidebar">
+
+
+        <div class="sidebar-brand">
+
+            <img
+                src="../assests/images/logo.svg"
+                alt="Daura Global Logo"
+            >
+
+
+            <div>
+
+                <strong>
+                    Daura Global
+                </strong>
+
+                <span>
+                   TECHNOLOGY
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="dashboard-nav">
+
+
+            <a
+                href="dashboard.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    ▦
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+
+            <div class="nav-section-title">
+                MANAGEMENT
+            </div>
+
+
+            <a
+                href="students.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    👥
+                </span>
+
+                <span>
+                    Students
+                </span>
+
+            </a>
+
+
+            <a
+                href="schools.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    🏫
+                </span>
+
+                <span>
+                    Schools
+                </span>
+
+            </a>
+
+
+            <a
+                href="siwes-batches.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    📚
+                </span>
+
+                <span>
+                    SIWES Batches
+                </span>
+
+            </a>
+
+
+
+            <div class="nav-section-title">
+                ATTENDANCE
+            </div>
+
+
+            <a
+                href="today-attendance.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    ✓
+                </span>
+
+                <span>
+                    Today's Attendance
+                </span>
+
+            </a>
+
+
+            <a
+                href="attendance-history.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    🕘
+                </span>
+
+                <span>
+                    Attendance History
+                </span>
+
+            </a>
+
+
+            <a
+                href="qr-attendance.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    QR
+                </span>
+
+                <span>
+                    QR Attendance
+                </span>
+
+            </a>
+
+
+
+            <div class="nav-section-title">
+                REPORTS
+            </div>
+
+
+            <a
+                href="attendance-reports.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    📊
+                </span>
+
+                <span>
+                    Reports
+                </span>
+
+            </a>
+
+
+            <a
+                href="student-reports.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    👨‍🎓
+                </span>
+
+                <span>
+                    Student Reports
+                </span>
+
+            </a>
+
+
+            <a
+                href="school-reports.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    🏫
+                </span>
+
+                <span>
+                    School Reports
+                </span>
+
+            </a>
+
+
+            <a
+                href="batch-reports.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    📚
+                </span>
+
+                <span>
+                    Batches Reports
+                </span>
+
+            </a>
+
+
+
+            <!-- PAYMENTS -->
+
+            <div class="nav-section-title">
+                PAYMENTS
+            </div>
+
+
+            <a
+                href="payment-dashboard.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    💳
+                </span>
+
+                <span>
+                    Payment Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="payments.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    💰
+                </span>
+
+                <span>
+                    All Payments
+                </span>
+
+            </a>
+
+
+            <a
+                href="siwes-fees.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    💵
+                </span>
+
+                <span>
+                    SIWES Fees
+                </span>
+
+            </a>
+
+
+
+            <!-- COMMUNICATION -->
+
+            <div class="nav-section-title">
+                COMMUNICATION
+            </div>
+
+
+            <a
+                href="announcements.html"
+                class="nav-item active"
+            >
+
+                <span class="nav-icon">
+                    📢
+                </span>
+
+                <span>
+                    Announcements
+                </span>
+
+            </a>
+
+
+
+            <div class="nav-section-title">
+                SYSTEM
+            </div>
+
+
+            <a
+                href="settings.html"
+                class="nav-item"
+            >
+
+                <span class="nav-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+
+        <!-- SIDEBAR FOOTER -->
+
+        <div class="sidebar-footer">
+
+            <div class="sidebar-status">
+
+                <span class="status-dot"></span>
+
+                System Online
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =========================================
+         MAIN
+    ========================================== -->
+
+    <main class="dashboard-main">
+
+
+        <!-- =========================================
+             TOPBAR
+        ========================================== -->
+
+        <header class="dashboard-topbar">
+
+
+            <div>
+
+                <div class="breadcrumb">
+                    Admin / Communication / Announcements
+                </div>
+
+
+                <h1>
+                    Announcements
+                </h1>
+
+            </div>
+
+
+
+            <div class="topbar-right">
+
+
+                <div class="admin-profile">
+
+                    <div class="admin-avatar">
+                        A
+                    </div>
+
+
+                    <div>
+
+                        <strong id="adminName">
+                            Admin
+                        </strong>
+
+                        <span>
+                            Administrator
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="logout-button"
+                    id="logoutButton"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =========================================
+             CONTENT
+        ========================================== -->
+
+        <section class="dashboard-content">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="announcement-page-header">
+
+                <div>
+
+                    <span class="welcome-badge">
+                        COMMUNICATION CENTER
+                    </span>
+
+                    <h2>
+                        Student Announcements
+                    </h2>
+
+                    <p>
+                        Create and manage important notices
+                        for SIWES students.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="announcement-primary-button"
+                    id="newAnnouncementButton"
+                >
+                    + New Announcement
+                </button>
+
+            </div>
+
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="announcementMessage"
+                class="announcement-message"
+            ></div>
+
+
+
+            <!-- =========================================
+                 CREATE / EDIT FORM
+            ========================================== -->
+
+            <div
+                class="dashboard-card announcement-form-card"
+                id="announcementFormCard"
+            >
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            ANNOUNCEMENT
+                        </span>
+
+                        <h3 id="formTitle">
+                            Create Announcement
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+
+                <form id="announcementForm">
+
+
+                    <div class="announcement-form-grid">
+
+
+                        <!-- TITLE -->
+
+                        <div class="announcement-form-group full">
+
+                            <label for="announcementTitle">
+                                Announcement Title
+                            </label>
+
+                            <input
+                                type="text"
+                                id="announcementTitle"
+                                maxlength="255"
+                                placeholder="e.g. Important SIWES Payment Notice"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- MESSAGE -->
+
+                        <div class="announcement-form-group full">
+
+                            <label for="announcementText">
+                                Message
+                            </label>
+
+                            <textarea
+                                id="announcementText"
+                                placeholder="Write the announcement for students..."
+                                required
+                            ></textarea>
+
+                            <span class="announcement-help">
+                                This message will be visible to the selected students.
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- AUDIENCE -->
+
+                        <div class="announcement-form-group">
+
+                            <label for="audienceType">
+                                Audience
+                            </label>
+
+                            <select
+                                id="audienceType"
+                                required
+                            >
+
+                                <option value="all">
+                                    All Students
+                                </option>
+
+                                <option value="batch">
+                                    Specific SIWES Batch
+                                </option>
+
+                                <option value="school">
+                                    Specific School
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- PRIORITY -->
+
+                        <div class="announcement-form-group">
+
+                            <label for="announcementPriority">
+                                Priority
+                            </label>
+
+                            <select
+                                id="announcementPriority"
+                                required
+                            >
+
+                                <option value="normal">
+                                    Normal
+                                </option>
+
+                                <option value="important">
+                                    Important
+                                </option>
+
+                                <option value="urgent">
+                                    Urgent
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- BATCH -->
+
+                        <div
+                            class="announcement-form-group announcement-target-group"
+                            id="batchGroup"
+                        >
+
+                            <label for="batchSelect">
+                                SIWES Batch
+                            </label>
+
+                            <select id="batchSelect">
+
+                                <option value="">
+                                    Select SIWES Batch
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- SCHOOL -->
+
+                        <div
+                            class="announcement-form-group announcement-target-group"
+                            id="schoolGroup"
+                        >
+
+                            <label for="schoolSelect">
+                                School
+                            </label>
+
+                            <select id="schoolSelect">
+
+                                <option value="">
+                                    Select School
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- EXPIRY -->
+
+                        <div class="announcement-form-group">
+
+                            <label for="expiresAt">
+                                Expiry Date & Time
+                            </label>
+
+                            <input
+                                type="datetime-local"
+                                id="expiresAt"
+                            >
+
+                            <span class="announcement-help">
+                                Optional. Leave empty if the announcement should not expire.
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- STATUS -->
+
+                        <div class="announcement-form-group">
+
+                            <label for="announcementStatus">
+                                Save As
+                            </label>
+
+                            <select
+                                id="announcementStatus"
+                                required
+                            >
+
+                                <option value="published">
+                                    Published
+                                </option>
+
+                                <option value="draft">
+                                    Draft
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- FORM ACTIONS -->
+
+                    <div class="announcement-form-actions">
+
+                        <button
+                            type="button"
+                            class="announcement-secondary-button"
+                            id="cancelFormButton"
+                        >
+                            Cancel
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            class="announcement-submit-button"
+                            id="submitAnnouncementButton"
+                        >
+                            Publish Announcement
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+
+
+            <!-- =========================================
+                 ANNOUNCEMENT LIST
+            ========================================== -->
+
+            <div class="dashboard-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-label">
+                            ANNOUNCEMENTS
+                        </span>
+
+                        <h3>
+                            All Announcements
+                        </h3>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="announcement-secondary-button"
+                        id="refreshButton"
+                    >
+                        Refresh
+                    </button>
+
+                </div>
+
+
+
+                <div
+                    id="announcementList"
+                    class="announcement-list"
+                >
+
+                    <div class="announcement-loading">
+                        Loading announcements...
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             FOOTER
+        ========================================== -->
+
+        <footer class="dashboard-footer">
+
+            <span>
+                © Daura GlobalTECHNOLOGY
+            </span>
+
+            <span>
+                SIWES Attendance Management System
+            </span>
+
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        const API_URL = "/api";
+
+
+        /* =========================================
+           AUTH
+        ========================================== */
+
+        const token =
+            localStorage.getItem("daura_admin_token");
+
+
+        if (!token) {
+
+            window.location.href = "login.html";
+
+        }
+
+
+
+        /* =========================================
+           ADMIN INFO
+        ========================================== */
+
+        const savedUser =
+            localStorage.getItem("daura_admin_user");
+
+
+        if (savedUser) {
+
+            try {
+
+                const user = JSON.parse(savedUser);
+
+                const name =
+                    user.full_name ||
+                    user.username ||
+                    "Admin";
+
+
+                document.getElementById(
+                    "adminName"
+                ).textContent = name;
+
+
+                const avatar =
+                    document.querySelector(
+                        ".admin-avatar"
+                    );
+
+
+                if (avatar && name.length) {
+
+                    avatar.textContent =
+                        name.charAt(0).toUpperCase();
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to read admin information:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           ELEMENTS
+        ========================================== */
+
+        const formCard =
+            document.getElementById(
+                "announcementFormCard"
+            );
+
+
+        const announcementForm =
+            document.getElementById(
+                "announcementForm"
+            );
+
+
+        const audienceType =
+            document.getElementById(
+                "audienceType"
+            );
+
+
+        const batchGroup =
+            document.getElementById(
+                "batchGroup"
+            );
+
+
+        const schoolGroup =
+            document.getElementById(
+                "schoolGroup"
+            );
+
+
+        const batchSelect =
+            document.getElementById(
+                "batchSelect"
+            );
+
+
+        const schoolSelect =
+            document.getElementById(
+                "schoolSelect"
+            );
+
+
+        const announcementStatus =
+            document.getElementById(
+                "announcementStatus"
+            );
+
+
+        const submitButton =
+            document.getElementById(
+                "submitAnnouncementButton"
+            );
+
+
+        const formTitle =
+            document.getElementById(
+                "formTitle"
+            );
+
+
+        const announcementList =
+            document.getElementById(
+                "announcementList"
+            );
+
+
+        let editingAnnouncementId = null;
+
+
+
+        /* =========================================
+           MESSAGE
+        ========================================== */
+
+        function showMessage(message, type = "success") {
+
+            const box =
+                document.getElementById(
+                    "announcementMessage"
+                );
+
+
+            box.textContent = message;
+
+            box.className =
+                `announcement-message show ${type}`;
+
+
+            setTimeout(() => {
+
+                box.classList.remove("show");
+
+            }, 4000);
+
+        }
+
+
+
+        /* =========================================
+           ESCAPE HTML
+        ========================================== */
+
+        function escapeHtml(value) {
+
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+
+        /* =========================================
+           DATE FORMAT
+        ========================================== */
+
+        function formatDate(value) {
+
+            if (!value) {
+                return "—";
+            }
+
+
+            const date = new Date(value);
+
+
+            if (Number.isNaN(date.getTime())) {
+                return value;
+            }
+
+
+            return date.toLocaleString(
+                "en-US",
+                {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
+
+        }
+
+
+
+        /* =========================================
+           AUDIENCE LABEL
+        ========================================== */
+
+        function getAudienceLabel(announcement) {
+
+            const type =
+                announcement.audience_type;
+
+
+            if (type === "all") {
+
+                return "All Students";
+
+            }
+
+
+            if (type === "batch") {
+
+                return `SIWES Batch: ${
+                    announcement.batch_name ||
+                    "Selected Batch"
+                }`;
+
+            }
+
+
+            if (type === "school") {
+
+                return `School: ${
+                    announcement.school_name ||
+                    "Selected School"
+                }`;
+
+            }
+
+
+            return "Students";
+
+        }
+
+
+
+        /* =========================================
+           PRIORITY BADGE
+        ========================================== */
+
+        function priorityBadge(priority) {
+
+            const value =
+                String(priority || "normal")
+                    .toLowerCase();
+
+
+            if (value === "urgent") {
+
+                return `
+                    <span class="announcement-badge badge-urgent">
+                        URGENT
+                    </span>
+                `;
+
+            }
+
+
+            if (value === "important") {
+
+                return `
+                    <span class="announcement-badge badge-important">
+                        IMPORTANT
+                    </span>
+                `;
+
+            }
+
+
+            return `
+                <span class="announcement-badge badge-normal">
+                    NORMAL
+                </span>
+            `;
+
+        }
+
+
+
+        /* =========================================
+           STATUS BADGE
+        ========================================== */
+
+        function statusBadge(status) {
+
+            if (status === "published") {
+
+                return `
+                    <span class="announcement-badge badge-published">
+                        PUBLISHED
+                    </span>
+                `;
+
+            }
+
+
+            return `
+                <span class="announcement-badge badge-draft">
+                    DRAFT
+                </span>
+            `;
+
+        }
+
+
+
+        /* =========================================
+           FETCH HELPER
+        ========================================== */
+
+        async function apiRequest(
+            endpoint,
+            options = {}
+        ) {
+
+            const response =
+                await fetch(
+                    `${API_URL}${endpoint}`,
+                    {
+                        ...options,
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                `Bearer ${token}`,
+
+                            ...(options.headers || {})
+                        }
+                    }
+                );
+
+
+            let data;
+
+
+            try {
+
+                data =
+                    await response.json();
+
+            } catch (error) {
+
+                data = {
+                    success: false,
+                    message:
+                        "Invalid server response."
+                };
+
+            }
+
+
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
+
+                localStorage.removeItem(
+                    "daura_admin_token"
+                );
+
+                localStorage.removeItem(
+                    "daura_admin_user"
+                );
+
+                localStorage.removeItem(
+                    "daura_role"
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+
+                throw new Error(
+                    "Your admin session has expired."
+                );
+
+            }
+
+
+            if (!response.ok || !data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Request failed."
+                );
+
+            }
+
+
+            return data;
+
+        }
+
+
+
+        /* =========================================
+           LOAD BATCHES
+        ========================================== */
+
+        async function loadBatches() {
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        "/batches"
+                    );
+
+
+                let batches =
+                    Array.isArray(response.data)
+                        ? response.data
+                        : [];
+
+
+                batchSelect.innerHTML = `
+                    <option value="">
+                        Select SIWES Batch
+                    </option>
+                `;
+
+
+                batches.forEach(batch => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value = batch.id;
+
+
+                    option.textContent =
+                        batch.name ||
+                        `Batch #${batch.id}`;
+
+
+                    batchSelect.appendChild(
+                        option
+                    );
+
+                });
+
+            } catch (error) {
+
+                console.error(
+                    "Load batches error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           LOAD SCHOOLS
+        ========================================== */
+
+        async function loadSchools() {
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        "/schools"
+                    );
+
+
+                let schools =
+                    Array.isArray(response.data)
+                        ? response.data
+                        : [];
+
+
+                schoolSelect.innerHTML = `
+                    <option value="">
+                        Select School
+                    </option>
+                `;
+
+
+                schools.forEach(school => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        school.id;
+
+
+                    option.textContent =
+                        school.name ||
+                        `School #${school.id}`;
+
+
+                    schoolSelect.appendChild(
+                        option
+                    );
+
+                });
+
+            } catch (error) {
+
+                console.error(
+                    "Load schools error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           AUDIENCE CHANGE
+        ========================================== */
+
+        function updateAudienceFields() {
+
+            const type =
+                audienceType.value;
+
+
+            batchGroup.classList.remove("show");
+
+            schoolGroup.classList.remove("show");
+
+
+            batchSelect.removeAttribute("required");
+
+            schoolSelect.removeAttribute("required");
+
+
+            if (type === "batch") {
+
+                batchGroup.classList.add("show");
+
+                batchSelect.setAttribute(
+                    "required",
+                    "required"
+                );
+
+            }
+
+
+            if (type === "school") {
+
+                schoolGroup.classList.add("show");
+
+                schoolSelect.setAttribute(
+                    "required",
+                    "required"
+                );
+
+            }
+
+        }
+
+
+        audienceType.addEventListener(
+            "change",
+            updateAudienceFields
+        );
+
+
+
+        /* =========================================
+           FORM STATUS BUTTON
+        ========================================== */
+
+        announcementStatus.addEventListener(
+            "change",
+            () => {
+
+                if (
+                    announcementStatus.value ===
+                    "published"
+                ) {
+
+                    submitButton.textContent =
+                        editingAnnouncementId
+                            ? "Update & Publish"
+                            : "Publish Announcement";
+
+                } else {
+
+                    submitButton.textContent =
+                        "Save Draft";
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================================
+           RESET FORM
+        ========================================== */
+
+        function resetForm() {
+
+            announcementForm.reset();
+
+            editingAnnouncementId = null;
+
+
+            formTitle.textContent =
+                "Create Announcement";
+
+
+            submitButton.textContent =
+                "Publish Announcement";
+
+
+            batchSelect.innerHTML = `
+                <option value="">
+                    Select SIWES Batch
+                </option>
+            `;
+
+
+            schoolSelect.innerHTML = `
+                <option value="">
+                    Select School
+                </option>
+            `;
+
+
+            updateAudienceFields();
+
+        }
+
+
+
+        /* =========================================
+           OPEN CREATE FORM
+        ========================================== */
+
+        document
+            .getElementById(
+                "newAnnouncementButton"
+            )
+            .addEventListener(
+                "click",
+                async () => {
+
+                    resetForm();
+
+                    formCard.classList.add(
+                        "show"
+                    );
+
+
+                    await Promise.all([
+                        loadBatches(),
+                        loadSchools()
+                    ]);
+
+
+                    formCard.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                }
+            );
+
+
+
+        /* =========================================
+           CLOSE FORM
+        ========================================== */
+
+        document
+            .getElementById(
+                "cancelFormButton"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    formCard.classList.remove(
+                        "show"
+                    );
+
+                    resetForm();
+
+                }
+            );
+
+
+
+        /* =========================================
+           CREATE / UPDATE
+        ========================================== */
+
+        announcementForm.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                const title =
+                    document
+                        .getElementById(
+                            "announcementTitle"
+                        )
+                        .value
+                        .trim();
+
+
+                const message =
+                    document
+                        .getElementById(
+                            "announcementText"
+                        )
+                        .value
+                        .trim();
+
+
+                const audience =
+                    audienceType.value;
+
+
+                const priority =
+                    document
+                        .getElementById(
+                            "announcementPriority"
+                        )
+                        .value;
+
+
+                const status =
+                    announcementStatus.value;
+
+
+                const expiresAt =
+                    document
+                        .getElementById(
+                            "expiresAt"
+                        )
+                        .value;
+
+
+                if (!title || !message) {
+
+                    showMessage(
+                        "Please enter the announcement title and message.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+
+                const payload = {
+
+                    title,
+
+                    message,
+
+                    audience_type:
+                        audience,
+
+                    batch_id:
+                        audience === "batch"
+                            ? batchSelect.value
+                            : null,
+
+                    school_id:
+                        audience === "school"
+                            ? schoolSelect.value
+                            : null,
+
+                    priority,
+
+                    status,
+
+                    expires_at:
+                        expiresAt
+                            ? expiresAt
+                            : null
+
+                };
+
+
+                try {
+
+                    submitButton.disabled = true;
+
+
+                    submitButton.textContent =
+                        "Saving...";
+
+
+                    let response;
+
+
+                    if (editingAnnouncementId) {
+
+                        response =
+                            await apiRequest(
+                                `/announcements/${editingAnnouncementId}`,
+                                {
+                                    method: "PUT",
+
+                                    body:
+                                        JSON.stringify(
+                                            payload
+                                        )
+                                }
+                            );
+
+                    } else {
+
+                        response =
+                            await apiRequest(
+                                "/announcements",
+                                {
+                                    method: "POST",
+
+                                    body:
+                                        JSON.stringify(
+                                            payload
+                                        )
+                                }
+                            );
+
+                    }
+
+
+                    showMessage(
+                        response.message ||
+                        "Announcement saved successfully."
+                    );
+
+
+                    formCard.classList.remove(
+                        "show"
+                    );
+
+
+                    resetForm();
+
+
+                    await loadAnnouncements();
+
+                } catch (error) {
+
+                    console.error(
+                        "Save announcement error:",
+                        error
+                    );
+
+
+                    showMessage(
+                        error.message ||
+                        "Failed to save announcement.",
+                        "error"
+                    );
+
+                } finally {
+
+                    submitButton.disabled = false;
+
+
+                    submitButton.textContent =
+                        "Publish Announcement";
+
+                }
+
+            }
+        );
+
+
+
+        /* =========================================
+           LOAD ANNOUNCEMENTS
+        ========================================== */
+
+        async function loadAnnouncements() {
+
+            announcementList.innerHTML = `
+                <div class="announcement-loading">
+                    Loading announcements...
+                </div>
+            `;
+
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        "/announcements"
+                    );
+
+
+                const announcements =
+                    Array.isArray(response.data)
+                        ? response.data
+                        : [];
+
+
+                if (!announcements.length) {
+
+                    announcementList.innerHTML = `
+                        <div class="announcement-empty">
+                            <h3>No announcements yet</h3>
+
+                            <p>
+                                Create your first announcement
+                                for SIWES students.
+                            </p>
+                        </div>
+                    `;
+
+                    return;
+
+                }
+
+
+                announcementList.innerHTML =
+                    announcements
+                        .map(
+                            announcement =>
+                                renderAnnouncement(
+                                    announcement
+                                )
+                        )
+                        .join("");
+
+
+            } catch (error) {
+
+                console.error(
+                    "Load announcements error:",
+                    error
+                );
+
+
+                announcementList.innerHTML = `
+                    <div class="announcement-empty">
+                        <h3>
+                            Failed to load announcements
+                        </h3>
+
+                        <p>
+                            ${escapeHtml(
+                                error.message
+                            )}
+                        </p>
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           RENDER ANNOUNCEMENT
+        ========================================== */
+
+        function renderAnnouncement(
+            announcement
+        ) {
+
+            const id =
+                Number(announcement.id);
+
+
+            const status =
+                String(
+                    announcement.status ||
+                    "draft"
+                ).toLowerCase();
+
+
+            const title =
+                escapeHtml(
+                    announcement.title
+                );
+
+
+            const message =
+                escapeHtml(
+                    announcement.message
+                );
+
+
+            const audience =
+                escapeHtml(
+                    getAudienceLabel(
+                        announcement
+                    )
+                );
+
+
+            const priority =
+                priorityBadge(
+                    announcement.priority
+                );
+
+
+            const statusHTML =
+                statusBadge(status);
+
+
+            const publishedDate =
+                announcement.published_at
+                    ? formatDate(
+                        announcement.published_at
+                    )
+                    : "Not published";
+
+
+            const expiryDate =
+                announcement.expires_at
+                    ? formatDate(
+                        announcement.expires_at
+                    )
+                    : "No expiry";
+
+
+            let actions = `
+                <button
+                    type="button"
+                    class="announcement-action-button announcement-edit-button"
+                    onclick="editAnnouncement(${id})"
+                >
+                    Edit
+                </button>
+            `;
+
+
+            if (status === "published") {
+
+                actions += `
+                    <button
+                        type="button"
+                        class="announcement-action-button announcement-unpublish-button"
+                        onclick="unpublishAnnouncement(${id})"
+                    >
+                        Unpublish
+                    </button>
+                `;
+
+            } else {
+
+                actions += `
+                    <button
+                        type="button"
+                        class="announcement-action-button announcement-publish-button"
+                        onclick="publishAnnouncement(${id})"
+                    >
+                        Publish
+                    </button>
+                `;
+
+            }
+
+
+            actions += `
+                <button
+                    type="button"
+                    class="announcement-action-button announcement-delete-button"
+                    onclick="deleteAnnouncement(${id})"
+                >
+                    Delete
+                </button>
+            `;
+
+
+            return `
+
+                <article class="announcement-item">
+
+                    <div class="announcement-item-header">
+
+                        <div>
+
+                            <h3
+                                class="announcement-item-title"
+                            >
+                                ${title}
+                            </h3>
+
+                            <div class="announcement-meta">
+
+                                ${priority}
+
+                                ${statusHTML}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <p
+                        class="announcement-item-message"
+                    >
+                        ${message}
+                    </p>
+
+
+                    <div class="announcement-audience">
+
+                        <strong>
+                            Audience:
+                        </strong>
+
+                        ${audience}
+
+                    </div>
+
+
+                    <div class="announcement-date">
+
+                        <strong>
+                            Published:
+                        </strong>
+
+                        ${escapeHtml(
+                            publishedDate
+                        )}
+
+                        &nbsp; • &nbsp;
+
+                        <strong>
+                            Expires:
+                        </strong>
+
+                        ${escapeHtml(
+                            expiryDate
+                        )}
+
+                    </div>
+
+
+                    <div class="announcement-actions">
+
+                        ${actions}
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }
+
+
+
+        /* =========================================
+           EDIT ANNOUNCEMENT
+        ========================================== */
+
+        async function editAnnouncement(id) {
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        `/announcements/${id}`
+                    );
+
+
+                const announcement =
+                    response.data;
+
+
+                editingAnnouncementId =
+                    Number(announcement.id);
+
+
+                formTitle.textContent =
+                    "Edit Announcement";
+
+
+                document.getElementById(
+                    "announcementTitle"
+                ).value =
+                    announcement.title || "";
+
+
+                document.getElementById(
+                    "announcementText"
+                ).value =
+                    announcement.message || "";
+
+
+                audienceType.value =
+                    announcement.audience_type ||
+                    "all";
+
+
+                document.getElementById(
+                    "announcementPriority"
+                ).value =
+                    announcement.priority ||
+                    "normal";
+
+
+                announcementStatus.value =
+                    announcement.status ||
+                    "draft";
+
+
+                document.getElementById(
+                    "expiresAt"
+                ).value =
+                    convertToDateTimeLocal(
+                        announcement.expires_at
+                    );
+
+
+                await Promise.all([
+                    loadBatches(),
+                    loadSchools()
+                ]);
+
+
+                if (
+                    announcement.audience_type ===
+                    "batch"
+                ) {
+
+                    batchSelect.value =
+                        announcement.batch_id || "";
+
+                }
+
+
+                if (
+                    announcement.audience_type ===
+                    "school"
+                ) {
+
+                    schoolSelect.value =
+                        announcement.school_id || "";
+
+                }
+
+
+                updateAudienceFields();
+
+
+                if (
+                    announcementStatus.value ===
+                    "published"
+                ) {
+
+                    submitButton.textContent =
+                        "Update & Publish";
+
+                } else {
+
+                    submitButton.textContent =
+                        "Save Draft";
+
+                }
+
+
+                formCard.classList.add(
+                    "show"
+                );
+
+
+                formCard.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+
+            } catch (error) {
+
+                console.error(
+                    "Edit announcement error:",
+                    error
+                );
+
+
+                showMessage(
+                    error.message ||
+                    "Failed to load announcement.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           DATE TIME CONVERSION
+        ========================================== */
+
+        function convertToDateTimeLocal(
+            value
+        ) {
+
+            if (!value) {
+                return "";
+            }
+
+
+            const date =
+                new Date(value);
+
+
+            if (Number.isNaN(
+                date.getTime()
+            )) {
+
+                return "";
+
+            }
+
+
+            const year =
+                date.getFullYear();
+
+
+            const month =
+                String(
+                    date.getMonth() + 1
+                ).padStart(2, "0");
+
+
+            const day =
+                String(
+                    date.getDate()
+                ).padStart(2, "0");
+
+
+            const hours =
+                String(
+                    date.getHours()
+                ).padStart(2, "0");
+
+
+            const minutes =
+                String(
+                    date.getMinutes()
+                ).padStart(2, "0");
+
+
+            return `
+                ${year}-${month}-${day}
+                T${hours}:${minutes}
+            `.replace(/\s/g, "");
+
+        }
+
+
+
+        /* =========================================
+           PUBLISH
+        ========================================== */
+
+        async function publishAnnouncement(id) {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to publish this announcement?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        `/announcements/publish/${id}`,
+                        {
+                            method: "PUT"
+                        }
+                    );
+
+
+                showMessage(
+                    response.message ||
+                    "Announcement published successfully."
+                );
+
+
+                await loadAnnouncements();
+
+            } catch (error) {
+
+                console.error(
+                    "Publish announcement error:",
+                    error
+                );
+
+
+                showMessage(
+                    error.message ||
+                    "Failed to publish announcement.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           UNPUBLISH
+        ========================================== */
+
+        async function unpublishAnnouncement(id) {
+
+            const confirmed =
+                confirm(
+                    "Move this announcement back to draft?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        `/announcements/unpublish/${id}`,
+                        {
+                            method: "PUT"
+                        }
+                    );
+
+
+                showMessage(
+                    response.message ||
+                    "Announcement moved to draft."
+                );
+
+
+                await loadAnnouncements();
+
+            } catch (error) {
+
+                console.error(
+                    "Unpublish announcement error:",
+                    error
+                );
+
+
+                showMessage(
+                    error.message ||
+                    "Failed to unpublish announcement.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           DELETE
+        ========================================== */
+
+        async function deleteAnnouncement(id) {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to permanently delete this announcement?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await apiRequest(
+                        `/announcements/${id}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                showMessage(
+                    response.message ||
+                    "Announcement deleted successfully."
+                );
+
+
+                await loadAnnouncements();
+
+            } catch (error) {
+
+                console.error(
+                    "Delete announcement error:",
+                    error
+                );
+
+
+                showMessage(
+                    error.message ||
+                    "Failed to delete announcement.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           REFRESH
+        ========================================== */
+
+        document
+            .getElementById(
+                "refreshButton"
+            )
+            .addEventListener(
+                "click",
+                loadAnnouncements
+            );
+
+
+
+        /* =========================================
+           LOGOUT
+        ========================================== */
+
+        document
+            .getElementById(
+                "logoutButton"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    localStorage.removeItem(
+                        "daura_admin_token"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_admin_user"
+                    );
+
+                    localStorage.removeItem(
+                        "daura_role"
+                    );
+
+
+                    window.location.href =
+                        "login.html";
+
+                }
+            );
+
+
+
+        /* =========================================
+           INITIAL LOAD
+        ========================================== */
+
+        updateAudienceFields();
+
+        loadAnnouncements();
+
+    </script>
+
+
+</body>
+
+</html>

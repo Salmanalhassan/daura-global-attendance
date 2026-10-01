@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Daura GlobalTECHNOLOGY Student Login"
+    >
+
+    <title>
+        Student Login | Daura Global
+    </title>
+
+    <link
+        rel="icon"
+        type="image/svg+xml"
+        href="/assests/images/logo.svg"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/assests/css/style.css"
+    >
+
+</head>
+
+
+<body class="auth-page">
+
+
+    <main class="auth-wrapper">
+
+
+        <!-- BRAND SIDE -->
+
+        <section class="auth-brand student-brand">
+
+
+            <a
+                href="/"
+                class="auth-logo"
+            >
+
+                <img
+                    src="/assests/images/logo.svg"
+                    alt="Daura Global Logo"
+                >
+
+            </a>
+
+
+            <div>
+
+                <span class="brand-badge">
+                    DAURA GLOBALTECHNOLOGY
+                </span>
+
+                <h1>
+                    Your SIWES
+                    Attendance
+                    Portal
+                </h1>
+
+                <p>
+                    Scan attendance QR codes,
+                    check your attendance history,
+                    view your SIWES information
+                    and manage your profile.
+                </p>
+
+            </div>
+
+
+            <div class="auth-brand-footer">
+
+                <span>
+                    QR Attendance
+                </span>
+
+                <span>
+                    •
+                </span>
+
+                <span>
+                    SIWES Student Portal
+                </span>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- LOGIN SIDE -->
+
+        <section class="auth-card-section">
+
+
+            <div class="auth-card">
+
+
+                <div class="mobile-logo">
+
+                    <img
+                        src="/assests/images/logo.svg"
+                        alt="Daura Global Logo"
+                    >
+
+                </div>
+
+
+                <div class="auth-heading">
+
+                    <span class="selection-badge">
+                        STUDENT PORTAL
+                    </span>
+
+                    <h2>
+                        Welcome back
+                    </h2>
+
+                    <p>
+                        Sign in to access your
+                        SIWES attendance portal.
+                    </p>
+
+                </div>
+
+
+
+                <!-- ERROR -->
+
+                <div
+                    id="studentLoginError"
+                    class="form-message error"
+                    hidden
+                ></div>
+
+
+
+                <!-- LOGIN FORM -->
+
+                <form id="studentLoginForm">
+
+
+                    <div class="form-group">
+
+                        <label for="student_id">
+                            Student ID
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                🎓
+                            </span>
+
+                            <input
+                                type="text"
+                                id="student_id"
+                                name="student_id"
+                                placeholder="e.g. DGT-001"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="studentPassword">
+                            Password
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                🔒
+                            </span>
+
+                            <input
+                                type="password"
+                                id="studentPassword"
+                                name="password"
+                                placeholder="Enter password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="studentTogglePassword"
+                            >
+                                Show
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                        id="studentLoginButton"
+                    >
+
+                        <span id="studentLoginButtonText">
+                            Sign In
+                        </span>
+
+                        <span class="button-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                </form>
+
+
+
+                <div class="auth-bottom">
+
+                    <a href="/">
+                        ← Back to main portal
+                    </a>
+
+                    <span>
+                        Daura GlobalTECHNOLOGY
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <script src="/assests/js/app.js"></script>
+
+
+    <script>
+
+        const studentLoginForm =
+            document.getElementById(
+                'studentLoginForm'
+            );
+
+        const studentLoginError =
+            document.getElementById(
+                'studentLoginError'
+            );
+
+        const studentLoginButton =
+            document.getElementById(
+                'studentLoginButton'
+            );
+
+        const studentLoginButtonText =
+            document.getElementById(
+                'studentLoginButtonText'
+            );
+
+        const studentPassword =
+            document.getElementById(
+                'studentPassword'
+            );
+
+        const studentTogglePassword =
+            document.getElementById(
+                'studentTogglePassword'
+            );
+
+
+        /* PASSWORD VISIBILITY */
+
+        studentTogglePassword.addEventListener(
+            'click',
+            () => {
+
+                if (
+                    studentPassword.type ===
+                    'password'
+                ) {
+
+                    studentPassword.type =
+                        'text';
+
+                    studentTogglePassword.textContent =
+                        'Hide';
+
+                } else {
+
+                    studentPassword.type =
+                        'password';
+
+                    studentTogglePassword.textContent =
+                        'Show';
+
+                }
+
+            }
+        );
+
+
+        /* STUDENT LOGIN */
+
+        studentLoginForm.addEventListener(
+            'submit',
+            async (event) => {
+
+                event.preventDefault();
+
+
+                studentLoginError.hidden =
+                    true;
+
+                studentLoginButton.disabled =
+                    true;
+
+                studentLoginButtonText.textContent =
+                    'Signing in...';
+
+
+                const student_id =
+                    document.getElementById(
+                        'student_id'
+                    ).value.trim();
+
+                const password =
+                    studentPassword.value;
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            '/api/auth/student-login',
+                            {
+                                method: 'POST',
+
+                                headers: {
+                                    'Content-Type':
+                                        'application/json'
+                                },
+
+                                body: JSON.stringify({
+                                    student_id,
+                                    password
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            'Login failed'
+                        );
+
+                    }
+
+
+                    if (
+                        !data.success ||
+                        !data.token
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            'Invalid login response'
+                        );
+
+                    }
+
+
+                    saveToken(
+                        data.token
+                    );
+
+
+                    saveUser({
+                        ...(
+                            data.student || {}
+                        ),
+
+                        role: 'student'
+                    });
+
+
+                    window.location.href =
+                        '/student/dashboard.html';
+
+
+                } catch (error) {
+
+                    studentLoginError.textContent =
+                        error.message;
+
+                    studentLoginError.hidden =
+                        false;
+
+                    studentLoginButton.disabled =
+                        false;
+
+                    studentLoginButtonText.textContent =
+                        'Sign In';
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

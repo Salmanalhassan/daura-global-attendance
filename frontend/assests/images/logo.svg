@@ -1,0 +1,235 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+    <defs>
+
+        <!-- Main Gradient -->
+        <linearGradient
+            id="purpleBlue"
+            x1="70"
+            y1="80"
+            x2="440"
+            y2="430"
+            gradientUnits="userSpaceOnUse"
+        >
+            <stop offset="0" stop-color="#B400FF"/>
+            <stop offset="0.35" stop-color="#6B2CFF"/>
+            <stop offset="0.7" stop-color="#168CFF"/>
+            <stop offset="1" stop-color="#00E5FF"/>
+        </linearGradient>
+
+        <!-- Cyan Gradient -->
+        <linearGradient
+            id="cyanBlue"
+            x1="100"
+            y1="300"
+            x2="400"
+            y2="170"
+            gradientUnits="userSpaceOnUse"
+        >
+            <stop offset="0" stop-color="#00E8D0"/>
+            <stop offset="0.45" stop-color="#08BFFF"/>
+            <stop offset="1" stop-color="#2465FF"/>
+        </linearGradient>
+
+        <!-- Purple Gradient -->
+        <linearGradient
+            id="purplePink"
+            x1="100"
+            y1="100"
+            x2="420"
+            y2="410"
+            gradientUnits="userSpaceOnUse"
+        >
+            <stop offset="0" stop-color="#5A00FF"/>
+            <stop offset="0.5" stop-color="#9C00FF"/>
+            <stop offset="1" stop-color="#E000FF"/>
+        </linearGradient>
+
+        <!-- Glow -->
+        <filter
+            id="glow"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+        >
+            <feGaussianBlur
+                stdDeviation="4"
+                result="blur"
+            />
+
+            <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+    </defs>
+
+
+    <!-- ================================= -->
+    <!-- LEFT OUTER CURVE -->
+    <!-- ================================= -->
+
+    <path
+        d="M214 82
+           C155 88 112 122 92 174
+           C73 224 78 283 108 329
+           C137 374 183 397 239 402"
+        stroke="url(#purplePink)"
+        stroke-width="34"
+        stroke-linecap="round"
+        filter="url(#glow)"
+    />
+
+
+    <!-- ================================= -->
+    <!-- RIGHT OUTER CURVE -->
+    <!-- ================================= -->
+
+    <path
+        d="M298 82
+           C357 88 400 122 420 174
+           C439 224 434 283 404 329
+           C375 374 329 397 273 402"
+        stroke="url(#purpleBlue)"
+        stroke-width="34"
+        stroke-linecap="round"
+        filter="url(#glow)"
+    />
+
+
+    <!-- ================================= -->
+    <!-- LEFT TOP RIBBON -->
+    <!-- ================================= -->
+
+    <path
+        d="M123 164
+           C142 130 177 111 215 105"
+        stroke="url(#purplePink)"
+        stroke-width="27"
+        stroke-linecap="round"
+    />
+
+
+    <!-- ================================= -->
+    <!-- LEFT BLUE RIBBON -->
+    <!-- ================================= -->
+
+    <path
+        d="M113 210
+           C135 171 169 153 211 146"
+        stroke="url(#cyanBlue)"
+        stroke-width="30"
+        stroke-linecap="round"
+    />
+
+
+    <!-- ================================= -->
+    <!-- LEFT INNER RIBBON -->
+    <!-- ================================= -->
+
+    <path
+        d="M121 254
+           C143 223 172 207 205 197"
+        stroke="url(#purplePink)"
+        stroke-width="25"
+        stroke-linecap="round"
+    />
+
+
+    <!-- ================================= -->
+    <!-- LEFT CENTER CYAN -->
+    <!-- ================================= -->
+
+    <path
+        d="M112 238
+           C101 268 109 299 137 319
+           C154 331 174 337 192 337"
+        stroke="url(#cyanBlue)"
+        stroke-width="34"
+        stroke-linecap="round"
+        filter="url(#glow)"
+    />
+
+
+    <!-- ================================= -->
+    <!-- LEFT LOWER RIBBON -->
+    <!-- ================================= -->
+
+    <path
+        d="M128 330
+           C150 353 181 365 215 368"
+        stroke="url(#purpleBlue)"
+        stroke-width="29"
+        stroke-linecap="round"
+    />
+
+
+    <!-- ================================= -->
+    <!-- RIGHT TOP RIBBON -->
+    <!-- ================================= -->
+
+    <path
+        d="M298 105
+           C336 111 371 130 390 164"
+        stroke="url(#purplePink)"
+        stroke-width="27"
+        stroke-linecap="round"
+    />
+
+
+    <!-- ================================= -->
+    <!-- RIGHT BLUE RIBBON -->
+    <!-- ================================= -->
+
+    <path
+        d="M302 146
+           C344 153 378 171 400 210"
+        stroke="url(#cyanBlue)"
+        stroke-width="30"
+        stroke-linecap="round"
+    />
+
+
+    <!-- ================================= -->
+    <!-- RIGHT INNER RIBBON -->
+    <!-- ================================= -->
+
+    <path
+        d="M307 197
+           C340 207 369 223 391 254"
+        stroke="url(#purplePink)"
+        stroke-width="25"
+        stroke-linecap="round"
+    />
+
+
+    <!-- ================================= -->
+    <!-- RIGHT CENTER CYAN -->
+    <!-- ================================= -->
+
+    <path
+        d="M400 238
+           C411 268 403 299 375 319
+           C358 331 338 337 320 337"
+        stroke="url(#cyanBlue)"
+        stroke-width="34"
+        stroke-linecap="round"
+        filter="url(#glow)"
+    />
+
+
+    <!-- ================================= -->
+    <!-- RIGHT LOWER RIBBON -->
+    <!-- ================================= -->
+
+    <path
+        d="M384 330
+           C362 353 331 365 297 368"
+        stroke="url(#purpleBlue)"
+        stroke-width="29"
+        stroke-linecap="round"
+    />
+
+</svg>

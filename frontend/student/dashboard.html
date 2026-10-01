@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Student Dashboard - Daura GlobalTECHNOLOGY
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/student-dashboard.css"
+    >
+
+    <style>
+
+        /* =====================================================
+           ANNOUNCEMENTS
+        ====================================================== */
+
+        .announcement-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 14px;
+            background: #ffffff;
+            transition: 0.2s ease;
+        }
+
+        .announcement-card:hover {
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .announcement-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .announcement-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .announcement-title {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .announcement-message {
+            margin: 0 0 12px 0;
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        .announcement-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .announcement-priority {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .priority-normal {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .priority-important {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+        .priority-urgent {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .announcement-empty {
+            text-align: center;
+            padding: 35px 20px;
+            color: #6b7280;
+        }
+
+        .announcement-empty-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .announcement-empty h3 {
+            margin: 0 0 7px;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .announcement-empty p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .announcement-error {
+            text-align: center;
+            padding: 25px 20px;
+            color: #b91c1c;
+            background: #fef2f2;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .announcement-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 26px;
+            height: 26px;
+            padding: 0 8px;
+            border-radius: 20px;
+            background: #f3f4f6;
+            color: #374151;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .announcement-expiry {
+            color: #9ca3af;
+        }
+
+        @media (max-width: 700px) {
+
+            .announcement-top {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .announcement-title {
+                font-size: 16px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="dashboard-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+
+            <img
+                src="../assests/images/logo.svg"
+                alt="Daura GlobalTECHNOLOGY"
+                class="logo"
+            >
+
+            <h2>
+                Daura Global
+            </h2>
+
+            <p>
+               TECHNOLOGY
+            </p>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a
+                href="/student/dashboard.html"
+                class="active"
+            >
+                Dashboard
+            </a>
+
+
+            <a href="/student/scan-qr.html">
+                Scan QR
+            </a>
+
+
+            <a href="/student/my-attendance.html">
+                My Attendance
+            </a>
+
+
+            <a href="/student/attendance-summary.html">
+                📊 Attendance Summary
+            </a>
+
+
+            <a href="/student/my-siwes.html">
+                My SIWES
+            </a>
+
+
+            <a href="/student-payment.html">
+                💳 SIWES Payment
+            </a>
+
+
+            <a href="/student/profile.html">
+                My Profile
+            </a>
+
+        </nav>
+
+
+        <button
+            type="button"
+            id="logoutBtn"
+            class="logout-btn"
+        >
+            Logout
+        </button>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>
+                    Student Dashboard
+                </h1>
+
+                <p id="welcomeMessage">
+                    Welcome back.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             MESSAGE
+        ================================================== -->
+
+        <div
+            id="messageBox"
+            class="message-box hidden"
+        ></div>
+
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <section class="stats-grid">
+
+
+            <!-- PRESENT -->
+
+            <div class="stat-card">
+
+                <div class="stat-content">
+
+                    <span>
+                        Present
+                    </span>
+
+                    <strong id="presentCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LATE -->
+
+            <div class="stat-card">
+
+                <div class="stat-content">
+
+                    <span>
+                        Late
+                    </span>
+
+                    <strong id="lateCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ABSENT -->
+
+            <div class="stat-card">
+
+                <div class="stat-content">
+
+                    <span>
+                        Absent
+                    </span>
+
+                    <strong id="absentCount">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PERCENTAGE -->
+
+            <div class="stat-card">
+
+                <div class="stat-content">
+
+                    <span>
+                        Attendance %
+                    </span>
+
+                    <strong id="attendancePercentage">
+                        0%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ANNOUNCEMENTS
+        ================================================== -->
+
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        📢 Announcements
+                    </h2>
+
+                    <p>
+                        Important information from Daura GlobalTECHNOLOGY.
+                    </p>
+
+                </div>
+
+
+                <span
+                    id="announcementCount"
+                    class="announcement-count"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div id="announcementsContainer">
+
+                <div class="announcement-empty">
+
+                    <div class="announcement-empty-icon">
+                        ⏳
+                    </div>
+
+                    <h3>
+                        Loading announcements...
+                    </h3>
+
+                    <p>
+                        Please wait.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SIWES INFORMATION
+        ================================================== -->
+
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        My SIWES Information
+                    </h2>
+
+                    <p>
+                        Your current industrial training information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="info-grid">
+
+
+                <!-- STUDENT ID -->
+
+                <div class="info-item">
+
+                    <span>
+                        Student ID
+                    </span>
+
+                    <strong id="studentId">
+                        —
+                    </strong>
+
+                </div>
+
+
+
+                <!-- REGISTRATION -->
+
+                <div class="info-item">
+
+                    <span>
+                        Registration Number
+                    </span>
+
+                    <strong id="registrationNumber">
+                        —
+                    </strong>
+
+                </div>
+
+
+
+                <!-- SCHOOL -->
+
+                <div class="info-item">
+
+                    <span>
+                        School
+                    </span>
+
+                    <strong id="schoolName">
+                        —
+                    </strong>
+
+                </div>
+
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="info-item">
+
+                    <span>
+                        Department
+                    </span>
+
+                    <strong id="department">
+                        —
+                    </strong>
+
+                </div>
+
+
+
+                <!-- COURSE -->
+
+                <div class="info-item">
+
+                    <span>
+                        Course
+                    </span>
+
+                    <strong id="course">
+                        —
+                    </strong>
+
+                </div>
+
+
+
+                <!-- BATCH -->
+
+                <div class="info-item">
+
+                    <span>
+                        SIWES Batch
+                    </span>
+
+                    <strong id="batchName">
+                        —
+                    </strong>
+
+                </div>
+
+
+
+                <!-- START DATE -->
+
+                <div class="info-item">
+
+                    <span>
+                        Start Date
+                    </span>
+
+                    <strong id="startDate">
+                        —
+                    </strong>
+
+                </div>
+
+
+
+                <!-- END DATE -->
+
+                <div class="info-item">
+
+                    <span>
+                        End Date
+                    </span>
+
+                    <strong id="endDate">
+                        —
+                    </strong>
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <div class="info-item">
+
+                    <span>
+                        Status
+                    </span>
+
+                    <strong
+                        id="studentStatus"
+                        class="status-badge"
+                    >
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RECENT ATTENDANCE
+        ================================================== -->
+
+        <section class="dashboard-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2>
+                        Recent Attendance
+                    </h2>
+
+                    <p>
+                        Your latest attendance records.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="/student/my-attendance.html"
+                    class="view-all-btn"
+                >
+                    View All
+                </a>
+
+            </div>
+
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Time
+                            </th>
+
+                            <th>
+                                Session
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="attendanceTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="empty"
+                            >
+                                Loading attendance...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     GLOBAL APP JS
+========================================================== -->
+
+<script
+    src="../assests/js/app.js"
+></script>
+
+
+
+<!-- =========================================================
+     DASHBOARD JS
+========================================================== -->
+
+<script
+    src="../assests/js/student-dashboard.js"
+></script>
+
+
+
+<!-- =========================================================
+     ANNOUNCEMENTS JS
+========================================================== -->
+
+<script>
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    loadStudentAnnouncements();
+
+});
+
+
+/* =========================================================
+   LOAD STUDENT ANNOUNCEMENTS
+========================================================= */
+
+async function loadStudentAnnouncements() {
+
+    const container =
+        document.getElementById('announcementsContainer');
+
+    const countElement =
+        document.getElementById('announcementCount');
+
+
+    try {
+
+        const response =
+            await apiRequest('/announcements/student/my-announcements');
+
+
+        const announcements =
+            Array.isArray(response.data)
+                ? response.data
+                : [];
+
+
+        countElement.textContent =
+            announcements.length;
+
+
+        if (announcements.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="announcement-empty">
+
+                    <div class="announcement-empty-icon">
+                        📭
+                    </div>
+
+                    <h3>
+                        No announcements
+                    </h3>
+
+                    <p>
+                        There are no new announcements for you at the moment.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML =
+            announcements
+                .map(announcement =>
+                    createAnnouncementHTML(announcement)
+                )
+                .join('');
+
+
+    } catch (error) {
+
+        console.error(
+            'Announcement loading error:',
+            error
+        );
+
+
+        countElement.textContent = '0';
+
+
+        container.innerHTML = `
+
+            <div class="announcement-error">
+
+                ❌ Unable to load announcements.
+
+                <br>
+
+                <small>
+                    Please refresh the page and try again.
+                </small>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE ANNOUNCEMENT HTML
+========================================================= */
+
+function createAnnouncementHTML(announcement) {
+
+    const priority =
+        String(
+            announcement.priority || 'normal'
+        ).toLowerCase();
+
+
+    let priorityClass =
+        'priority-normal';
+
+
+    if (priority === 'important') {
+
+        priorityClass =
+            'priority-important';
+
+    }
+
+
+    if (priority === 'urgent') {
+
+        priorityClass =
+            'priority-urgent';
+
+    }
+
+
+    let priorityIcon =
+        'ℹ️';
+
+
+    if (priority === 'important') {
+
+        priorityIcon =
+            '⚠️';
+
+    }
+
+
+    if (priority === 'urgent') {
+
+        priorityIcon =
+            '🚨';
+
+    }
+
+
+    const title =
+        escapeAnnouncementHTML(
+            announcement.title || 'Announcement'
+        );
+
+
+    const message =
+        escapeAnnouncementHTML(
+            announcement.message || ''
+        );
+
+
+    const publishedDate =
+        formatAnnouncementDate(
+            announcement.published_at
+        );
+
+
+    let expiryHTML = '';
+
+
+    if (announcement.expires_at) {
+
+        const expiryDate =
+            formatAnnouncementDate(
+                announcement.expires_at
+            );
+
+
+        expiryHTML = `
+
+            <span class="announcement-expiry">
+
+                • Expires ${expiryDate}
+
+            </span>
+
+        `;
+
+    }
+
+
+    return `
+
+        <article class="announcement-card">
+
+            <div class="announcement-top">
+
+                <h3 class="announcement-title">
+                    ${title}
+                </h3>
+
+
+                <span
+                    class="announcement-priority ${priorityClass}"
+                >
+                    ${priorityIcon}
+                    ${escapeAnnouncementHTML(
+                        priority
+                    )}
+                </span>
+
+            </div>
+
+
+            <p class="announcement-message">
+                ${message}
+            </p>
+
+
+            <div class="announcement-meta">
+
+                <span>
+                    📅 ${publishedDate}
+                </span>
+
+                ${expiryHTML}
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatAnnouncementDate(value) {
+
+    if (!value) {
+
+        return 'Date unavailable';
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (Number.isNaN(date.getTime())) {
+
+        return 'Date unavailable';
+
+    }
+
+
+    return date.toLocaleString(
+        'en-NG',
+        {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   Security protection
+========================================================= */
+
+function escapeAnnouncementHTML(value) {
+
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+}
+
+</script>
+
+
+</body>
+
+</html>

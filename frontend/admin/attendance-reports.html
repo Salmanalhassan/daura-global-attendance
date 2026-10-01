@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Attendance Reports - Daura GlobalTECHNOLOGY</title>
+
+    <link
+        rel="stylesheet"
+        href="../assests/css/attendance-reports.css"
+    >
+</head>
+
+<body>
+
+    <div class="page-container">
+
+        <!-- ==============================
+             HEADER
+        =============================== -->
+
+        <header class="page-header">
+
+            <div>
+                <h1>Attendance Reports</h1>
+
+                <p>
+                    Generate and analyze student attendance reports
+                </p>
+            </div>
+
+            <div class="header-actions">
+
+                <button
+                    type="button"
+                    id="printBtn"
+                    class="btn btn-secondary"
+                >
+                    🖨️ Print
+                </button>
+
+                <button
+                    type="button"
+                    id="exportPdfBtn"
+                    class="btn btn-danger"
+                >
+                    📄 Export PDF
+                </button>
+
+                <button
+                    type="button"
+                    id="exportExcelBtn"
+                    class="btn btn-success"
+                >
+                    📊 Export Excel
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==============================
+             MESSAGE
+        =============================== -->
+
+        <div
+            id="messageBox"
+            class="message-box"
+            hidden
+        ></div>
+
+
+        <!-- ==============================
+             FILTER CARD
+        =============================== -->
+
+        <section class="card filter-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>Report Filters</h2>
+
+                    <p>
+                        Select school, department and date range
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="filter-grid">
+
+                <!-- SCHOOL -->
+
+                <div class="form-group">
+
+                    <label for="schoolFilter">
+                        School
+                    </label>
+
+                    <select id="schoolFilter">
+
+                        <option value="">
+                            Select School
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DEPARTMENT -->
+
+                <div class="form-group">
+
+                    <label for="departmentFilter">
+                        Department
+                    </label>
+
+                    <select
+                        id="departmentFilter"
+                        disabled
+                    >
+
+                        <option value="">
+                            All Departments
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- STUDENT ID -->
+
+                <div class="form-group">
+
+                    <label for="studentIdFilter">
+                        Student ID
+                        <span>(Optional)</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="studentIdFilter"
+                        placeholder="e.g. DGT-001"
+                    >
+
+                </div>
+
+
+                <!-- FROM DATE -->
+
+                <div class="form-group">
+
+                    <label for="fromDate">
+                        From Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="fromDate"
+                    >
+
+                </div>
+
+
+                <!-- TO DATE -->
+
+                <div class="form-group">
+
+                    <label for="toDate">
+                        To Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="toDate"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-actions">
+
+                <button
+                    type="button"
+                    id="generateBtn"
+                    class="btn btn-primary"
+                >
+                    🔍 Generate Report
+                </button>
+
+                <button
+                    type="button"
+                    id="resetBtn"
+                    class="btn btn-light"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             REPORT AREA
+        =============================== -->
+
+        <main id="reportArea" hidden>
+
+
+            <!-- ==============================
+                 SCHOOL INFORMATION
+            =============================== -->
+
+            <section class="card school-card">
+
+                <div class="school-info">
+
+                    <div class="school-logo">
+                        DG
+                    </div>
+
+                    <div>
+
+                        <h2 id="schoolName">
+                            —
+                        </h2>
+
+                        <p id="schoolAddress">
+                            —
+                        </p>
+
+                        <p>
+
+                            <strong>Contact:</strong>
+
+                            <span id="schoolContact">
+                                —
+                            </span>
+
+                            &nbsp;&nbsp;
+
+                            <strong>Email:</strong>
+
+                            <span id="schoolEmail">
+                                —
+                            </span>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="report-meta">
+
+                    <p>
+                        <strong>Department:</strong>
+                        <span id="reportDepartment">
+                            All Departments
+                        </span>
+                    </p>
+
+                    <p>
+                        <strong>Period:</strong>
+                        <span id="reportPeriod">
+                            —
+                        </span>
+                    </p>
+
+                    <p>
+                        <strong>Generated:</strong>
+                        <span id="generatedAt">
+                            —
+                        </span>
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 SUMMARY CARDS
+            =============================== -->
+
+            <section class="summary-grid">
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        👨‍🎓
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Students
+                        </span>
+
+                        <strong id="totalStudents">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        📅
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Expected Sessions
+                        </span>
+
+                        <strong id="totalSessions">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        ✅
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Present
+                        </span>
+
+                        <strong id="presentCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        ⏰
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Late
+                        </span>
+
+                        <strong id="lateCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        ❌
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Absent
+                        </span>
+
+                        <strong id="absentCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-icon">
+                        📈
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Attendance Rate
+                        </span>
+
+                        <strong id="attendancePercentage">
+                            0%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 STUDENT REPORT TABLE
+            =============================== -->
+
+            <section class="card table-card">
+
+                <div class="card-header table-header">
+
+                    <div>
+
+                        <h2>
+                            Student Attendance Report
+                        </h2>
+
+                        <p id="resultText">
+                            No report generated
+                        </p>
+
+                    </div>
+
+                    <div class="table-tools">
+
+                        <input
+                            type="text"
+                            id="tableSearch"
+                            placeholder="Search student..."
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="loadingState"
+                    class="loading-state"
+                    hidden
+                >
+                    <div class="spinner"></div>
+
+                    <p>
+                        Generating report...
+                    </p>
+                </div>
+
+
+                <div
+                    id="emptyState"
+                    class="empty-state"
+                    hidden
+                >
+
+                    <div>
+                        📋
+                    </div>
+
+                    <h3>
+                        No Students Found
+                    </h3>
+
+                    <p>
+                        No students matched the selected filters.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="tableWrapper"
+                    class="table-wrapper"
+                >
+
+                    <table id="reportTable">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    #
+                                </th>
+
+                                <th>
+                                    Student ID
+                                </th>
+
+                                <th>
+                                    Full Name
+                                </th>
+
+                                <th>
+                                    Registration No.
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                <th>
+                                    Course
+                                </th>
+
+                                <th>
+                                    Sessions
+                                </th>
+
+                                <th>
+                                    Present
+                                </th>
+
+                                <th>
+                                    Late
+                                </th>
+
+                                <th>
+                                    Absent
+                                </th>
+
+                                <th>
+                                    Attendance
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="reportTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 REPORT FOOTER
+            =============================== -->
+
+            <section class="report-footer">
+
+                <p>
+                    Daura GlobalTECHNOLOGY
+                </p>
+
+                <p>
+                    Student Attendance Management System
+                </p>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ==============================
+         LIBRARIES
+    =============================== -->
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+    ></script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"
+    ></script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+    ></script>
+
+
+    <!-- GLOBAL JS -->
+
+    <script src="../assests/js/app.js"></script>
+
+    <!-- REPORT JS -->
+
+    <script src="../assests/js/attendance-reports.js"></script>
+
+</body>
+</html>
