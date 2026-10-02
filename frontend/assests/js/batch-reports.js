@@ -1,4 +1,4 @@
-const API_URL = "/api";
+const API_BASE_URL = '/api';
 
 
 const user = JSON.parse(localStorage.getItem('user') || '{}');

@@ -743,3 +743,28 @@ button {
     }
 
 }
+
+/* Styling na Maɓallin Koma Baya (Back Button) */
+button {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+button:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+button a {
+  color: #334155;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+}
