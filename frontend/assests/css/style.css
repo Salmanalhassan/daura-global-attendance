@@ -3041,3 +3041,53 @@ input {
     }
 
 }
+
+
+
+
+/* Wajen da katin yake */
+.btn {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    max-width: 320px;
+    border: 1px solid #f1f5f9; /* Karin kyau kamar sauran katunan shafin */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Taken rubutun sama */
+.btn h2 {
+    color: #1e293b;
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Button din da kanka */
+.btn button {
+    background-color: #2563eb; /* Daidai da shudiyar da kake amfani da ita */
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.btn button:hover {
+    background-color: #1d4ed8;
+}
+
+/* Rubutun dake cikin button din */
+.btn button a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: inline-block;
+    letter-spacing: 0.3px;
+}
+
