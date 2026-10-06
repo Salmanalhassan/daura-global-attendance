@@ -23,8 +23,8 @@ const getDepartmentsBySchool = (req, res) => {
             department
         FROM students
         WHERE school_id = ?
-        AND department IS NOT NULL
-        AND TRIM(department) != ''
+          AND department IS NOT NULL
+          AND TRIM(department) != ''
         ORDER BY department ASC
     `;
 
@@ -48,7 +48,7 @@ const getDepartmentsBySchool = (req, res) => {
 
             }
 
-            res.json({
+            return res.json({
                 success: true,
                 data: results
             });
@@ -74,9 +74,9 @@ const getAttendanceReport = (req, res) => {
     } = req.query;
 
 
-    // -------------------------------------------------
+    // =================================================
     // VALIDATION
-    // -------------------------------------------------
+    // =================================================
 
     if (!school_id) {
 
@@ -110,9 +110,9 @@ const getAttendanceReport = (req, res) => {
     }
 
 
-    // -------------------------------------------------
+    // =================================================
     // GET SCHOOL
-    // -------------------------------------------------
+    // =================================================
 
     const schoolSql = `
         SELECT
@@ -123,8 +123,8 @@ const getAttendanceReport = (req, res) => {
             email
         FROM schools
         WHERE id = ?
+        LIMIT 1
     `;
-
 
     db.query(
         schoolSql,
@@ -162,24 +162,47 @@ const getAttendanceReport = (req, res) => {
                 schoolResults[0];
 
 
-            // -------------------------------------------------
+            // =================================================
             // GET STUDENTS
-            // -------------------------------------------------
+            //
+            // IMPORTANT:
+            // DATE_FORMAT() forces MySQL DATE values to remain
+            // plain YYYY-MM-DD strings.
+            // =================================================
 
             let studentSql = `
                 SELECT
+
                     s.id,
+
                     s.student_id,
+
                     s.full_name,
+
                     s.registration_number,
+
                     s.email,
+
                     s.phone,
+
                     s.department,
+
                     s.course,
-                    s.start_date,
-                    s.end_date,
+
+                    DATE_FORMAT(
+                        s.start_date,
+                        '%Y-%m-%d'
+                    ) AS start_date,
+
+                    DATE_FORMAT(
+                        s.end_date,
+                        '%Y-%m-%d'
+                    ) AS end_date,
+
                     s.status
+
                 FROM students s
+
                 WHERE s.school_id = ?
             `;
 
@@ -189,14 +212,16 @@ const getAttendanceReport = (req, res) => {
             ];
 
 
-            // Department filter
-            // Case-insensitive
+            // =================================================
+            // DEPARTMENT FILTER
+            // =================================================
 
             if (department) {
 
                 studentSql += `
-                    AND LOWER(TRIM(s.department)) =
-                        LOWER(TRIM(?))
+                    AND LOWER(TRIM(s.department))
+                        =
+                    LOWER(TRIM(?))
                 `;
 
                 studentParams.push(
@@ -206,7 +231,9 @@ const getAttendanceReport = (req, res) => {
             }
 
 
-            // Student ID filter
+            // =================================================
+            // STUDENT ID FILTER
+            // =================================================
 
             if (student_id) {
 
@@ -222,7 +249,8 @@ const getAttendanceReport = (req, res) => {
 
 
             studentSql += `
-                ORDER BY s.full_name ASC
+                ORDER BY
+                    s.full_name ASC
             `;
 
 
@@ -250,25 +278,60 @@ const getAttendanceReport = (req, res) => {
                     }
 
 
-                    // -------------------------------------------------
+                    // =================================================
                     // GET ATTENDANCE RECORDS
-                    // -------------------------------------------------
+                    // =================================================
+                    //
+                    // We use DATE_FORMAT() here too so the date
+                    // never gets converted by JavaScript timezone.
+                    //
+                    // =================================================
 
                     let attendanceSql = `
                         SELECT
+
                             a.id,
+
                             a.student_id,
+
                             s.student_id AS student_code,
+
                             s.full_name,
+
                             s.registration_number,
+
                             s.department,
-                            a.attendance_date,
-                            a.attendance_time,
+
+                            DATE_FORMAT(
+                                a.attendance_date,
+                                '%Y-%m-%d'
+                            ) AS attendance_date,
+
+                            TIME_FORMAT(
+                                a.attendance_time,
+                                '%H:%i:%s'
+                            ) AS attendance_time,
+
                             a.status,
+
                             q.id AS qr_session_id,
+
                             q.session_type,
-                            q.start_time,
-                            q.end_time
+
+                            DATE_FORMAT(
+                                q.session_date,
+                                '%Y-%m-%d'
+                            ) AS session_date,
+
+                            TIME_FORMAT(
+                                q.start_time,
+                                '%H:%i:%s'
+                            ) AS start_time,
+
+                            TIME_FORMAT(
+                                q.end_time,
+                                '%H:%i:%s'
+                            ) AS end_time
 
                         FROM attendance a
 
@@ -280,9 +343,9 @@ const getAttendanceReport = (req, res) => {
 
                         WHERE s.school_id = ?
 
-                        AND DATE(q.session_date)
-                            BETWEEN ?
-                            AND ?
+                          AND DATE(q.session_date)
+                              BETWEEN ?
+                              AND ?
                     `;
 
 
@@ -293,13 +356,16 @@ const getAttendanceReport = (req, res) => {
                     ];
 
 
-                    // Department filter
+                    // =================================================
+                    // DEPARTMENT FILTER
+                    // =================================================
 
                     if (department) {
 
                         attendanceSql += `
-                            AND LOWER(TRIM(s.department)) =
-                                LOWER(TRIM(?))
+                            AND LOWER(TRIM(s.department))
+                                =
+                            LOWER(TRIM(?))
                         `;
 
                         attendanceParams.push(
@@ -309,7 +375,9 @@ const getAttendanceReport = (req, res) => {
                     }
 
 
-                    // Student ID filter
+                    // =================================================
+                    // STUDENT FILTER
+                    // =================================================
 
                     if (student_id) {
 
@@ -355,30 +423,13 @@ const getAttendanceReport = (req, res) => {
                             }
 
 
-                            // -------------------------------------------------
-                            // GET UNIQUE ATTENDANCE DAYS
-                            // -------------------------------------------------
-                            //
-                            // IMPORTANT:
-                            //
-                            // If Admin creates 10 QR sessions
-                            // on the same date, that date counts
-                            // as ONE attendance day.
-                            //
-                            // Example:
-                            //
-                            // Sep 6:
-                            // QR 1
-                            // QR 2
-                            // QR 3
-                            // QR 4
-                            //
-                            // = ONE attendance day
-                            //
-                            // -------------------------------------------------
+                            // =================================================
+                            // GET UNIQUE QR ATTENDANCE DAYS
+                            // =================================================
 
                             const sessionsSql = `
                                 SELECT DISTINCT
+
                                     DATE_FORMAT(
                                         session_date,
                                         '%Y-%m-%d'
@@ -390,7 +441,8 @@ const getAttendanceReport = (req, res) => {
                                     BETWEEN ?
                                     AND ?
 
-                                ORDER BY session_date ASC
+                                ORDER BY
+                                    session_date ASC
                             `;
 
 
@@ -421,83 +473,97 @@ const getAttendanceReport = (req, res) => {
                                     }
 
 
-                                    // -------------------------------------------------
+                                    // =================================================
                                     // UNIQUE ATTENDANCE DAYS
-                                    // -------------------------------------------------
+                                    // =================================================
 
-                                    const attendanceDays =
-                                        sessionResults.map(
-                                            session =>
-                                                String(
-                                                    session.session_date
-                                                ).slice(0, 10)
-                                        );
+                                    const attendanceDays = [
+                                        ...new Set(
+                                            sessionResults.map(
+                                                session =>
+                                                    String(
+                                                        session.session_date
+                                                    ).slice(0, 10)
+                                            )
+                                        )
+                                    ];
 
 
-                                    // -------------------------------------------------
+                                    // =================================================
                                     // BUILD STUDENT REPORTS
-                                    // -------------------------------------------------
+                                    // =================================================
 
                                     const studentReports =
                                         studentResults.map(
                                             student => {
 
+                                                // -----------------------------------------
+                                                // STUDENT SIWES PERIOD
+                                                // -----------------------------------------
+
                                                 const studentStart =
-                                                    new Date(
+                                                    String(
                                                         student.start_date
-                                                    )
-                                                    .toISOString()
-                                                    .slice(0, 10);
+                                                    ).slice(0, 10);
 
 
                                                 const studentEnd =
-                                                    new Date(
+                                                    String(
                                                         student.end_date
-                                                    )
-                                                    .toISOString()
-                                                    .slice(0, 10);
+                                                    ).slice(0, 10);
 
 
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
                                                 // EXPECTED ATTENDANCE DAYS
-                                                // -------------------------------------------------
-                                                //
-                                                // Only dates inside the student's
-                                                // SIWES period are counted.
-                                                //
-                                                // Multiple QR sessions on the same
-                                                // date still count as ONE day.
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
 
                                                 const studentAttendanceDays =
                                                     attendanceDays.filter(
-                                                        date =>
-                                                            date >=
-                                                                studentStart &&
-                                                            date <=
-                                                                studentEnd
+                                                        date => {
+
+                                                            return (
+                                                                date >=
+                                                                    studentStart
+                                                                &&
+                                                                date <=
+                                                                    studentEnd
+                                                            );
+
+                                                        }
                                                     );
 
 
-                                                // -------------------------------------------------
-                                                // STUDENT ATTENDANCE RECORDS
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
+                                                // FIND THIS STUDENT'S ATTENDANCE
+                                                //
+                                                // IMPORTANT:
+                                                // record.student_id = students.id
+                                                // student.id = students.id
+                                                //
+                                                // So they match directly.
+                                                // -----------------------------------------
 
                                                 const studentAttendance =
                                                     attendanceResults.filter(
-                                                        record =>
-                                                            Number(
-                                                                record.student_id
-                                                            ) ===
-                                                            Number(
-                                                                student.id
-                                                            )
+                                                        record => {
+
+                                                            return (
+                                                                Number(
+                                                                    record.student_id
+                                                                )
+                                                                ===
+                                                                Number(
+                                                                    student.id
+                                                                )
+                                                            );
+
+                                                        }
                                                     );
 
 
-                                                // -------------------------------------------------
-                                                // UNIQUE PRESENT / LATE DAYS
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
+                                                // UNIQUE ATTENDED DAYS
+                                                // -----------------------------------------
 
                                                 const attendedDateMap =
                                                     new Map();
@@ -507,35 +573,32 @@ const getAttendanceReport = (req, res) => {
                                                     record => {
 
                                                         const attendanceDate =
-                                                            new Date(
+                                                            String(
                                                                 record.attendance_date
-                                                            )
-                                                            .toISOString()
-                                                            .slice(0, 10);
+                                                            ).slice(0, 10);
 
 
-                                                        // Only attendance within
-                                                        // student's SIWES period
+                                                        // -------------------------------------
+                                                        // ONLY COUNT ATTENDANCE INSIDE
+                                                        // STUDENT'S SIWES PERIOD
+                                                        // -------------------------------------
 
                                                         if (
                                                             attendanceDate <
-                                                                studentStart ||
+                                                                studentStart
+                                                            ||
                                                             attendanceDate >
                                                                 studentEnd
                                                         ) {
+
                                                             return;
+
                                                         }
 
 
-                                                        /*
-                                                         * If a student has multiple
-                                                         * attendance records on the
-                                                         * same day, keep only ONE day.
-                                                         *
-                                                         * If any record is late,
-                                                         * we remember that the day
-                                                         * was late.
-                                                         */
+                                                        // -------------------------------------
+                                                        // ONE ATTENDANCE PER DAY
+                                                        // -------------------------------------
 
                                                         if (
                                                             !attendedDateMap.has(
@@ -548,8 +611,16 @@ const getAttendanceReport = (req, res) => {
                                                                 record.status
                                                             );
 
-                                                        } else if (
-                                                            record.status === 'late'
+                                                        }
+
+                                                        // -------------------------------------
+                                                        // IF MULTIPLE RECORDS EXIST FOR
+                                                        // SAME DATE, KEEP LATE AS PRIORITY
+                                                        // -------------------------------------
+
+                                                        else if (
+                                                            record.status ===
+                                                            'late'
                                                         ) {
 
                                                             attendedDateMap.set(
@@ -563,9 +634,9 @@ const getAttendanceReport = (req, res) => {
                                                 );
 
 
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
                                                 // PRESENT DAYS
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
 
                                                 const present =
                                                     Array.from(
@@ -579,9 +650,9 @@ const getAttendanceReport = (req, res) => {
                                                     .length;
 
 
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
                                                 // LATE DAYS
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
 
                                                 const late =
                                                     Array.from(
@@ -595,21 +666,25 @@ const getAttendanceReport = (req, res) => {
                                                     .length;
 
 
-                                                // -------------------------------------------------
-                                                // TOTAL ATTENDED DAYS
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
+                                                // TOTAL ATTENDED
+                                                // -----------------------------------------
 
                                                 const totalAttended =
                                                     attendedDateMap.size;
 
 
-                                                // -------------------------------------------------
-                                                // ABSENT DAYS
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
+                                                // TOTAL EXPECTED DAYS
+                                                // -----------------------------------------
 
                                                 const totalSessions =
                                                     studentAttendanceDays.length;
 
+
+                                                // -----------------------------------------
+                                                // ABSENT
+                                                // -----------------------------------------
 
                                                 const absent =
                                                     Math.max(
@@ -619,9 +694,9 @@ const getAttendanceReport = (req, res) => {
                                                     );
 
 
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
                                                 // ATTENDANCE PERCENTAGE
-                                                // -------------------------------------------------
+                                                // -----------------------------------------
 
                                                 const attendancePercentage =
                                                     totalSessions > 0
@@ -635,6 +710,10 @@ const getAttendanceReport = (req, res) => {
                                                         )
                                                         : 0;
 
+
+                                                // -----------------------------------------
+                                                // RETURN STUDENT REPORT
+                                                // -----------------------------------------
 
                                                 return {
 
@@ -668,6 +747,9 @@ const getAttendanceReport = (req, res) => {
                                                     total_sessions:
                                                         totalSessions,
 
+                                                    total_attendance:
+                                                        totalAttended,
+
                                                     present:
                                                         present,
 
@@ -686,37 +768,27 @@ const getAttendanceReport = (req, res) => {
                                         );
 
 
-                                    // -------------------------------------------------
+                                    // =================================================
                                     // OVERALL SUMMARY
-                                    // -------------------------------------------------
+                                    // =================================================
 
                                     const totalStudents =
                                         studentReports.length;
 
-
-                                    /*
-                                     * IMPORTANT:
-                                     *
-                                     * total_sessions here means the
-                                     * TOTAL EXPECTED ATTENDANCE DAYS
-                                     * across all students.
-                                     *
-                                     * Example:
-                                     *
-                                     * Aisha  = 3 days
-                                     * Salman = 3 days
-                                     *
-                                     * Total = 6 expected attendance days
-                                     */
 
                                     const totalSessions =
                                         studentReports.reduce(
                                             (
                                                 total,
                                                 student
-                                            ) =>
-                                                total +
-                                                student.total_sessions,
+                                            ) => {
+
+                                                return (
+                                                    total +
+                                                    student.total_sessions
+                                                );
+
+                                            },
                                             0
                                         );
 
@@ -726,9 +798,14 @@ const getAttendanceReport = (req, res) => {
                                             (
                                                 total,
                                                 student
-                                            ) =>
-                                                total +
-                                                student.present,
+                                            ) => {
+
+                                                return (
+                                                    total +
+                                                    student.present
+                                                );
+
+                                            },
                                             0
                                         );
 
@@ -738,9 +815,14 @@ const getAttendanceReport = (req, res) => {
                                             (
                                                 total,
                                                 student
-                                            ) =>
-                                                total +
-                                                student.late,
+                                            ) => {
+
+                                                return (
+                                                    total +
+                                                    student.late
+                                                );
+
+                                            },
                                             0
                                         );
 
@@ -750,9 +832,14 @@ const getAttendanceReport = (req, res) => {
                                             (
                                                 total,
                                                 student
-                                            ) =>
-                                                total +
-                                                student.absent,
+                                            ) => {
+
+                                                return (
+                                                    total +
+                                                    student.absent
+                                                );
+
+                                            },
                                             0
                                         );
 
@@ -775,11 +862,11 @@ const getAttendanceReport = (req, res) => {
                                             : 0;
 
 
-                                    // -------------------------------------------------
-                                    // SEND RESPONSE
-                                    // -------------------------------------------------
+                                    // =================================================
+                                    // RESPONSE
+                                    // =================================================
 
-                                    res.json({
+                                    return res.json({
 
                                         success: true,
 
@@ -863,5 +950,7 @@ const getAttendanceReport = (req, res) => {
 module.exports = {
 
     getDepartmentsBySchool,
+
     getAttendanceReport
+
 };

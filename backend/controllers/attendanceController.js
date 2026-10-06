@@ -1,4 +1,9 @@
 const db = require('../config/database');
+
+
+// ============================================================
+// MARK ATTENDANCE
+// ============================================================
 const markAttendance = (req, res) => {
 
     const studentId = req.user.id;
@@ -11,7 +16,9 @@ const markAttendance = (req, res) => {
         });
     }
 
+    // ========================================================
     // FIND QR SESSION
+    // ========================================================
     const qrSql = `
         SELECT
             id,
@@ -24,12 +31,13 @@ const markAttendance = (req, res) => {
             status
         FROM qr_sessions
         WHERE qr_token = ?
+        LIMIT 1
     `;
 
     db.query(qrSql, [qr_token], (err, qrResults) => {
 
         if (err) {
-            console.error(err);
+            console.error('QR session error:', err);
 
             return res.status(500).json({
                 success: false,
@@ -46,7 +54,9 @@ const markAttendance = (req, res) => {
 
         const qrSession = qrResults[0];
 
+        // ====================================================
         // CHECK SESSION STATUS
+        // ====================================================
         if (qrSession.status !== 'active') {
             return res.status(400).json({
                 success: false,
@@ -54,7 +64,9 @@ const markAttendance = (req, res) => {
             });
         }
 
-        // GET CURRENT DATE AND TIME AS STRINGS
+        // ====================================================
+        // GET CURRENT DATABASE DATE AND TIME
+        // ====================================================
         const timeSql = `
             SELECT
                 DATE_FORMAT(CURDATE(), '%Y-%m-%d') AS today_date,
@@ -64,7 +76,7 @@ const markAttendance = (req, res) => {
         db.query(timeSql, (timeErr, timeResults) => {
 
             if (timeErr) {
-                console.error(timeErr);
+                console.error('Current time error:', timeErr);
 
                 return res.status(500).json({
                     success: false,
@@ -75,7 +87,9 @@ const markAttendance = (req, res) => {
             const currentDate = timeResults[0].today_date;
             const currentTime = timeResults[0].today_time;
 
+            // =================================================
             // CHECK QR DATE
+            // =================================================
             if (qrSession.session_date !== currentDate) {
 
                 return res.status(400).json({
@@ -84,7 +98,9 @@ const markAttendance = (req, res) => {
                 });
             }
 
+            // =================================================
             // CHECK START TIME
+            // =================================================
             if (currentTime < qrSession.start_time) {
 
                 return res.status(400).json({
@@ -93,7 +109,9 @@ const markAttendance = (req, res) => {
                 });
             }
 
+            // =================================================
             // CHECK END TIME
+            // =================================================
             if (currentTime > qrSession.end_time) {
 
                 return res.status(400).json({
@@ -102,7 +120,9 @@ const markAttendance = (req, res) => {
                 });
             }
 
-            // CHECK EXPIRY USING DATABASE TIME
+            // =================================================
+            // CHECK QR EXPIRY
+            // =================================================
             const expirySql = `
                 SELECT
                     CASE
@@ -111,6 +131,7 @@ const markAttendance = (req, res) => {
                     END AS expired
                 FROM qr_sessions
                 WHERE id = ?
+                LIMIT 1
             `;
 
             db.query(
@@ -119,7 +140,7 @@ const markAttendance = (req, res) => {
                 (expiryErr, expiryResults) => {
 
                     if (expiryErr) {
-                        console.error(expiryErr);
+                        console.error('QR expiry error:', expiryErr);
 
                         return res.status(500).json({
                             success: false,
@@ -127,7 +148,10 @@ const markAttendance = (req, res) => {
                         });
                     }
 
-                    if (expiryResults[0].expired === 1) {
+                    if (
+                        expiryResults.length === 0 ||
+                        expiryResults[0].expired === 1
+                    ) {
 
                         return res.status(400).json({
                             success: false,
@@ -135,15 +159,23 @@ const markAttendance = (req, res) => {
                         });
                     }
 
+                    // =================================================
                     // CHECK STUDENT
+                    // =================================================
                     const studentSql = `
                         SELECT
                             id,
                             student_id,
                             full_name,
-                            status
+                            registration_number,
+                            status,
+                            school_id,
+                            siwes_batch_id,
+                            start_date,
+                            end_date
                         FROM students
                         WHERE id = ?
+                        LIMIT 1
                     `;
 
                     db.query(
@@ -152,7 +184,10 @@ const markAttendance = (req, res) => {
                         (studentErr, studentResults) => {
 
                             if (studentErr) {
-                                console.error(studentErr);
+                                console.error(
+                                    'Student verification error:',
+                                    studentErr
+                                );
 
                                 return res.status(500).json({
                                     success: false,
@@ -170,7 +205,9 @@ const markAttendance = (req, res) => {
 
                             const student = studentResults[0];
 
+                            // =================================================
                             // CHECK STUDENT STATUS
+                            // =================================================
                             if (student.status !== 'active') {
 
                                 return res.status(403).json({
@@ -179,21 +216,58 @@ const markAttendance = (req, res) => {
                                 });
                             }
 
-                            // CHECK DUPLICATE
+                            // =================================================
+                            // CHECK STUDENT SIWES DATE RANGE
+                            // =================================================
+                            if (
+                                student.start_date &&
+                                currentDate < String(student.start_date).slice(0, 10)
+                            ) {
+
+                                return res.status(403).json({
+                                    success: false,
+                                    message: 'Your SIWES has not started yet'
+                                });
+                            }
+
+                            if (
+                                student.end_date &&
+                                currentDate > String(student.end_date).slice(0, 10)
+                            ) {
+
+                                return res.status(403).json({
+                                    success: false,
+                                    message: 'Your SIWES period has ended'
+                                });
+                            }
+
+                            // =================================================
+                            // CHECK DUPLICATE ATTENDANCE
+                            //
+                            // ONE STUDENT = ONE ATTENDANCE PER DAY
+                            // =================================================
                             const duplicateSql = `
-                                SELECT id
+                                SELECT
+                                    id,
+                                    attendance_date,
+                                    attendance_time,
+                                    status
                                 FROM attendance
                                 WHERE student_id = ?
-                                AND qr_session_id = ?
+                                  AND attendance_date = ?
+                                LIMIT 1
                             `;
 
                             db.query(
                                 duplicateSql,
-                                [studentId, qrSession.id],
+                                [studentId, currentDate],
                                 (duplicateErr, duplicateResults) => {
 
                                     if (duplicateErr) {
-                                        console.error(duplicateErr);
+                                        console.error(
+                                            'Duplicate attendance error:',
+                                            duplicateErr
+                                        );
 
                                         return res.status(500).json({
                                             success: false,
@@ -205,11 +279,13 @@ const markAttendance = (req, res) => {
 
                                         return res.status(409).json({
                                             success: false,
-                                            message: 'Attendance already marked for this session'
+                                            message: 'Attendance already recorded today'
                                         });
                                     }
 
+                                    // =================================================
                                     // INSERT ATTENDANCE
+                                    // =================================================
                                     const insertSql = `
                                         INSERT INTO attendance
                                         (
@@ -240,7 +316,10 @@ const markAttendance = (req, res) => {
                                         (insertErr, insertResult) => {
 
                                             if (insertErr) {
-                                                console.error(insertErr);
+                                                console.error(
+                                                    'Insert attendance error:',
+                                                    insertErr
+                                                );
 
                                                 return res.status(500).json({
                                                     success: false,
@@ -249,16 +328,34 @@ const markAttendance = (req, res) => {
                                             }
 
                                             return res.status(201).json({
+
                                                 success: true,
-                                                message: 'Attendance marked successfully',
+
+                                                message:
+                                                    'Attendance marked successfully',
+
                                                 data: {
-                                                    attendance_id: insertResult.insertId,
-                                                    student_id: student.student_id,
-                                                    student_name: student.full_name,
-                                                    attendance_date: currentDate,
-                                                    attendance_time: currentTime,
-                                                    status: 'present',
-                                                    qr_session_id: qrSession.id
+
+                                                    attendance_id:
+                                                        insertResult.insertId,
+
+                                                    student_id:
+                                                        student.student_id,
+
+                                                    student_name:
+                                                        student.full_name,
+
+                                                    attendance_date:
+                                                        currentDate,
+
+                                                    attendance_time:
+                                                        currentTime,
+
+                                                    status:
+                                                        'present',
+
+                                                    qr_session_id:
+                                                        qrSession.id
                                                 }
                                             });
 
@@ -281,8 +378,9 @@ const markAttendance = (req, res) => {
 };
 
 
-
+// ============================================================
 // GET MY ATTENDANCE
+// ============================================================
 const getMyAttendance = (req, res) => {
 
     const studentId = req.user.id;
@@ -293,20 +391,29 @@ const getMyAttendance = (req, res) => {
             a.attendance_date,
             a.attendance_time,
             a.status,
+
+            q.id AS qr_session_id,
             q.session_type,
+            q.session_date,
             q.start_time,
             q.end_time
+
         FROM attendance a
+
         INNER JOIN qr_sessions q
             ON a.qr_session_id = q.id
+
         WHERE a.student_id = ?
-        ORDER BY a.attendance_date DESC, a.attendance_time DESC
+
+        ORDER BY
+            a.attendance_date DESC,
+            a.attendance_time DESC
     `;
 
     db.query(sql, [studentId], (err, results) => {
 
         if (err) {
-            console.error(err);
+            console.error('My attendance error:', err);
 
             return res.status(500).json({
                 success: false,
@@ -314,22 +421,33 @@ const getMyAttendance = (req, res) => {
             });
         }
 
-        res.json({
+        return res.json({
+
             success: true,
-            student_id: studentId,
-            total_records: results.length,
-            data: results
+
+            student_id:
+                studentId,
+
+            total_records:
+                results.length,
+
+            data:
+                results
         });
     });
 };
+
+
+// ============================================================
+// GET MY ATTENDANCE SUMMARY
+// ============================================================
 const getMyAttendanceSummary = (req, res) => {
 
     const studentId = req.user.id;
 
-    // ==========================================
+    // ========================================================
     // GET STUDENT INFORMATION
-    // ==========================================
-
+    // ========================================================
     const studentSql = `
         SELECT
             s.id,
@@ -362,9 +480,9 @@ const getMyAttendanceSummary = (req, res) => {
             ON s.siwes_batch_id = b.id
 
         WHERE s.id = ?
+
         LIMIT 1
     `;
-
 
     db.query(
         studentSql,
@@ -385,7 +503,6 @@ const getMyAttendanceSummary = (req, res) => {
                 });
             }
 
-
             if (studentResults.length === 0) {
 
                 return res.status(404).json({
@@ -395,45 +512,40 @@ const getMyAttendanceSummary = (req, res) => {
                 });
             }
 
-
             const student =
                 studentResults[0];
 
-
-            // ==========================================
+            // =================================================
             // GET ATTENDANCE SUMMARY
-            // ==========================================
-
+            //
+            // Each calendar date counts ONCE.
+            // =================================================
             const summarySql = `
-
                 SELECT
 
-                    COUNT(q.id)
-                        AS total_sessions,
+                    COUNT(
+                        DISTINCT DATE(q.session_date)
+                    ) AS total_sessions,
 
-                    COUNT(a.id)
-                        AS total_attendance,
+                    COUNT(
+                        DISTINCT CASE
+                            WHEN a.id IS NOT NULL
+                            THEN DATE(q.session_date)
+                        END
+                    ) AS total_attendance,
 
-                    COALESCE(
-                        SUM(
-                            CASE
-                                WHEN a.status = 'present'
-                                THEN 1
-                                ELSE 0
-                            END
-                        ),
-                        0
+                    COUNT(
+                        DISTINCT CASE
+                            WHEN a.status = 'present'
+                            THEN DATE(q.session_date)
+                        END
                     ) AS present,
 
-                    COALESCE(
-                        SUM(
-                            CASE
-                                WHEN a.status = 'late'
-                                THEN 1
-                                ELSE 0
-                            END
-                        ),
-                        0
+                    COUNT(
+                        DISTINCT CASE
+                            WHEN a.status = 'late'
+                            THEN DATE(q.session_date)
+                        END
                     ) AS late
 
                 FROM qr_sessions q
@@ -442,20 +554,12 @@ const getMyAttendanceSummary = (req, res) => {
                     ON a.qr_session_id = q.id
                     AND a.student_id = ?
 
-                WHERE q.session_date >= ?
+                WHERE DATE(q.session_date) >= ?
 
-                AND q.session_date <= ?
+                  AND DATE(q.session_date) <= ?
 
-                AND q.session_date <= DATE(
-                    CONVERT_TZ(
-                        NOW(),
-                        '+00:00',
-                        '+01:00'
-                    )
-                )
-
+                  AND DATE(q.session_date) <= CURDATE()
             `;
-
 
             db.query(
                 summarySql,
@@ -480,62 +584,47 @@ const getMyAttendanceSummary = (req, res) => {
                         });
                     }
 
-
                     const result =
-                        summaryResults[0];
-
-
-                    // ==========================================
-                    // SUMMARY VALUES
-                    // ==========================================
+                        summaryResults[0] || {};
 
                     const totalSessions =
                         Number(
                             result.total_sessions
                         ) || 0;
 
-
                     const totalAttendance =
                         Number(
                             result.total_attendance
                         ) || 0;
-
 
                     const present =
                         Number(
                             result.present
                         ) || 0;
 
-
                     const late =
                         Number(
                             result.late
                         ) || 0;
 
-
-                    // ==========================================
-                    // ATTENDED
-                    // ==========================================
-
+                    // =================================================
+                    // ATTENDED DAYS
+                    // =================================================
                     const attended =
                         present + late;
 
-
-                    // ==========================================
-                    // ABSENT
-                    // ==========================================
-
+                    // =================================================
+                    // ABSENT DAYS
+                    // =================================================
                     const absent =
                         Math.max(
                             totalSessions - attended,
                             0
                         );
 
-
-                    // ==========================================
+                    // =================================================
                     // ATTENDANCE PERCENTAGE
-                    // ==========================================
-
+                    // =================================================
                     const attendancePercentage =
                         totalSessions > 0
                             ? Number(
@@ -548,14 +637,11 @@ const getMyAttendanceSummary = (req, res) => {
                             )
                             : 0;
 
-
-                    // ==========================================
+                    // =================================================
                     // ATTENDANCE STATUS
-                    // ==========================================
-
+                    // =================================================
                     let attendanceStatus =
                         'No Data';
-
 
                     if (totalSessions > 0) {
 
@@ -587,12 +673,10 @@ const getMyAttendanceSummary = (req, res) => {
                         }
                     }
 
-
-                    // ==========================================
+                    // =================================================
                     // RESPONSE
-                    // ==========================================
-
-                    res.json({
+                    // =================================================
+                    return res.json({
 
                         success: true,
 
@@ -638,7 +722,6 @@ const getMyAttendanceSummary = (req, res) => {
 
                                 name:
                                     student.school_name
-
                             },
 
                             siwes_batch: {
@@ -657,9 +740,7 @@ const getMyAttendanceSummary = (req, res) => {
 
                                 status:
                                     student.batch_status
-
                             }
-
                         },
 
                         summary: {
@@ -684,9 +765,7 @@ const getMyAttendanceSummary = (req, res) => {
 
                             attendance_status:
                                 attendanceStatus
-
                         }
-
                     });
 
                 }
@@ -697,25 +776,37 @@ const getMyAttendanceSummary = (req, res) => {
 };
 
 
-
-
-
-
-
+// ============================================================
 // GET TODAY'S ATTENDANCE
+// ============================================================
 const getTodayAttendance = (req, res) => {
 
     const sql = `
         SELECT
+
             a.id,
+
+            s.id AS student_database_id,
             s.student_id,
             s.full_name,
+            s.registration_number,
+
+            sc.id AS school_id,
             sc.name AS school_name,
+
+            b.id AS batch_id,
             b.name AS batch_name,
+
             a.attendance_date,
             a.attendance_time,
             a.status,
-            q.session_type
+
+            q.id AS qr_session_id,
+            q.session_type,
+            q.session_date,
+            q.start_time,
+            q.end_time
+
         FROM attendance a
 
         INNER JOIN students s
@@ -730,34 +821,88 @@ const getTodayAttendance = (req, res) => {
         INNER JOIN qr_sessions q
             ON a.qr_session_id = q.id
 
-        WHERE a.attendance_date = DATE(
-            CONVERT_TZ(NOW(), '+00:00', '+01:00')
-        )
+        WHERE a.attendance_date = CURDATE()
 
-        ORDER BY a.attendance_time ASC
+        ORDER BY
+            a.attendance_time ASC
     `;
 
     db.query(sql, (err, results) => {
 
         if (err) {
-            console.error(err);
+
+            console.error(
+                "Today's attendance error:",
+                err
+            );
 
             return res.status(500).json({
                 success: false,
-                message: 'Failed to fetch today attendance'
+                message:
+                    "Failed to fetch today's attendance"
             });
         }
 
-        res.json({
-            success: true,
-            date: new Date().toISOString().split('T')[0],
-            total_records: results.length,
-            data: results
-        });
+        // =====================================================
+        // GET DATABASE DATE
+        // =====================================================
+        const dateSql = `
+            SELECT
+                DATE_FORMAT(
+                    CURDATE(),
+                    '%Y-%m-%d'
+                ) AS today_date
+        `;
+
+        db.query(
+            dateSql,
+            (dateErr, dateResults) => {
+
+                if (dateErr) {
+
+                    console.error(
+                        'Today date error:',
+                        dateErr
+                    );
+
+                    return res.json({
+
+                        success: true,
+
+                        date: null,
+
+                        total_records:
+                            results.length,
+
+                        data:
+                            results
+                    });
+                }
+
+                return res.json({
+
+                    success: true,
+
+                    date:
+                        dateResults[0].today_date,
+
+                    total_records:
+                        results.length,
+
+                    data:
+                        results
+                });
+
+            }
+        );
+
     });
 };
 
+
+// ============================================================
 // GET ATTENDANCE HISTORY
+// ============================================================
 const getAttendanceHistory = (req, res) => {
 
     const {
@@ -769,17 +914,30 @@ const getAttendanceHistory = (req, res) => {
 
     let sql = `
         SELECT
+
             a.id,
+
+            s.id AS student_database_id,
             s.student_id,
             s.full_name,
+            s.registration_number,
+
             sc.id AS school_id,
             sc.name AS school_name,
+
             b.id AS batch_id,
             b.name AS batch_name,
+
             a.attendance_date,
             a.attendance_time,
             a.status,
-            q.session_type
+
+            q.id AS qr_session_id,
+            q.session_type,
+            q.session_date,
+            q.start_time,
+            q.end_time
+
         FROM attendance a
 
         INNER JOIN students s
@@ -799,27 +957,51 @@ const getAttendanceHistory = (req, res) => {
 
     const values = [];
 
+    // ========================================================
     // FILTER BY DATE
+    // ========================================================
     if (date) {
-        sql += ` AND a.attendance_date = ?`;
+
+        sql += `
+            AND a.attendance_date = ?
+        `;
+
         values.push(date);
     }
 
+    // ========================================================
     // FILTER BY SCHOOL
+    // ========================================================
     if (school_id) {
-        sql += ` AND s.school_id = ?`;
+
+        sql += `
+            AND s.school_id = ?
+        `;
+
         values.push(school_id);
     }
 
+    // ========================================================
     // FILTER BY STUDENT
+    // ========================================================
     if (student_id) {
-        sql += ` AND s.student_id = ?`;
+
+        sql += `
+            AND s.student_id = ?
+        `;
+
         values.push(student_id);
     }
 
+    // ========================================================
     // FILTER BY STATUS
+    // ========================================================
     if (status) {
-        sql += ` AND a.status = ?`;
+
+        sql += `
+            AND a.status = ?
+        `;
+
         values.push(status);
     }
 
@@ -829,38 +1011,66 @@ const getAttendanceHistory = (req, res) => {
             a.attendance_time DESC
     `;
 
-    db.query(sql, values, (err, results) => {
+    db.query(
+        sql,
+        values,
+        (err, results) => {
 
-        if (err) {
-            console.error(err);
+            if (err) {
 
-            return res.status(500).json({
-                success: false,
-                message: 'Failed to fetch attendance history'
+                console.error(
+                    'Attendance history error:',
+                    err
+                );
+
+                return res.status(500).json({
+                    success: false,
+                    message:
+                        'Failed to fetch attendance history'
+                });
+            }
+
+            return res.json({
+
+                success: true,
+
+                total_records:
+                    results.length,
+
+                filters: {
+
+                    date:
+                        date || null,
+
+                    school_id:
+                        school_id || null,
+
+                    student_id:
+                        student_id || null,
+
+                    status:
+                        status || null
+                },
+
+                data:
+                    results
             });
-        }
 
-        res.json({
-            success: true,
-            total_records: results.length,
-            filters: {
-                date: date || null,
-                school_id: school_id || null,
-                student_id: student_id || null,
-                status: status || null
-            },
-            data: results
-        });
-    });
+        }
+    );
 };
 
+
+// ============================================================
 // GET ATTENDANCE DETAILS
+// ============================================================
 const getAttendanceById = (req, res) => {
 
     const { id } = req.params;
 
     const sql = `
         SELECT
+
             a.id AS attendance_id,
 
             s.id AS student_database_id,
@@ -907,40 +1117,64 @@ const getAttendanceById = (req, res) => {
             ON a.qr_session_id = q.id
 
         WHERE a.id = ?
+
+        LIMIT 1
     `;
 
-    db.query(sql, [id], (err, results) => {
+    db.query(
+        sql,
+        [id],
+        (err, results) => {
 
-        if (err) {
-            console.error(err);
+            if (err) {
 
-            return res.status(500).json({
-                success: false,
-                message: 'Failed to fetch attendance details'
+                console.error(
+                    'Attendance details error:',
+                    err
+                );
+
+                return res.status(500).json({
+                    success: false,
+                    message:
+                        'Failed to fetch attendance details'
+                });
+            }
+
+            if (results.length === 0) {
+
+                return res.status(404).json({
+                    success: false,
+                    message:
+                        'Attendance record not found'
+                });
+            }
+
+            return res.json({
+
+                success: true,
+
+                data:
+                    results[0]
             });
-        }
 
-        if (results.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Attendance record not found'
-            });
         }
-
-        res.json({
-            success: true,
-            data: results[0]
-        });
-    });
+    );
 };
 
+
+// ============================================================
 // GET STUDENT ATTENDANCE REPORT
+// ============================================================
 const getStudentAttendanceReport = (req, res) => {
 
     const { student_id } = req.params;
 
+    // ========================================================
+    // GET STUDENT
+    // ========================================================
     const studentSql = `
         SELECT
+
             s.id,
             s.student_id,
             s.full_name,
@@ -970,501 +1204,938 @@ const getStudentAttendanceReport = (req, res) => {
             ON s.siwes_batch_id = b.id
 
         WHERE s.student_id = ?
+
+        LIMIT 1
     `;
 
-    db.query(studentSql, [student_id], (studentErr, studentResults) => {
+    db.query(
+        studentSql,
+        [student_id],
+        (studentErr, studentResults) => {
 
-        if (studentErr) {
-            console.error(studentErr);
+            if (studentErr) {
 
-            return res.status(500).json({
-                success: false,
-                message: 'Failed to fetch student information'
-            });
-        }
+                console.error(
+                    'Student report error:',
+                    studentErr
+                );
 
-        if (studentResults.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Student not found'
-            });
-        }
-
-        const student = studentResults[0];
-
-        const attendanceSql = `
-            SELECT
-                a.id,
-                a.attendance_date,
-                a.attendance_time,
-                a.status,
-                q.id AS qr_session_id,
-                q.session_type,
-                q.session_date,
-                q.start_time,
-                q.end_time
-
-            FROM attendance a
-
-            INNER JOIN qr_sessions q
-                ON a.qr_session_id = q.id
-
-            WHERE a.student_id = ?
-
-            ORDER BY
-                a.attendance_date DESC,
-                a.attendance_time DESC
-        `;
-
-        db.query(
-            attendanceSql,
-            [student.id],
-            (attendanceErr, attendanceResults) => {
-
-                if (attendanceErr) {
-                    console.error(attendanceErr);
-
-                    return res.status(500).json({
-                        success: false,
-                        message: 'Failed to fetch student attendance'
-                    });
-                }
-
-                const totalSessions = attendanceResults.length;
-
-                const present = attendanceResults.filter(
-                    record => record.status === 'present'
-                ).length;
-
-                const late = attendanceResults.filter(
-                    record => record.status === 'late'
-                ).length;
-
-                const attended = present + late;
-
-                const attendancePercentage =
-                    totalSessions > 0
-                        ? Number(
-                            ((attended / totalSessions) * 100).toFixed(2)
-                        )
-                        : 0;
-
-                res.json({
-                    success: true,
-
-                    student: {
-                        id: student.id,
-                        student_id: student.student_id,
-                        full_name: student.full_name,
-                        registration_number: student.registration_number,
-                        email: student.email,
-                        phone: student.phone,
-                        department: student.department,
-                        course: student.course,
-                        start_date: student.start_date,
-                        end_date: student.end_date,
-                        status: student.status
-                    },
-
-                    school: {
-                        id: student.school_id,
-                        name: student.school_name
-                    },
-
-                    siwes_batch: student.batch_id
-                        ? {
-                            id: student.batch_id,
-                            name: student.batch_name,
-                            start_date: student.batch_start_date,
-                            end_date: student.batch_end_date
-                        }
-                        : null,
-
-                    summary: {
-                        total_sessions: totalSessions,
-                        present: present,
-                        late: late,
-                        absent: 0,
-                        attendance_percentage: attendancePercentage
-                    },
-
-                    attendance: attendanceResults
+                return res.status(500).json({
+                    success: false,
+                    message:
+                        'Failed to fetch student information'
                 });
             }
-        );
-    });
+
+            if (studentResults.length === 0) {
+
+                return res.status(404).json({
+                    success: false,
+                    message:
+                        'Student not found'
+                });
+            }
+
+            const student =
+                studentResults[0];
+
+            // =================================================
+            // GET ATTENDANCE RECORDS
+            // =================================================
+            const attendanceSql = `
+                SELECT
+
+                    a.id,
+
+                    a.attendance_date,
+                    a.attendance_time,
+                    a.status,
+
+                    q.id AS qr_session_id,
+                    q.session_type,
+                    q.session_date,
+                    q.start_time,
+                    q.end_time
+
+                FROM attendance a
+
+                INNER JOIN qr_sessions q
+                    ON a.qr_session_id = q.id
+
+                WHERE a.student_id = ?
+
+                ORDER BY
+                    a.attendance_date DESC,
+                    a.attendance_time DESC
+            `;
+
+            db.query(
+                attendanceSql,
+                [student.id],
+                (attendanceErr, attendanceResults) => {
+
+                    if (attendanceErr) {
+
+                        console.error(
+                            'Student attendance error:',
+                            attendanceErr
+                        );
+
+                        return res.status(500).json({
+                            success: false,
+                            message:
+                                'Failed to fetch student attendance'
+                        });
+                    }
+
+                    // =================================================
+                    // UNIQUE ATTENDANCE DAYS
+                    // =================================================
+                    const attendanceDays =
+                        new Set(
+                            attendanceResults.map(
+                                record =>
+                                    String(
+                                        record.attendance_date
+                                    ).slice(0, 10)
+                            )
+                        );
+
+                    const presentDays =
+                        new Set(
+                            attendanceResults
+                                .filter(
+                                    record =>
+                                        record.status === 'present'
+                                )
+                                .map(
+                                    record =>
+                                        String(
+                                            record.attendance_date
+                                        ).slice(0, 10)
+                                )
+                        );
+
+                    const lateDays =
+                        new Set(
+                            attendanceResults
+                                .filter(
+                                    record =>
+                                        record.status === 'late'
+                                )
+                                .map(
+                                    record =>
+                                        String(
+                                            record.attendance_date
+                                        ).slice(0, 10)
+                                )
+                        );
+
+                    const totalAttendanceDays =
+                        attendanceDays.size;
+
+                    const present =
+                        presentDays.size;
+
+                    const late =
+                        lateDays.size;
+
+                    // =================================================
+                    // GET TOTAL ATTENDANCE DAYS
+                    //
+                    // DISTINCT calendar days on which a QR session
+                    // existed within the student's SIWES period.
+                    // =================================================
+                    const sessionsSql = `
+                        SELECT
+                            COUNT(
+                                DISTINCT DATE(session_date)
+                            ) AS total_days
+
+                        FROM qr_sessions
+
+                        WHERE DATE(session_date) >= ?
+
+                          AND DATE(session_date) <= ?
+
+                          AND DATE(session_date) <= CURDATE()
+                    `;
+
+                    db.query(
+                        sessionsSql,
+                        [
+                            student.start_date,
+                            student.end_date
+                        ],
+                        (sessionsErr, sessionsResults) => {
+
+                            if (sessionsErr) {
+
+                                console.error(
+                                    'Student session calculation error:',
+                                    sessionsErr
+                                );
+
+                                return res.status(500).json({
+                                    success: false,
+                                    message:
+                                        'Failed to calculate attendance days'
+                                });
+                            }
+
+                            const totalSessions =
+                                Number(
+                                    sessionsResults[0]
+                                        .total_days
+                                ) || 0;
+
+                            const attended =
+                                present + late;
+
+                            const absent =
+                                Math.max(
+                                    totalSessions -
+                                    attended,
+                                    0
+                                );
+
+                            const attendancePercentage =
+                                totalSessions > 0
+                                    ? Number(
+                                        (
+                                            (
+                                                attended /
+                                                totalSessions
+                                            ) * 100
+                                        ).toFixed(2)
+                                    )
+                                    : 0;
+
+                            // =================================================
+                            // RESPONSE
+                            // =================================================
+                            return res.json({
+
+                                success: true,
+
+                                student: {
+
+                                    id:
+                                        student.id,
+
+                                    student_id:
+                                        student.student_id,
+
+                                    full_name:
+                                        student.full_name,
+
+                                    registration_number:
+                                        student.registration_number,
+
+                                    email:
+                                        student.email,
+
+                                    phone:
+                                        student.phone,
+
+                                    department:
+                                        student.department,
+
+                                    course:
+                                        student.course,
+
+                                    start_date:
+                                        student.start_date,
+
+                                    end_date:
+                                        student.end_date,
+
+                                    status:
+                                        student.status
+                                },
+
+                                school: {
+
+                                    id:
+                                        student.school_id,
+
+                                    name:
+                                        student.school_name
+                                },
+
+                                siwes_batch:
+                                    student.batch_id
+                                        ? {
+
+                                            id:
+                                                student.batch_id,
+
+                                            name:
+                                                student.batch_name,
+
+                                            start_date:
+                                                student.batch_start_date,
+
+                                            end_date:
+                                                student.batch_end_date
+                                        }
+                                        : null,
+
+                                summary: {
+
+                                    total_sessions:
+                                        totalSessions,
+
+                                    total_attendance:
+                                        totalAttendanceDays,
+
+                                    present:
+                                        present,
+
+                                    late:
+                                        late,
+
+                                    absent:
+                                        absent,
+
+                                    attendance_percentage:
+                                        attendancePercentage
+                                },
+
+                                attendance:
+                                    attendanceResults
+                            });
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
 };
 
+
+// ============================================================
 // GET SCHOOL ATTENDANCE REPORT
+// ============================================================
 const getSchoolAttendanceReport = (req, res) => {
 
     const { school_id } = req.params;
 
+    // ========================================================
+    // GET SCHOOL
+    // ========================================================
     const schoolSql = `
         SELECT
+
             id,
             name,
             address,
             contact,
             email,
             status
+
         FROM schools
+
         WHERE id = ?
+
+        LIMIT 1
     `;
 
-    db.query(schoolSql, [school_id], (schoolErr, schoolResults) => {
+    db.query(
+        schoolSql,
+        [school_id],
+        (schoolErr, schoolResults) => {
 
-        if (schoolErr) {
-            console.error(schoolErr);
+            if (schoolErr) {
 
-            return res.status(500).json({
-                success: false,
-                message: 'Failed to fetch school'
-            });
-        }
+                console.error(
+                    'School report error:',
+                    schoolErr
+                );
 
-        if (schoolResults.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'School not found'
-            });
-        }
-
-        const school = schoolResults[0];
-
-        const attendanceSql = `
-            SELECT
-                a.id,
-                s.student_id,
-                s.full_name,
-                s.registration_number,
-
-                a.attendance_date,
-                a.attendance_time,
-                a.status,
-
-                q.id AS qr_session_id,
-                q.session_type,
-                q.session_date,
-                q.start_time,
-                q.end_time
-
-            FROM attendance a
-
-            INNER JOIN students s
-                ON a.student_id = s.id
-
-            INNER JOIN qr_sessions q
-                ON a.qr_session_id = q.id
-
-            WHERE s.school_id = ?
-
-            ORDER BY
-                a.attendance_date DESC,
-                a.attendance_time DESC
-        `;
-
-        db.query(
-            attendanceSql,
-            [school_id],
-            (attendanceErr, attendanceResults) => {
-
-                if (attendanceErr) {
-                    console.error(attendanceErr);
-
-                    return res.status(500).json({
-                        success: false,
-                        message: 'Failed to fetch school attendance'
-                    });
-                }
-
-                const totalRecords = attendanceResults.length;
-
-                const present = attendanceResults.filter(
-                    record => record.status === 'present'
-                ).length;
-
-                const late = attendanceResults.filter(
-                    record => record.status === 'late'
-                ).length;
-
-                res.json({
-                    success: true,
-
-                    school: {
-                        id: school.id,
-                        name: school.name,
-                        address: school.address,
-                        contact: school.contact,
-                        email: school.email,
-                        status: school.status
-                    },
-
-                    summary: {
-                        total_attendance_records: totalRecords,
-                        present: present,
-                        late: late
-                    },
-
-                    attendance: attendanceResults
+                return res.status(500).json({
+                    success: false,
+                    message:
+                        'Failed to fetch school'
                 });
             }
-        );
-    });
+
+            if (schoolResults.length === 0) {
+
+                return res.status(404).json({
+                    success: false,
+                    message:
+                        'School not found'
+                });
+            }
+
+            const school =
+                schoolResults[0];
+
+            // =================================================
+            // GET ATTENDANCE
+            // =================================================
+            const attendanceSql = `
+                SELECT
+
+                    a.id,
+
+                    s.student_id,
+                    s.full_name,
+                    s.registration_number,
+
+                    a.attendance_date,
+                    a.attendance_time,
+                    a.status,
+
+                    q.id AS qr_session_id,
+                    q.session_type,
+                    q.session_date,
+                    q.start_time,
+                    q.end_time
+
+                FROM attendance a
+
+                INNER JOIN students s
+                    ON a.student_id = s.id
+
+                INNER JOIN qr_sessions q
+                    ON a.qr_session_id = q.id
+
+                WHERE s.school_id = ?
+
+                ORDER BY
+                    a.attendance_date DESC,
+                    a.attendance_time DESC
+            `;
+
+            db.query(
+                attendanceSql,
+                [school_id],
+                (attendanceErr, attendanceResults) => {
+
+                    if (attendanceErr) {
+
+                        console.error(
+                            'School attendance error:',
+                            attendanceErr
+                        );
+
+                        return res.status(500).json({
+                            success: false,
+                            message:
+                                'Failed to fetch school attendance'
+                        });
+                    }
+
+                    // =================================================
+                    // UNIQUE RECORDS BY STUDENT + DATE
+                    // =================================================
+                    const uniqueAttendance =
+                        new Set(
+                            attendanceResults.map(
+                                record =>
+                                    `${record.student_id}-${String(
+                                        record.attendance_date
+                                    ).slice(0, 10)}`
+                            )
+                        );
+
+                    const present =
+                        new Set(
+                            attendanceResults
+                                .filter(
+                                    record =>
+                                        record.status === 'present'
+                                )
+                                .map(
+                                    record =>
+                                        `${record.student_id}-${String(
+                                            record.attendance_date
+                                        ).slice(0, 10)}`
+                                )
+                        );
+
+                    const late =
+                        new Set(
+                            attendanceResults
+                                .filter(
+                                    record =>
+                                        record.status === 'late'
+                                )
+                                .map(
+                                    record =>
+                                        `${record.student_id}-${String(
+                                            record.attendance_date
+                                        ).slice(0, 10)}`
+                                )
+                        );
+
+                    return res.json({
+
+                        success: true,
+
+                        school: {
+
+                            id:
+                                school.id,
+
+                            name:
+                                school.name,
+
+                            address:
+                                school.address,
+
+                            contact:
+                                school.contact,
+
+                            email:
+                                school.email,
+
+                            status:
+                                school.status
+                        },
+
+                        summary: {
+
+                            total_attendance_records:
+                                uniqueAttendance.size,
+
+                            present:
+                                present.size,
+
+                            late:
+                                late.size
+                        },
+
+                        attendance:
+                            attendanceResults
+                    });
+
+                }
+            );
+
+        }
+    );
 };
 
+
+// ============================================================
 // GET SIWES BATCH ATTENDANCE REPORT
+// ============================================================
 const getBatchAttendanceReport = (req, res) => {
 
     const { batch_id } = req.params;
 
+    // ========================================================
     // GET BATCH
+    // ========================================================
     const batchSql = `
         SELECT
+
             id,
             name,
             start_date,
             end_date,
             description,
             status
+
         FROM siwes_batches
+
         WHERE id = ?
+
+        LIMIT 1
     `;
 
-    db.query(batchSql, [batch_id], (batchErr, batchResults) => {
+    db.query(
+        batchSql,
+        [batch_id],
+        (batchErr, batchResults) => {
 
-        if (batchErr) {
-            console.error(batchErr);
+            if (batchErr) {
 
-            return res.status(500).json({
-                success: false,
-                message: 'Failed to fetch SIWES batch'
-            });
-        }
+                console.error(
+                    'Batch report error:',
+                    batchErr
+                );
 
-        if (batchResults.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'SIWES batch not found'
-            });
-        }
+                return res.status(500).json({
+                    success: false,
+                    message:
+                        'Failed to fetch SIWES batch'
+                });
+            }
 
-        const batch = batchResults[0];
+            if (batchResults.length === 0) {
 
-        // GET STUDENTS IN THIS BATCH
-        const studentsSql = `
-            SELECT
-                s.id,
-                s.student_id,
-                s.full_name,
-                s.registration_number,
-                s.email,
-                s.phone,
-                s.department,
-                s.course,
-                s.start_date,
-                s.end_date,
-                s.status,
+                return res.status(404).json({
+                    success: false,
+                    message:
+                        'SIWES batch not found'
+                });
+            }
 
-                sc.id AS school_id,
-                sc.name AS school_name
+            const batch =
+                batchResults[0];
 
-            FROM students s
+            // =================================================
+            // GET STUDENTS IN BATCH
+            // =================================================
+            const studentsSql = `
+                SELECT
 
-            INNER JOIN schools sc
-                ON s.school_id = sc.id
+                    s.id,
+                    s.student_id,
+                    s.full_name,
+                    s.registration_number,
+                    s.email,
+                    s.phone,
+                    s.department,
+                    s.course,
+                    s.start_date,
+                    s.end_date,
+                    s.status,
 
-            WHERE s.siwes_batch_id = ?
+                    sc.id AS school_id,
+                    sc.name AS school_name
 
-            ORDER BY s.full_name ASC
-        `;
+                FROM students s
 
-        db.query(
-            studentsSql,
-            [batch_id],
-            (studentsErr, studentsResults) => {
+                INNER JOIN schools sc
+                    ON s.school_id = sc.id
 
-                if (studentsErr) {
-                    console.error(studentsErr);
+                WHERE s.siwes_batch_id = ?
 
-                    return res.status(500).json({
-                        success: false,
-                        message: 'Failed to fetch batch students'
-                    });
-                }
+                ORDER BY
+                    s.full_name ASC
+            `;
 
-                // GET ATTENDANCE RECORDS
-                const attendanceSql = `
-                    SELECT
-                        a.id,
+            db.query(
+                studentsSql,
+                [batch_id],
+                (studentsErr, studentsResults) => {
 
-                        s.student_id,
-                        s.full_name,
-                        s.registration_number,
+                    if (studentsErr) {
 
-                        sc.id AS school_id,
-                        sc.name AS school_name,
+                        console.error(
+                            'Batch students error:',
+                            studentsErr
+                        );
 
-                        a.attendance_date,
-                        a.attendance_time,
-                        a.status,
+                        return res.status(500).json({
+                            success: false,
+                            message:
+                                'Failed to fetch batch students'
+                        });
+                    }
 
-                        q.id AS qr_session_id,
-                        q.session_type,
-                        q.session_date,
-                        q.start_time,
-                        q.end_time
+                    // =================================================
+                    // GET ATTENDANCE RECORDS
+                    // =================================================
+                    const attendanceSql = `
+                        SELECT
 
-                    FROM attendance a
+                            a.id,
 
-                    INNER JOIN students s
-                        ON a.student_id = s.id
+                            s.student_id,
+                            s.full_name,
+                            s.registration_number,
 
-                    INNER JOIN schools sc
-                        ON s.school_id = sc.id
+                            sc.id AS school_id,
+                            sc.name AS school_name,
 
-                    INNER JOIN qr_sessions q
-                        ON a.qr_session_id = q.id
+                            a.attendance_date,
+                            a.attendance_time,
+                            a.status,
 
-                    WHERE s.siwes_batch_id = ?
+                            q.id AS qr_session_id,
+                            q.session_type,
+                            q.session_date,
+                            q.start_time,
+                            q.end_time
 
-                    ORDER BY
-                        a.attendance_date DESC,
-                        a.attendance_time DESC
-                `;
+                        FROM attendance a
 
-                db.query(
-                    attendanceSql,
-                    [batch_id],
-                    (attendanceErr, attendanceResults) => {
+                        INNER JOIN students s
+                            ON a.student_id = s.id
 
-                        if (attendanceErr) {
-                            console.error(attendanceErr);
+                        INNER JOIN schools sc
+                            ON s.school_id = sc.id
 
-                            return res.status(500).json({
-                                success: false,
-                                message: 'Failed to fetch batch attendance'
-                            });
-                        }
+                        INNER JOIN qr_sessions q
+                            ON a.qr_session_id = q.id
 
-                        // GET TOTAL QR SESSIONS FOR THIS BATCH
-                        const sessionsSql = `
-                            SELECT
-                                COUNT(*) AS total_sessions
-                            FROM qr_sessions
-                            WHERE session_date BETWEEN ? AND ?
-                        `;
+                        WHERE s.siwes_batch_id = ?
 
-                        db.query(
-                            sessionsSql,
-                            [
-                                batch.start_date,
-                                batch.end_date
-                            ],
-                            (sessionsErr, sessionsResults) => {
+                        ORDER BY
+                            a.attendance_date DESC,
+                            a.attendance_time DESC
+                    `;
 
-                                if (sessionsErr) {
-                                    console.error(sessionsErr);
+                    db.query(
+                        attendanceSql,
+                        [batch_id],
+                        (attendanceErr, attendanceResults) => {
 
-                                    return res.status(500).json({
-                                        success: false,
-                                        message: 'Failed to calculate batch sessions'
-                                    });
-                                }
+                            if (attendanceErr) {
 
-                                const totalStudents =
-                                    studentsResults.length;
+                                console.error(
+                                    'Batch attendance error:',
+                                    attendanceErr
+                                );
 
-                                const totalSessions =
-                                    Number(
-                                        sessionsResults[0].total_sessions
-                                    ) || 0;
-
-                                const totalRecords =
-                                    attendanceResults.length;
-
-                                const present =
-                                    attendanceResults.filter(
-                                        record =>
-                                            record.status === 'present'
-                                    ).length;
-
-                                const late =
-                                    attendanceResults.filter(
-                                        record =>
-                                            record.status === 'late'
-                                    ).length;
-
-                                const attended =
-                                    present + late;
-
-                                const expectedAttendance =
-                                    totalStudents * totalSessions;
-
-                                const absent =
-                                    Math.max(
-                                        expectedAttendance - attended,
-                                        0
-                                    );
-
-                                const attendancePercentage =
-                                    expectedAttendance > 0
-                                        ? Number(
-                                            (
-                                                (
-                                                    attended /
-                                                    expectedAttendance
-                                                ) * 100
-                                            ).toFixed(2)
-                                        )
-                                        : 0;
-
-                                // FINAL RESPONSE
-                                res.json({
-                                    success: true,
-
-                                    batch: {
-                                        id: batch.id,
-                                        name: batch.name,
-                                        start_date: batch.start_date,
-                                        end_date: batch.end_date,
-                                        description: batch.description,
-                                        status: batch.status
-                                    },
-
-                                    summary: {
-                                        total_students: totalStudents,
-                                        total_sessions: totalSessions,
-                                        total_attendance_records:
-                                            totalRecords,
-                                        present: present,
-                                        late: late,
-                                        absent: absent,
-                                        attendance_percentage:
-                                            attendancePercentage
-                                    },
-
-                                    students: studentsResults,
-
-                                    attendance: attendanceResults
+                                return res.status(500).json({
+                                    success: false,
+                                    message:
+                                        'Failed to fetch batch attendance'
                                 });
                             }
-                        );
-                    }
-                );
-            }
-        );
-    });
+
+                            // =================================================
+                            // GET TOTAL ATTENDANCE DAYS
+                            // =================================================
+                            const sessionsSql = `
+                                SELECT
+
+                                    COUNT(
+                                        DISTINCT DATE(session_date)
+                                    ) AS total_sessions
+
+                                FROM qr_sessions
+
+                                WHERE DATE(session_date) >= ?
+
+                                  AND DATE(session_date) <= ?
+
+                                  AND DATE(session_date) <= CURDATE()
+                            `;
+
+                            db.query(
+                                sessionsSql,
+                                [
+                                    batch.start_date,
+                                    batch.end_date
+                                ],
+                                (sessionsErr, sessionsResults) => {
+
+                                    if (sessionsErr) {
+
+                                        console.error(
+                                            'Batch session calculation error:',
+                                            sessionsErr
+                                        );
+
+                                        return res.status(500).json({
+                                            success: false,
+                                            message:
+                                                'Failed to calculate batch sessions'
+                                        });
+                                    }
+
+                                    // =================================================
+                                    // TOTAL STUDENTS
+                                    // =================================================
+                                    const totalStudents =
+                                        studentsResults.length;
+
+                                    // =================================================
+                                    // TOTAL ATTENDANCE DAYS
+                                    // =================================================
+                                    const totalSessions =
+                                        Number(
+                                            sessionsResults[0]
+                                                .total_sessions
+                                        ) || 0;
+
+                                    // =================================================
+                                    // UNIQUE STUDENT + DATE RECORDS
+                                    // =================================================
+                                    const totalRecords =
+                                        new Set(
+                                            attendanceResults.map(
+                                                record =>
+                                                    `${record.student_id}-${String(
+                                                        record.attendance_date
+                                                    ).slice(0, 10)}`
+                                            )
+                                        ).size;
+
+                                    // =================================================
+                                    // PRESENT DAYS
+                                    // =================================================
+                                    const present =
+                                        new Set(
+                                            attendanceResults
+                                                .filter(
+                                                    record =>
+                                                        record.status ===
+                                                        'present'
+                                                )
+                                                .map(
+                                                    record =>
+                                                        `${record.student_id}-${String(
+                                                            record.attendance_date
+                                                        ).slice(0, 10)}`
+                                                )
+                                        ).size;
+
+                                    // =================================================
+                                    // LATE DAYS
+                                    // =================================================
+                                    const late =
+                                        new Set(
+                                            attendanceResults
+                                                .filter(
+                                                    record =>
+                                                        record.status ===
+                                                        'late'
+                                                )
+                                                .map(
+                                                    record =>
+                                                        `${record.student_id}-${String(
+                                                            record.attendance_date
+                                                        ).slice(0, 10)}`
+                                                )
+                                        ).size;
+
+                                    // =================================================
+                                    // TOTAL ATTENDED
+                                    // =================================================
+                                    const attended =
+                                        present + late;
+
+                                    // =================================================
+                                    // EXPECTED ATTENDANCE
+                                    //
+                                    // Every student is expected once per
+                                    // attendance day.
+                                    // =================================================
+                                    const expectedAttendance =
+                                        totalStudents *
+                                        totalSessions;
+
+                                    // =================================================
+                                    // ABSENT
+                                    // =================================================
+                                    const absent =
+                                        Math.max(
+                                            expectedAttendance -
+                                            attended,
+                                            0
+                                        );
+
+                                    // =================================================
+                                    // PERCENTAGE
+                                    // =================================================
+                                    const attendancePercentage =
+                                        expectedAttendance > 0
+                                            ? Number(
+                                                (
+                                                    (
+                                                        attended /
+                                                        expectedAttendance
+                                                    ) * 100
+                                                ).toFixed(2)
+                                            )
+                                            : 0;
+
+                                    // =================================================
+                                    // RESPONSE
+                                    // =================================================
+                                    return res.json({
+
+                                        success: true,
+
+                                        batch: {
+
+                                            id:
+                                                batch.id,
+
+                                            name:
+                                                batch.name,
+
+                                            start_date:
+                                                batch.start_date,
+
+                                            end_date:
+                                                batch.end_date,
+
+                                            description:
+                                                batch.description,
+
+                                            status:
+                                                batch.status
+                                        },
+
+                                        summary: {
+
+                                            total_students:
+                                                totalStudents,
+
+                                            total_sessions:
+                                                totalSessions,
+
+                                            total_attendance_records:
+                                                totalRecords,
+
+                                            present:
+                                                present,
+
+                                            late:
+                                                late,
+
+                                            absent:
+                                                absent,
+
+                                            attendance_percentage:
+                                                attendancePercentage
+                                        },
+
+                                        students:
+                                            studentsResults,
+
+                                        attendance:
+                                            attendanceResults
+                                    });
+
+                                }
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
 };
 
+
+// ============================================================
+// EXPORT CONTROLLERS
+// ============================================================
 module.exports = {
+
     markAttendance,
+
     getMyAttendance,
+
     getMyAttendanceSummary,
+
     getTodayAttendance,
+
     getAttendanceHistory,
+
     getAttendanceById,
+
     getStudentAttendanceReport,
+
     getSchoolAttendanceReport,
+
     getBatchAttendanceReport
+
 };
