@@ -162,21 +162,21 @@ const markAttendance = (req, res) => {
                     // =================================================
                     // CHECK STUDENT
                     // =================================================
-                    const studentSql = `
-                        SELECT
-                            id,
-                            student_id,
-                            full_name,
-                            registration_number,
-                            status,
-                            school_id,
-                            siwes_batch_id,
-                            start_date,
-                            end_date
-                        FROM students
-                        WHERE id = ?
-                        LIMIT 1
-                    `;
+                   const studentSql = `
+    SELECT
+        id,
+        student_id,
+        full_name,
+        registration_number,
+        status,
+        school_id,
+        siwes_batch_id,
+        DATE_FORMAT(start_date, '%Y-%m-%d') AS start_date,
+        DATE_FORMAT(end_date, '%Y-%m-%d') AS end_date
+    FROM students
+    WHERE id = ?
+    LIMIT 1
+`;
 
                     db.query(
                         studentSql,
@@ -219,6 +219,7 @@ const markAttendance = (req, res) => {
                             // =================================================
                             // CHECK STUDENT SIWES DATE RANGE
                             // =================================================
+                        
                             if (
                                 student.start_date &&
                                 currentDate < String(student.start_date).slice(0, 10)
