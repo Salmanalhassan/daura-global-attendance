@@ -1,0 +1,543 @@
+/* =========================================================
+   DAURA GLOBAL — SHARED RESPONSIVE & UX LAYER
+   File: frontend/assests/css/responsive.css
+
+   Load this file LAST in <head> on every page, after the
+   page's own stylesheets. It does not rename or remove any
+   existing class or ID. It only adds:
+
+   1. Safe foundations (media, text sizing, overflow guard)
+   2. Visible keyboard focus + consistent disabled states
+   3. Touch-friendly, iOS-zoom-safe form controls
+   4. Fluid page headers, grids, tables and modals
+   5. A mobile slide-in navigation drawer (works with all three
+      existing sidebar styles; activated by mobile-nav.js)
+
+   Breakpoints used (matching the existing project):
+     <= 480   small phones      481-767  large phones
+     <= 768   mobile drawer     769-1024 tablets
+     1025+    laptops / desktops
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   TOKENS (prefixed so they never collide with existing ones)
+   --------------------------------------------------------- */
+
+:root {
+    --rn-accent: #0f766e;
+    --rn-accent-ring: rgba(15, 118, 110, 0.45);
+    --rn-bar-h: 56px;
+    --rn-drawer-w: 300px;
+    --rn-touch: 44px;
+    --rn-gutter: clamp(14px, 4vw, 38px);
+}
+
+
+/* ---------------------------------------------------------
+   1. FOUNDATIONS
+   --------------------------------------------------------- */
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+img,
+svg,
+video,
+canvas {
+    max-width: 100%;
+}
+
+img,
+video,
+canvas {
+    height: auto;
+}
+
+/* Long words / emails / IDs must never push the page wide */
+body {
+    overflow-wrap: break-word;
+}
+
+/* Safety net: nothing may create sideways page scroll.
+   "clip" does not create a scroll container, so sticky and
+   fixed elements keep working. */
+html,
+body {
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+/* Flex/grid children must be allowed to shrink */
+main,
+.main-content,
+.dashboard-main,
+.student-main,
+.page-content,
+.dashboard-content,
+.page-container {
+    min-width: 0;
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   2. FOCUS + STATES
+   --------------------------------------------------------- */
+
+/* Specificity is deliberately above "input:focus { outline:none }"
+   rules found in page stylesheets. Mouse users do not see it;
+   keyboard users always do. */
+html body :focus-visible {
+    outline: 3px solid var(--rn-accent-ring);
+    outline-offset: 2px;
+}
+
+html body a:focus-visible,
+html body button:focus-visible,
+html body [role="button"]:focus-visible {
+    outline-color: var(--rn-accent);
+}
+
+/* Dark sidebars need a light ring */
+html body aside :focus-visible {
+    outline-color: #99f6e4;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+button,
+[role="button"],
+select,
+summary,
+label[for] {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    touch-action: manipulation;
+}
+
+button:not(:disabled):active {
+    transform: translateY(1px);
+}
+
+
+/* ---------------------------------------------------------
+   3. FORMS
+   --------------------------------------------------------- */
+
+input,
+select,
+textarea {
+    max-width: 100%;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* ---------------------------------------------------------
+   4. FLUID COMPONENTS
+   --------------------------------------------------------- */
+
+/* Modals: never taller or wider than the screen */
+.modal,
+.modal-content,
+.student-modal,
+.school-modal {
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+}
+
+.modal-overlay {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/* Tables inside wrappers scroll sideways inside the wrapper,
+   never the page */
+.table-wrapper,
+.table-container,
+.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ---------------------------------------------------------
+   TABLETS AND BELOW (<= 1024px)
+   --------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   PHONES AND SMALL TABLETS (<= 768px)
+   --------------------------------------------------------- */
+
+@media (max-width: 768px) {
+
+    /* Stop iOS Safari zooming into focused fields */
+    body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]),
+    body select,
+    body textarea {
+        font-size: 16px;
+    }
+
+    /* Page headers wrap instead of squeezing */
+    .dashboard-topbar,
+    .topbar,
+    .student-topbar,
+    .page-header {
+        flex-wrap: wrap;
+        gap: 10px 14px;
+    }
+
+    .dashboard-topbar h1,
+    .topbar h1,
+    .student-topbar h1,
+    .page-header h1 {
+        font-size: clamp(1.15rem, 0.95rem + 1.6vw, 1.5rem);
+        line-height: 1.25;
+    }
+
+    .topbar-right,
+    .header-actions {
+        flex-wrap: wrap;
+        max-width: 100%;
+    }
+
+    /* Content gutters */
+    .dashboard-content,
+    .page-content {
+        padding-left: var(--rn-gutter);
+        padding-right: var(--rn-gutter);
+    }
+
+    /* Touch-sized form fields (buttons are handled in the
+       pointer: coarse block below so inline icon buttons are
+       not enlarged) */
+    body select,
+    body input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]) {
+        min-height: 40px;
+    }
+
+    .modal-overlay {
+        padding: 12px;
+    }
+
+    .modal-actions {
+        flex-wrap: wrap;
+    }
+
+    .modal-actions > * {
+        flex: 1 1 140px;
+    }
+
+}
+
+@media (pointer: coarse) {
+
+    .nav-item,
+    .sidebar-nav a,
+    .student-nav a,
+    .student-nav-link,
+    .primary-button,
+    .primary-btn,
+    .secondary-btn,
+    .secondary-button,
+    .logout-button,
+    .logout-btn,
+    .refresh-button,
+    .refresh-btn,
+    .password-toggle {
+        min-height: var(--rn-touch);
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .modal-actions > * {
+        flex-basis: 100%;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-actions > * {
+        flex: 1 1 100%;
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   LARGE DESKTOPS (>= 1441px)
+   Keep line lengths and card grids from stretching.
+   --------------------------------------------------------- */
+
+@media (min-width: 1441px) {
+
+    .page-container,
+    .page-content,
+    .main-content > section {
+        max-width: 1500px;
+    }
+
+    .page-container {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   PAGE-SPECIFIC OVERFLOW FIXES
+   --------------------------------------------------------- */
+
+/* admin/announcements.html: top bar buttons ran off 320-360px */
+.topbar-right {
+    min-width: 0;
+}
+
+/* student-payment.html: card was 12px wider than a 320px phone */
+.payment-card {
+    min-width: 0;
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   5. MOBILE NAVIGATION DRAWER
+   Activated only when mobile-nav.js finds a sidebar and adds
+   body.rn-has-drawer, so pages without the script behave as
+   before.
+   ========================================================= */
+
+.rn-bar,
+.rn-overlay {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    body.rn-has-drawer {
+        padding-top: var(--rn-bar-h);
+    }
+
+    body.rn-lock {
+        overflow: hidden;
+    }
+
+    /* ---- top bar with the menu button ---- */
+
+    body.rn-has-drawer .rn-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--rn-bar-h);
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        z-index: 1100;
+    }
+
+    .rn-menu-btn {
+        width: var(--rn-touch);
+        height: var(--rn-touch);
+        min-height: var(--rn-touch);
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: #ffffff;
+        color: #0f172a;
+        cursor: pointer;
+    }
+
+    .rn-menu-btn:hover {
+        background: #f1f5f9;
+    }
+
+    .rn-menu-btn svg {
+        width: 22px;
+        height: 22px;
+        display: block;
+    }
+
+    .rn-bar-title {
+        min-width: 0;
+        flex: 1;
+        color: #0f172a;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ---- the sidebar becomes a drawer ---- */
+
+    body.rn-has-drawer aside.rn-drawer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(var(--rn-drawer-w), 86vw);
+        max-width: 86vw;
+        height: 100vh;
+        height: 100dvh;
+        min-height: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        z-index: 1300;
+        transform: translateX(-105%);
+        visibility: hidden;
+        transition:
+            transform 0.25s ease,
+            visibility 0s linear 0.25s;
+    }
+
+    body.rn-has-drawer aside.rn-drawer.rn-open {
+        transform: translateX(0);
+        visibility: visible;
+        box-shadow: 0 0 48px rgba(15, 23, 42, 0.35);
+        transition: transform 0.25s ease;
+    }
+
+    /* Navigation inside the drawer is always a vertical list,
+       even where a page used to turn it into a scrolling row */
+    body.rn-has-drawer aside.rn-drawer nav {
+        display: block;
+        flex: 1;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    body.rn-has-drawer aside.rn-drawer nav a {
+        white-space: normal;
+    }
+
+    body.rn-has-drawer aside.rn-drawer .student-sidebar-footer,
+    body.rn-has-drawer aside.rn-drawer .sidebar-footer {
+        display: block;
+    }
+
+    /* style.css reserved 78px on the left of the admin top bar for a
+       floating button; the menu now lives in its own bar instead */
+    body.rn-has-drawer .dashboard-topbar {
+        padding-left: var(--rn-gutter);
+        padding-right: var(--rn-gutter);
+    }
+
+    /* ---- the page no longer reserves space for the sidebar ---- */
+
+    body.rn-has-drawer .main-content,
+    body.rn-has-drawer .dashboard-main,
+    body.rn-has-drawer .student-main {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+    }
+
+    body.rn-has-drawer .dashboard-container,
+    body.rn-has-drawer .dashboard-layout,
+    body.rn-has-drawer .student-layout {
+        display: block;
+        min-height: calc(100vh - var(--rn-bar-h));
+    }
+
+    /* ---- dimmed backdrop ---- */
+
+    body.rn-has-drawer .rn-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 1250;
+        background: rgba(15, 23, 42, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition:
+            opacity 0.25s ease,
+            visibility 0s linear 0.25s;
+    }
+
+    body.rn-has-drawer .rn-overlay.rn-open {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.25s ease;
+    }
+
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+
+    @media (max-width: 768px) {
+
+        body.rn-has-drawer .rn-bar {
+            padding-left: max(12px, env(safe-area-inset-left));
+            padding-right: max(12px, env(safe-area-inset-right));
+        }
+
+    }
+
+}
+
+@media print {
+
+    .rn-bar,
+    .rn-overlay {
+        display: none !important;
+    }
+
+    body.rn-has-drawer {
+        padding-top: 0;
+    }
+
+}
